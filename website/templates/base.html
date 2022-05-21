@@ -1,0 +1,35 @@
+<!-- Plantilla. base.html es como el "tema" de la web, tienelos elementos basicos
+     que van a aparecer en todas las  paginas de la webapp (nav-bar, footer, etc)
+
+     Las plantillas son logradas con Jinja
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Jinja block for emplating: can be overwritten in child templates-->
+    <title>{% block title %}A{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+    <nav>
+        <button>
+            <span>
+                <div>
+                    <div>
+                        <a id="login" href="/login">Login</a>
+                        <a id="signUp" href="/sign-up">Sign Up</a>
+                        <a id="logout" href="/logout">Logout</a>
+                        <a id="home" href="/">Home</a>
+                    </div>
+                </div>
+            </span>
+        </button>
+    </nav>
+    <div>
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
