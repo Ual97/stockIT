@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block title %}Inv{% endblock %}
+{% block content %}
+<style>
+  table, td, th {
+    border: 1px solid black;
+    text-align: center;
+    padding: 5px;
+  }
+  th {background-color: orange;}
+  input {width: 120px;}
+</style>
+
+<h1>Inventario / Add</h1>
+<p>Aniada su nuevo producto compa</p>
+<br> 
+<form method="POST">  
+    <table>
+        <!-- row of clumn names -->    
+        <tr>
+          <th>Nombre</th>
+          <th>ID</th>
+          <th>Cantidad</th>
+          <th>Reservado</th>
+          <th>F. Vencimiento</th>
+          <th>Costo</th>
+          <th>Precio</th>
+          <th>codigo barras</th>
+        </tr>
+        <tr>
+            <td>
+                <label for="pname"></label>
+                <input 
+                type="pname"
+                id="pname"
+                name="pname"
+                placeholder="Salsa de tomate"
+                />
+              </td>
+              <td>
+                <label for="ide"></label>
+                <input 
+                type="ide"
+                id="ide"
+                name="ide"
+                placeholder="TOM112"
+                />
+              </td>
+            <td>
+              <label for="cant"></label>
+              <input 
+              type="number"
+              id="cant"
+              name="cant"
+              placeholder="500"
+            />
+            </td>
+            <td>
+              <label for="reservado"></label>
+              <input 
+              type="reservado"
+              id="reservado"
+              name="reservado"
+              placeholder="no"
+              />
+            </td>
+            <td>
+              <label for="fvencimiento"></label>
+              <input 
+              type="date"
+              id="fvencimiento"
+              name="fvencimiento"
+              placeholder="TOM112"
+              />
+            </td>
+            <td>
+              <label for="costo"></label>
+              <input 
+              type="number"
+              id="costo"
+              name="costo"
+              placeholder="30"
+              />
+            </td>
+            <td>
+              <label for="precio"></label>
+              <input 
+              type="number"
+              id="precio"
+              name="precio"
+              placeholder="50"
+              />
+            </td>
+            <td>
+              <label for="cbarras"></label>
+              <input 
+              type="number"
+              id="cbarras"
+              name="cbarras"
+              placeholder="111111111122222"
+              />
+            </td>
+        </tr>       
+    </table>
+</form>
+<br>
+<button type="submit">Submit</button>
+</form>
+<br><br>
+
+<a href="/inventario/add">añadir producto</a>
+<a href="/inventario/edit">editar producto</a>
+<a href="/inventario/del">borrar producto</a>
+{% endblock %}

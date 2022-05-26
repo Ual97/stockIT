@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Inv{% endblock %}
+{% block content %}
+<!-- un poco de css para di -->
+<style>
+    html {margin-left: 30px;}
+</style>
+<h1>Inventario</h1>
+<p>aca se mostraran todos sus productos</p>
+<br><br>   
+<p>---- tablas de sql ---</p>
+<br><br>
+<a href="/inventario/add">añadir producto</a>
+<a href="/inventario/edit">editar producto</a>
+<a href="/inventario/del">borrar producto</a>
+{% endblock %}

@@ -31,3 +31,11 @@ def login():
 @auth.route('/logout')
 def logout():
     return "<p>logout</>"
+
+@auth.route('/inventario')
+def inv():
+    return render_template('inventario.html')
+
+@auth.route('/inventario/add')
+def add():
+    return render_template('add.html')
