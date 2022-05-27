@@ -5,10 +5,44 @@
 <style>
     html {margin-left: 30px;}
 </style>
+<style>
+    table, td, th {
+      border: 1px solid black;
+      text-align: center;
+      padding: 5px;
+    }
+    th {background-color: orange;}
+    input {width: 120px;}
+  </style>
 <h1>Inventario</h1>
 <p>aca se mostraran todos sus productos</p>
-<br><br>   
-<p>---- tablas de sql ---</p>
+<br><br>
+<table>
+    <!-- row of clumn names -->
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Sucursal</th>
+        <th>Cantidad</th>
+        <th>Costo</th>
+        <th>Precio</th>
+        <th>F. Vencimiento</th>
+        <th>Reservado</th>
+        <th>codigo barras</th>
+    </tr>  
+    {% for p in products %}    
+    <tr>
+        <td> {{ p.0}} </td>
+        <td> {{ p.1}} </td>
+        <td> {{ p.2}} </td>
+        <td> {{ p.3}} </td>
+        <td> {{ p.4}} </td>
+        <td> {{ p.5}} </td>
+        <td> {{ p.6}} </td>
+        <td> {{ p.7}} </td>
+        <td> {{ p.8}} </td>
+    </tr>
+{% endfor %}
 <br><br>
 <a href="/inventario/add">añadir producto</a>
 <a href="/inventario/edit">editar producto</a>

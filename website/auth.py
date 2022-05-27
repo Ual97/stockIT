@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, flash
+from . import db
 
 # This file is a blueprint, it has urls in it
 # We can have url routes in different files because of this
@@ -34,7 +35,10 @@ def logout():
 
 @auth.route('/inventario')
 def inv():
-    return render_template('inventario.html')
+    cur = db.connection.cursor()
+    cur.execute('SELECT * FROM inventory')
+    data = cur.fetchall()
+    return render_template('inventario.html', products=data)
 
 @auth.route('/inventario/add')
 def add():
