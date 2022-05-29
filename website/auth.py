@@ -68,7 +68,8 @@ def logout():
 @auth.route('/inventario')
 @login_required
 def inv():
-    data = Product.query.filter_by(owner=current_user.email).all()
+    """ returns prduct list of current user with pagination"""
+    data = Product.query.filter_by(owner=current_user.email).paginate(per_page=10)
     return render_template('inventario.html', user=current_user, products=data )
 
 @auth.route('/inventario/add', methods=['GET', 'POST'])
@@ -95,7 +96,7 @@ def add():
             reserved = None
         if cbarras == '':
             cbarras = None
-
+    
         # query to check if product in form is already in the db
         prod = Product.query.filter_by(id=ide).first()
         if ide and name and sucursal and qty:
