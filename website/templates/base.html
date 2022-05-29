@@ -33,6 +33,7 @@
                         {% if user.is_authenticated %}
                             <a id="inv" href="/inventario">Inventory</a>
                             <a id="logout" href="/logout">Logout</a>
+                            <p>user {{ user.usrname }}</p>
                         {% else %}
                             <a id="signUp" href="/sign-up">Sign Up</a>
                             <a id="login" href="/login">Login</a>
@@ -49,12 +50,10 @@
         {% if category == 'error' %}
           <div class="alert alert-danger alert-dismissable fade show" role="alert">
               {{ message }}
-              <button type="button" class="close" dat-dismiss="alert"></button>
           </div>
         {% else %}
           <div class="alert alert-success alert-dismissable fade show" role="alert">
               {{ message }}
-              <button type="button" class="close" dat-dismiss="alert"></button>
           </div>
         {% endif %}     
       {% endfor %}

@@ -15,8 +15,8 @@
     input {width: 120px;}
   </style>
 <h1>Inventario</h1>
+<br>
 <p>aca se mostraran todos sus productos</p>
-<br><br>
 <table>
     <!-- row of clumn names -->
     <tr>
@@ -42,8 +42,9 @@
         <td> {{ p.qty_reserved}} </td>
         <td> {{ p.qr_barcode}} </td>
     </tr>
-{% endfor %}
-<br><br>
+    {% endfor %}
+</table>
+<br>
 <a href="/inventario/add">añadir producto</a>
 <a href="/inventario/edit">editar producto</a>
 <a href="/inventario/del">borrar producto</a>

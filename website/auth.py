@@ -1,10 +1,7 @@
-import email
-from hashlib import sha256
-from tabnanny import check
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from website import views
 from . import db
-from .models import Product, User
+from .models import Product, Sucursal, User
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_required, login_user, logout_user, current_user
 
@@ -74,7 +71,30 @@ def inv():
     data = Product.query.filter_by(owner=current_user.email).all()
     return render_template('inventario.html', user=current_user, products=data )
 
-@auth.route('/inventario/add')
-@login_required 
+@auth.route('/inventario/add', methods=['GET', 'POST'])
+@login_required
 def add():
-    return render_template('add.html')
+    if request.method == 'POST':
+        ide = request.form.get('ide')
+        name = request.form.get('pname')
+        sucursal = request.form.get('sucursal')
+        qty = request.form.get('cant')
+        cost = request.form.get('cost')
+        price = request.form.get('price')
+        expiry = request.form.get('expiry')
+        reserved = request.form.get('reserved')
+        cbarras = request.form.get('cbarras')
+
+        # query to check if product in form is already in the db
+        prod = Product.query.filter_by(id=ide).first()
+        if ide and name and sucursal and qty:
+            if not prod:
+                flash("Poduct added", category='success')
+                print(ide, name, sucursal, qty, cost, price, expiry, reserved, cbarras)
+            else:
+                flash('A product with that ID already exists', category='error')
+        else:
+            flash('ID, Name, Sucursal and Quantity are mandatory fields', category='error')
+
+    sucs = Sucursal.query.filter_by(owner=current_user.email)
+    return render_template('add.html', user=current_user, sucursales=sucs)

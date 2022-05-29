@@ -10,3 +10,10 @@ VALUES
 ('s4lv4dord@gmail.com', 'levadura puritas 10g','suc1', 100, 20, 50, '2022-05-22', 0, '1234512346'),
 ('s4lv4dord@gmail.com', 'pan duro', 'suc2', 25, 5, 45, '2022-05-21', 0, '1234512347'),
 ('camia2611@hotmail.com', 'merluza 1kg', 'suc3', 93, 150, 350, '2022-05-19', 0, '1234512348');
+
+INSERT INTO sucursal (name, owner) 
+VALUES
+ ('ptacarretas', 's4lv4dord@gmail.com'),
+ ('pocitos', 's4lv4dord@gmail.com'),
+ ('centro', 's4lv4dord@gmail.com'),
+ ('perez castellanos', 'camia2611@gmail.com');
