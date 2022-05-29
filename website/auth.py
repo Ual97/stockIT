@@ -84,13 +84,28 @@ def add():
         expiry = request.form.get('expiry')
         reserved = request.form.get('reserved')
         cbarras = request.form.get('cbarras')
+        
+        if cost == '':
+            cost = None
+        if price == '':
+            price = None
+        if expiry == '':
+            expiry = None
+        if reserved == '':
+            reserved = None
+        if cbarras == '':
+            cbarras = None
 
         # query to check if product in form is already in the db
         prod = Product.query.filter_by(id=ide).first()
         if ide and name and sucursal and qty:
             if not prod:
-                flash("Poduct added", category='success')
                 print(ide, name, sucursal, qty, cost, price, expiry, reserved, cbarras)
+                new_prod = Product(id=ide, owner=current_user.email, name=name, sucursal=sucursal, quantity=qty,
+                                cost=cost, price=price, expiry=expiry, qty_reserved=reserved, qr_barcode=cbarras)
+                db.session.add(new_prod)
+                db.session.commit()
+                flash("Poduct added", category='success')
             else:
                 flash('A product with that ID already exists', category='error')
         else:
