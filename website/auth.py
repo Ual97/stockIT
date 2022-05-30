@@ -4,6 +4,7 @@ from . import db
 from .models import Product, Sucursal, User
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_required, login_user, logout_user, current_user
+from sqlalchemy.sql.expression import func
 
 # This file is a blueprint, it has urls in it
 # We can have url routes in different files because of this
@@ -76,7 +77,6 @@ def inv():
 @login_required
 def add():
     if request.method == 'POST':
-        ide = request.form.get('ide')
         name = request.form.get('pname')
         sucursal = request.form.get('sucursal')
         qty = request.form.get('cant')
@@ -97,20 +97,21 @@ def add():
         if cbarras == '':
             cbarras = None
     
-        # query to check if product in form is already in the db
-        prod = Product.query.filter_by(id=ide).first()
-        if ide and name and sucursal and qty:
-            if not prod:
-                print(ide, name, sucursal, qty, cost, price, expiry, reserved, cbarras)
-                new_prod = Product(id=ide, owner=current_user.email, name=name, sucursal=sucursal, quantity=qty,
-                                cost=cost, price=price, expiry=expiry, qty_reserved=reserved, qr_barcode=cbarras)
-                db.session.add(new_prod)
-                db.session.commit()
-                flash("Poduct added", category='success')
-            else:
-                flash('A product with that ID already exists', category='error')
+        if name and sucursal and qty:
+            new_prod = Product(owner=current_user.email, name=name, sucursal=sucursal, quantity=qty, cost=cost,
+                               price=price, expiry=expiry, qty_reserved=reserved, qr_barcode=cbarras)
+            db.session.add(new_prod)
+            db.session.commit()
+            flash("Poduct added", category='success')
         else:
-            flash('ID, Name, Sucursal and Quantity are mandatory fields', category='error')
+            flash('Name, Sucursal and Quantity are mandatory fields', category='error')
 
+    # sucursales to display as options in add product table
     sucs = Sucursal.query.filter_by(owner=current_user.email)
-    return render_template('add.html', user=current_user, sucursales=sucs)
+    # hardprint next id for new product
+    nextid = db.session.query(func.max(Product.id)).scalar()
+    if nextid is None:
+        nextid = 1
+    else:
+        nextid += 1
+    return render_template('add.html', user=current_user, sucursales=sucs, nextid=nextid)
