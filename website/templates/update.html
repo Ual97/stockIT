@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Inv{% endblock %}
+{% block content %}
+<style>
+  table, td, th {
+    border: 1px solid black;
+    text-align: center;
+    padding: 5px;
+    margin-bottom: 15px;
+  }
+  th {
+      background-color: orange;
+    }
+  input {width: 110px;}
+  td {
+        max-width: 100%; /* ajusta las td al content*/
+        white-space: nowrap;
+    }
+</style>
+
+<body>
+    <h1> Inventory </h1>
+    <form action="/inventory/update/{{ item.id }}" method="POST">
+        <!--updates inventory on the db-->
+        <input type="text" name="name" placeholder="New product name", value="{{ item.name }}">
+        <input type="text" name="sucursal" placeholder="New subsidiary", value="{{ item.sucursal }}">
+        <input type="text" name="quantity" placeholder="New quantity", value="{{ item.quantity }}">
+        <input type="text" name="cost" placeholder="New Cost", value="{{ item.cost }}">
+        <input type="text" name="price" placeholder="New Price", value="{{ item.price }}">
+        <input type="text" name="expiry" placeholder="New Expiry", value="{{ item.expiry }}">
+        <input type="text" name="qty_reserved" placeholder="New Quantity reserved", value="{{ item.qty_reserved }}">
+        <input type="text" name="qr_barcode" placeholder="New QR or Varcode", value="{{ item.qr_barcode }}">
+        <button type="submit">Update</button>
+    </form>
+</body>

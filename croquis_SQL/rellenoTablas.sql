@@ -3,13 +3,12 @@
 -- VALUES 
 -- ('s4lv4dord@gmail.com', 'sha256$Zo1sPqXhu8aR4G9w$4fa51fce6799617ddf5eef13dee12bf339a3e607522699bf82eccfccaa6c22b4', 'sl4'), 
 -- ('camia2611@gmail.com', 'sha256$CwQn5Ty8vFVxPrGr$1c613c620628d19fce28ce75f8508e4bb56736f5e72e8bfde52ffc605f18b9be', 'cam');
-
--- INSERT INTO sucursal (name, owner) 
--- VALUES
---  ('ptacarretas', 's4lv4dord@gmail.com'),
---  ('pocitos', 's4lv4dord@gmail.com'),
---  ('centro', 's4lv4dord@gmail.com'),
---  ('perez castellanos', 'camia2611@gmail.com');
+INSERT INTO sucursal (name, owner) 
+VALUES
+ ('ptacarretas', 's4lv4dord@gmail.com'),
+ ('pocitos', 's4lv4dord@gmail.com'),
+ ('centro', 's4lv4dord@gmail.com'),
+ ('perez castellanos', 'camia2611@gmail.com');
 
 INSERT INTO product (owner, name, sucursal, quantity, cost, price, expiry, qty_reserved, qr_barcode)
 VALUES 

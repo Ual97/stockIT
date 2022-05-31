@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login  import LoginManager
 
 db = SQLAlchemy()
-DB_NAME = 'stockITdb'
+DB_NAME = 'DB'
 
 def create_app():
     app = Flask(__name__)
@@ -11,26 +11,29 @@ def create_app():
     app.config['SECRET_KEY'] = 'wooooa, secret'
 
     # sqlalchemy connection config
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://root:123@localhost/{DB_NAME}'
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://root:12345678@localhost/{DB_NAME}'
     db.init_app(app)
 
     # import blueprints
     from .views import views
-    from .auth import auth
+    from .routes.user import usr
+    from .routes.product import inventory
     # registering blueprints
     app.register_blueprint(views, url_prefix='/')
-    app.register_blueprint(auth, url_prefix='/')
+    app.register_blueprint(usr, url_prefix='/')
+    app.register_blueprint(inventory, url_prefix='/')
 
     # create tables from models
-    from . import models    
+    from .models.user import User
+    
     db.create_all(app=app)
 
     login_manager = LoginManager()
-    login_manager.login_view = 'auth.login'
+    login_manager.login_view = 'usr.login'
     login_manager.init_app(app)
 
     @login_manager.user_loader #how the users are loaded
     def load_user(id):
-        return models.User.query.get(id)
+        return User.query.get(id)
 
     return app

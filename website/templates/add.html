@@ -29,7 +29,7 @@
           <th>Precio</th>
           <th>F. Vencimiento</th>
           <th>Reservado</th>
-          <th>codigo barras</th>
+          <th>Codigo barras</th>
         </tr>
         <tr>
             <td>
@@ -106,7 +106,21 @@
               placeholder="888 888 888 888"
               />
             </td>
-        </tr>       
+        </tr>
+        {% for p in products.items %}    
+        <tr>
+          <td>{{ p.id }}</td>
+          <td>{{ p.name }}</td>
+          <td>{{ p.sucursal }}</td>
+          <td>{{ p.quantity }}</td>
+          <td>{{ p.cost }}</td>
+          <td>{{ p.price }}</td>
+          <td>{{ p.expiry }}</td>
+          <td>{{ p.qty_reserved }}</td>
+          <td>{{ p.qr_barcode }}</td>
+          
+        </tr>
+        {% endfor %}
     </table>
   <input name="btn-add" value="add product" type="submit"/>
 </form>

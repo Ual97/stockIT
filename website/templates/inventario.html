@@ -12,7 +12,7 @@
       padding: 5px;
     }
     th {background-color: orange;}
-    input {width: 120px;}
+    input {width: 180px;}
     table {margin-bottom: 15px;}
   </style>
 <h1>Inventory</h1>
@@ -30,18 +30,29 @@
         <th>F. Vencimiento</th>
         <th>Reservado</th>
         <th>codigo barras</th>
+        <th>Update</th>
+        <th>Delete</th>
     </tr>  
     {% for p in products.items %}    
     <tr>
-        <td> {{ p.id}} </td>
-        <td> {{ p.name}} </td>
-        <td> {{ p.sucursal}} </td>
-        <td> {{ p.quantity}} </td>
-        <td> {{ p.cost}} </td>
-        <td> {{ p.price}} </td>
-        <td> {{ p.expiry}} </td>
-        <td> {{ p.qty_reserved}} </td>
-        <td> {{ p.qr_barcode}} </td>
+        <td>{{ p.id }}</td>
+        <td>{{ p.name }}</td>
+        <td>{{ p.sucursal }}</td>
+        <td>{{ p.quantity }}</td>
+        <td>{{ p.cost }}</td>
+        <td>{{ p.price }}</td>
+        <td>{{ p.expiry }}</td>
+        <td>{{ p.qty_reserved }}</td>
+        <td>{{ p.qr_barcode }}</td>
+        <td><button onclick="window.location.href='{{ url_for( 'inventory.Put', id=p.id) }}';">
+            Update
+            </button>
+        </td>
+        <td>
+            <button onclick="window.location.href='{{ url_for( 'inventory.Delete', id=p.id) }}';">
+            Delete
+            </button>
+        </td>
     </tr>
     {% endfor %}
 </table>
@@ -50,9 +61,9 @@
 {% for page_num in products.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=3) %}
     {% if page_num %}
         {% if products.page == page_num %}
-            <a  class="btn btn-info mb-4" href="{{url_for('auth.inv', page=page_num)}}">{{page_num}}</a>
+            <a  class="btn btn-info mb-4" href="{{url_for('inventory.inv', page=page_num)}}">{{page_num}}</a>
         {% else %}
-            <a  class="btn btn-outline-info mb-4" href="{{url_for('auth.inv', page=page_num)}}">{{page_num}}</a>
+            <a  class="btn btn-outline-info mb-4" href="{{url_for('inventory.inv', page=page_num)}}">{{page_num}}</a>
         {% endif %}      
     {% else %}
         ...
