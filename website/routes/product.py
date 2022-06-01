@@ -19,7 +19,7 @@ def inv():
 @inventory.route('/inventario/add', methods=['GET', 'POST'])
 @login_required
 def InvAdd():
-    print(f'\n\nentre donde pense q entraba chinchulin\n\n\n')
+    print(f'\n\nentre donde pense q entraba chinchulin {request.method}\n\n\n')
     if request.method == 'POST':
         prodDict = request.form.to_dict()
         name = prodDict.get('pname')
@@ -71,20 +71,20 @@ def Put(id):
 
     if request.method == 'POST':
 
-        item.name = request.form.get('name') if request.form.get('name\
+        item.name = request.form.get('pname') if request.form.get('pname\
 ') != 'None' else item.name
 
         item.sucursal = request.form.get('sucursal') if request.form.get('\
 sucursal') != 'None' else item.sucursal
 
-        item.quantity = request.form.get('quantity') if request.form.get('\
-quantity') != 'None' else item.quantity
+        item.quantity = request.form.get('cant') if request.form.get('\
+cant') != 'None' else item.quantity
         
         item.cost = request.form.get('cost') if request.form.get('cost') != '\
 None' else item.cost
         
         item.price = request.form.get('price') if request.form.get('price') != '\
-None' else item.price
+None' and request.form.get('price') != '' else item.price
         
         item.expiry = datetime.strptime(request.form.get('expiry'), '%d/%m/%Y').date() if request.form.get('expiry\
 ') != 'None' and request.form.get('expiry').replace('/', '\
@@ -100,14 +100,23 @@ get('qty_reserved') != 'None' and request.form.get('qty_reserved') != '' else it
 
         flash('Item updated successfully!')
         
-        return redirect('/inventario')    
-    return render_template('update.html', item=item)
+        return redirect('/inventario')
+    # sucursales to display as options in add product table
+    sucs = Sucursal.query.filter_by(owner=current_user.email)
+    data = Product.query.filter_by(owner=current_user.email).paginate(per_page=10)    
+    return render_template('update.html', user=current_user, item=item,
+                           sucursales=sucs, products=data)
 
 @inventory.route('/inventario/delete/<id>', strict_slashes=False)
+@inventory.route('/inventario/add/delete/<id>', strict_slashes=False)
 @login_required
 def Delete(id):
     """inventory page"""
     db.session.delete(Product.query.get(id))
     db.session.commit()
     flash('Item deleted successfully!')
-    return redirect('/inventario')
+    print(f'\n\n\naaaaaaaaaaaa{request.url_rule}\n\n\n')
+    if request.url_rule == '/inventario/add/delete/<id>':
+        return redirect('/inventario/add/delete/<id>')
+    else:
+        return redirect('/inventario')

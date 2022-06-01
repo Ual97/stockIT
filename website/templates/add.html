@@ -13,6 +13,9 @@
   td {  max-width: 100%; /* ajusta las td al content*/
         white-space: nowrap;}
 </style>
+<head>
+  <link rel="stylesheet" href="../static/buttons.css">
+</head>
 
 <h1>Inventory / Add</h1>
 <br> 
@@ -106,6 +109,9 @@
               placeholder="888 888 888 888"
               />
             </td>
+            <td>
+              <input name="btn-add" value="add product" type="submit"/>
+            </td>
         </tr>
         {% for p in products.items %}    
         <tr>
@@ -118,11 +124,16 @@
           <td>{{ p.expiry }}</td>
           <td>{{ p.qty_reserved }}</td>
           <td>{{ p.qr_barcode }}</td>
+          <td>
+            <!--<button onclick="window.location.href='{{ url_for( 'inventory.Delete', id=p.id) }}';">
+            Delete
+            </button>-->
+          <a class="deleteButton" href="{{ url_for( 'inventory.Delete', id=p.id) }}">Delete</a>
+        </td>
           
         </tr>
         {% endfor %}
     </table>
-  <input name="btn-add" value="add product" type="submit"/>
 </form>
 <br><br>
 <a href="/inventario/edit">editar producto</a>

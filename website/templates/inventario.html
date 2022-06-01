@@ -2,6 +2,9 @@
 {% block title %}Inv{% endblock %}
 {% block content %}
 <!-- un poco de css para di -->
+<head>
+    <link rel="stylesheet" href="../static/buttons.css">
+</head>
 <style>
     html {margin-left: 30px;}
 </style>
@@ -44,14 +47,14 @@
         <td>{{ p.expiry }}</td>
         <td>{{ p.qty_reserved }}</td>
         <td>{{ p.qr_barcode }}</td>
-        <td><button onclick="window.location.href='{{ url_for( 'inventory.Put', id=p.id) }}';">
+        <td><a class="updateButton" href="{{ url_for( 'inventory.Put', id=p.id) }}">
             Update
-            </button>
+            </a>
         </td>
         <td>
-            <button onclick="window.location.href='{{ url_for( 'inventory.Delete', id=p.id) }}';">
+            <a class="deleteButton" href="{{ url_for( 'inventory.Delete', id=p.id) }}'">
             Delete
-            </button>
+            </a>
         </td>
     </tr>
     {% endfor %}
@@ -70,7 +73,5 @@
     {% endif %}
 {% endfor %}
 <br>
-<a href="/inventario/add">Add product</a>
-<a href="/inventario/edit">Modify product</a>
-<a href="/inventario/del">Delete product</a>
+<a class="addButton" href="/inventario/add">Add product</a>
 {% endblock %}

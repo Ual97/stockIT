@@ -17,19 +17,113 @@
         white-space: nowrap;
     }
 </style>
-
+<head>
+  <link rel="stylesheet" href="../static/buttons.css">
+</head>
 <body>
     <h1> Inventory </h1>
-    <form action="/inventory/update/{{ item.id }}" method="POST">
-        <!--updates inventory on the db-->
-        <input type="text" name="name" placeholder="New product name", value="{{ item.name }}">
-        <input type="text" name="sucursal" placeholder="New subsidiary", value="{{ item.sucursal }}">
-        <input type="text" name="quantity" placeholder="New quantity", value="{{ item.quantity }}">
-        <input type="text" name="cost" placeholder="New Cost", value="{{ item.cost }}">
-        <input type="text" name="price" placeholder="New Price", value="{{ item.price }}">
-        <input type="text" name="expiry" placeholder="New Expiry", value="{{ item.expiry }}">
-        <input type="text" name="qty_reserved" placeholder="New Quantity reserved", value="{{ item.qty_reserved }}">
-        <input type="text" name="qr_barcode" placeholder="New QR or Varcode", value="{{ item.qr_barcode }}">
-        <button type="submit">Update</button>
+    <form id="form" action="/inventario/update/{{ item.id }}" method="POST">
+      <!--updates inventory on the db-->
+      <table>
+        <!-- row of clumn names -->    
+        <!-- row of clumn names -->    
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Sucursal</th>
+          <th>Cantidad</th>
+          <th>Costo</th>
+          <th>Precio</th>
+          <th>F. Vencimiento</th>
+          <th>Reservado</th>
+          <th>Codigo barras</th>
+        </tr>
+        <tr>
+            <td>
+              {{ item.id }}
+            </td>
+            <td>
+              <label for="pname"></label>
+              <input 
+               type="text"
+               id="pname"
+               name="pname"
+               placeholder=""
+               value="{{ item.name }}"
+              />
+            </td>
+            <td>
+              <label for="sucursal">select s.</label>
+              <select name="sucursal" id="sucursal">
+                {% for s in sucursales%}
+                <option value="{{s.name}}">{{s.name}}</option>
+                {% endfor %}
+              </select>
+            </td>
+            <td>
+              <label for="cant"></label>
+              <input 
+                type="number"
+                id="cant"
+                name="cant"
+                placeholder=""
+                value="{{ item.quantity }}"
+              />
+            </td>
+            <td>
+              <label for="cost"></label>
+              <input 
+                type="number"
+                id="cost"
+                name="cost"
+                placeholder=""
+                value="{{ item.cost }}"
+              />
+            </td>
+            <td>
+              <label for="price"></label>
+              <input 
+                type="number"
+                id="price"
+                name="price"
+                placeholder=""
+                value="{{ item.price }}"
+              />
+            </td>
+            <td>
+              <label for="expiry"></label>
+              <input 
+                type="date"
+                id="expiry"
+                name="expiry"
+                placeholder=""
+                value="{{ item.expiry }}"
+              />
+            </td>
+            <td>
+              <label for="reserved"></label>
+              <input 
+                type="number"
+                id="reserved"
+                name="reserved"
+                placeholder=""
+              />
+            </td>
+            <td>
+              <label for="cbarras"></label>
+              <input 
+                type="number"
+                id="cbarras"
+                name="cbarras"
+                placeholder="888 888 888 888"
+                value="{{ item.cbarras }}"
+              />
+            </td>
+            <td>
+              <input class="updateButton" name="btn-add" value="Update product" type="submit"/>
+              </td>
+        </tr>
+      </table>
     </form>
 </body>
+{% endblock %}

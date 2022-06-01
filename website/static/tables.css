@@ -1,0 +1,17 @@
+table, td, th {
+    border: 1px solid black;
+    text-align: center;
+    padding: 5px;
+    margin-bottom: 15px;
+  }
+th {
+  background-color: orange;
+}
+input {
+  width: 110px;
+}
+
+td {
+  max-width: 100%; /* ajusta las td al content*/
+  white-space: nowrap;
+}
