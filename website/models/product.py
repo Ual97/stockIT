@@ -25,3 +25,4 @@ class Product(db.Model):
         self.expiry = kwargs.get('expiry')
         self.qty_reserved = kwargs.get('reserved')
         self.qr_barcode = kwargs.get('cbarras')
+

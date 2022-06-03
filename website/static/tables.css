@@ -15,3 +15,22 @@ td {
   max-width: 100%; /* ajusta las td al content*/
   white-space: nowrap;
 }
+
+.update {
+
+  z-index: 10;
+  background-color: cornflowerblue;
+  border-radius: 10px;
+  width: 50%;
+  height: 50%;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  position: fixed;
+  margin-top: 12%;
+}
+
+.Invisible {
+  display: none;
+}

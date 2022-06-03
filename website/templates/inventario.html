@@ -4,7 +4,13 @@
 <!-- un poco de css para di -->
 <head>
     <link rel="stylesheet" href="../static/buttons.css">
+    <link rel="stylesheet" href="../static/tables.css">
+    <script src="../static/scripts/updateForm.js"></script>
 </head>
+<div class="Invisible">
+  <!--updates inventory on the db-->
+
+</div>
 <style>
     html {margin-left: 30px;}
 </style>
@@ -15,27 +21,113 @@
       padding: 5px;
     }
     th {background-color: orange;}
-    input {width: 180px;}
     table {margin-bottom: 15px;}
+  input {width: 100px;}
+  td {    white-space: nowrap;}/*ajusta las td al content*/
+ 
   </style>
-<h1>Inventory</h1>
 <br>
-<p>Your products will be shown here</p>
-<table>
-    <!-- row of clumn names -->
-    <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Sucursal</th>
-        <th>Cantidad</th>
-        <th>Costo</th>
-        <th>Precio</th>
-        <th>F. Vencimiento</th>
-        <th>Reservado</th>
-        <th>codigo barras</th>
-        <th>Update</th>
-        <th>Delete</th>
-    </tr>  
+    <h1>Inventory / Add</h1>
+    <br> 
+    <p>Your products will be shown here</p>
+    <p>Add your new product here. First four fields are mandatory</p>
+    <form method="POST">  
+        <table>
+            <!-- row of clumn names -->    
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Sucursal</th>
+              <th>Cantidad</th>
+              <th>Costo</th>
+              <th>Precio</th>
+              <th>F. Vencimiento</th>
+              <th>Reservado</th>
+              <th>Codigo barras</th>
+              <th>Add/Update</th>
+              <th>Delete</th>
+            </tr>
+            <tr>
+                <td>
+                  {{ nextid }}
+                </td>
+                <td>
+                  <label for="pname"></label>
+                  <input 
+                   type="text"
+                   id="pname"
+                   name="pname"
+                   placeholder=""
+                  />
+                </td>
+                <td>
+                  <label for="sucursal">select s.</label>
+                  <select name="sucursal" id="sucursal">
+                    {% for s in sucursales%}
+                    <option value="{{s.name}}">{{s.name}}</option>
+                    {% endfor %}
+                  </select>
+                </td>
+                <td>
+                  <label for="cant"></label>
+                  <input 
+                  type="number"
+                  id="cant"
+                  name="cant"
+                  placeholder=""
+                />
+                </td>
+                <td>
+                  <label for="cost"></label>
+                  <input 
+                  type="number"
+                  id="cost"
+                  name="cost"
+                  placeholder=""
+                  />
+                </td>
+                <td>
+                  <label for="price"></label>
+                  <input 
+                  type="number"
+                  id="price"
+                  name="price"
+                  placeholder=""
+                  />
+                </td>
+                <td>
+                  <label for="expiry"></label>
+                  <input 
+                  type="date"
+                  id="expiry"
+                  name="expiry"
+                  placeholder=""
+                  />
+                </td>
+                <td>
+                  <label for="reserved"></label>
+                  <input 
+                  type="number"
+                  id="reserved"
+                  name="reserved"
+                  placeholder=""
+                  />
+                </td>
+                <td>
+                  <label for="cbarras"></label>
+                  <input 
+                  type="number"
+                  id="cbarras"
+                  name="cbarras"
+                  placeholder="888 888 888 888"
+                  />
+                </td>
+                <td>
+                  <input name="btn-add" value="add product" type="submit"/>
+                </td>
+                <th></th>
+            </tr>
+    <!-- row of clumn names -->  
     {% for p in products.items %}    
     <tr>
         <td>{{ p.id }}</td>
@@ -47,7 +139,7 @@
         <td>{{ p.expiry }}</td>
         <td>{{ p.qty_reserved }}</td>
         <td>{{ p.qr_barcode }}</td>
-        <td><a class="updateButton" href="{{ url_for( 'inventory.Put', id=p.id) }}">
+        <td><a id="{{ p.id }}" class="updateButton">
             Update
             </a>
         </td>
@@ -73,5 +165,4 @@
     {% endif %}
 {% endfor %}
 <br>
-<a class="addButton" href="/inventario/add">Add product</a>
 {% endblock %}

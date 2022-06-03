@@ -1,28 +1,24 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from operator import or_
+from os import abort
+from flask import Blueprint, render_template, request, flash, redirect, jsonify, abort
 from website import db
 from website.models.product import Product
 from website.models.sucursal import Sucursal
+from website.models.user import User
 from flask_login import login_required, current_user
 from sqlalchemy.sql.expression import func
+from sqlalchemy import and_
 from datetime import datetime
 
 inventory = Blueprint('inventory', __name__)
 
-@inventory.route('/inventario')
+@inventory.route('/inventario', methods=['GET', 'POST'])
 @login_required
 def inv():
-    """ returns prduct list of current user with pagination"""
-    data = Product.query.filter_by(owner=current_user.email).paginate(per_page=10)
-    print(f'\n\n\ndata pal render: {data.query.values()}\n\n')
-    return render_template('inventario.html', user=current_user, products=data)
-
-@inventory.route('/inventario/add', methods=['GET', 'POST'])
-@login_required
-def InvAdd():
     print(f'\n\nentre donde pense q entraba chinchulin {request.method}\n\n\n')
     if request.method == 'POST':
         prodDict = request.form.to_dict()
-        name = prodDict.get('pname')
+        name = prodDict.get('pname')    
         sucursal = prodDict.get('sucursal')
         qty = prodDict.get('cant')
         cost = prodDict.get('cost')
@@ -48,7 +44,7 @@ def InvAdd():
             db.session.add(new_prod)
             db.session.commit()
             flash("Poduct added", category='success')
-            return redirect('/inventario/add')
+            return redirect('/inventario')
         else:
             flash('Name, Sucursal and Quantity are mandatory fields', category='error')
     # sucursales to display as options in add product table
@@ -60,7 +56,7 @@ def InvAdd():
     else:
         nextid += 1
     data = Product.query.filter_by(owner=current_user.email).paginate(per_page=10)
-    return render_template('add.html', user=current_user,
+    return render_template('inventario.html', user=current_user,
                            sucursales=sucs, nextid=nextid, products=data)
 
 @inventory.route('/inventario/update/<id>', methods=['POST','GET'], strict_slashes=False)
@@ -101,11 +97,16 @@ get('qty_reserved') != 'None' and request.form.get('qty_reserved') != '' else it
         flash('Item updated successfully!')
         
         return redirect('/inventario')
-    # sucursales to display as options in add product table
-    sucs = Sucursal.query.filter_by(owner=current_user.email)
-    data = Product.query.filter_by(owner=current_user.email).paginate(per_page=10)    
-    return render_template('update.html', user=current_user, item=item,
-                           sucursales=sucs, products=data)
+    try:
+        # filter query by logged user and id
+        product = Product.query.filter(and_(Product.owner==current_user.email, Product.id==id)).first()
+        
+        # making a diccionary to use the GET method as API
+        toDict = product.__dict__
+        toDict.pop('_sa_instance_state')
+        return jsonify(toDict)
+    except Exception:
+        abort(404)
 
 @inventory.route('/inventario/delete/<id>', strict_slashes=False)
 @inventory.route('/inventario/add/delete/<id>', strict_slashes=False)
