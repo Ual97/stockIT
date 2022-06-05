@@ -1,5 +1,7 @@
 from operator import or_
 from os import abort
+from re import X
+from urllib import response
 from flask import Blueprint, render_template, request, flash, redirect, jsonify, abort
 from website import db
 from website.models.product import Product
@@ -63,35 +65,81 @@ def inv():
 @login_required
 def Put(id):
     """updating or consulting item from inventory"""
+    # hacerlo con if coherentes
     item = Product.query.get(id)
 
     if request.method == 'POST':
+        prodDict = request.form.to_dict()
+        if prodDict is None:
+            abort(404)
+        debugKeys = prodDict.keys()
 
-        item.name = request.form.get('pname') if request.form.get('pname\
-') != 'None' else item.name
+        keys = ('name', 'sucursal', 'quantity', 'cost', 'price', 'expiry', 'qty_reserved', 'qr_barcode')
 
-        item.sucursal = request.form.get('sucursal') if request.form.get('\
-sucursal') != 'None' else item.sucursal
+        print(f'debug keys: {debugKeys} \n\n keys set: {keys}\n\n diccionario antes de update: {item.__dict__}\n\n datos nuevos: {prodDict}')
+        pos = 0
+        for pos in keys[pos]:
+            if pos == 0:
+                if prodDict[keys[pos]] != '' and prodDict[keys[pos]] != 'None':
+                    if type(prodDict[keys[pos]]) is str:
+                        item.name = prodDict[keys[pos]]
+            if pos == 1:
+                if prodDict[keys[pos]] != '' and prodDict[keys[pos]] != 'None':
+                    if type(prodDict[keys[pos]]) is str:
+                        item.sucursal = prodDict[keys[pos]]
+            if pos == 2:
+                if prodDict[keys[pos]] != '' and prodDict[keys[pos]] != 'None':
+                    if type(prodDict[keys[pos]]) is int:
+                        item.quantity = prodDict[keys[pos]]
+            if pos == 3:
+                if prodDict[keys[pos]] != '' and prodDict[keys[pos]] != 'None':
+                    if type(prodDict[keys[pos]]) is int:
+                        item.cost = prodDict[keys[pos]]
+            if pos == 4:
+                if prodDict[keys[pos]] != '' and prodDict[keys[pos]] != 'None':
+                    if type(prodDict[keys[pos]]) is int:
+                        item.price = prodDict[keys[pos]]
+            if pos == 5:
+                if prodDict[keys[pos]] != '' and prodDict[keys[pos]] != 'None':
+                    if type(prodDict[keys[pos]]) is datetime.date():
+                        item.expiry = prodDict[keys[pos]]
+            if pos == 6:
+                if prodDict[keys[pos]] != '' and prodDict[keys[pos]] != 'None':
+                    if type(prodDict[keys[pos]]) is int:
+                        item.qty_reserved = prodDict[keys[pos]]
+            if pos == 7:
+                if prodDict[keys[pos]] != '' and prodDict[keys[pos]] != 'None':
+                    if type(prodDict[keys[pos]]) is int:
+                        item.qr_barcode = prodDict[keys[pos]]
+        print(f'diccionario desp {item.__dict__}')
 
-        item.quantity = request.form.get('cant') if request.form.get('\
-cant') != 'None' else item.quantity
-        
-        item.cost = request.form.get('cost') if request.form.get('cost') != '\
-None' else item.cost
-        
-        item.price = request.form.get('price') if request.form.get('price') != '\
-None' and request.form.get('price') != '' else item.price
-        
-        item.expiry = datetime.strptime(request.form.get('expiry'), '%d/%m/%Y').date() if request.form.get('expiry\
-') != 'None' and request.form.get('expiry').replace('/', '\
-').isnumeric() != False and request.form.get('expiry') != '' else item.expiry
-        
-        item.qty_reserved = request.form.get('qty_reserved') if request.form.\
-get('qty_reserved') != 'None' and request.form.get('qty_reserved') != '' else item.qty_reserved
-        
-        item.qr_barcode = request.form.get('qr_barcode') if request.form.get(\
-'qr_barcode') != 'None' else item.qr_barcode
-        
+#        item.name = request.form.get('pname') if request.form.get('pname\
+#') != 'None' else item.name
+#
+#        item.sucursal = request.form.get('sucursal') if request.form.get('\
+#sucursal') != 'None' else item.sucursal
+#
+#        item.quantity = request.form.get('cant') if request.form.get('\
+#cant') != 'None' else item.quantity
+#        
+#        item.cost = request.form.get('cost') if request.form.get('cost') != '\
+#None' else item.cost
+#        
+#        item.price = request.form.get('price') if request.form.get('price') != '\
+#None' and request.form.get('price') != '' else item.price
+#        expiry = request.form.get('expiry')
+#        if expiry != 'None' and expiry != '' and expiry != None:
+#            if expiry.replace('/', "").isdigit():
+#                item.expiry = datetime.strptime(expiry, '%Y/%m/%d').date()
+#        else:
+#            item.expiry = None
+#        
+#        item.qty_reserved = request.form.get('qty_reserved') if request.form.\
+#get('qty_reserved') != 'None' and request.form.get('qty_reserved') != '' else item.qty_reserved
+#        
+#        item.qr_barcode = request.form.get('qr_barcode') if request.form.get(\
+#'qr_barcode') != 'None' else item.qr_barcode
+#        
         db.session.commit()
 
         flash('Item updated successfully!')

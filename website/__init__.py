@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login  import LoginManager
+from flask_cors import CORS
 
 db = SQLAlchemy()
 DB_NAME = 'DB'
@@ -9,6 +10,8 @@ def create_app():
     app = Flask(__name__)
     
     app.config['SECRET_KEY'] = 'wooooa, secret'
+    #CORS(app)
+
 
     # sqlalchemy connection config
     app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://root:12345678@localhost/{DB_NAME}'
