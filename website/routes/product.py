@@ -100,8 +100,7 @@ def Put(id):
                         item.price = prodDict[keys[pos]]
             if pos == 5:
                 if prodDict[keys[pos]] != '' and prodDict[keys[pos]] != 'None':
-                    if type(prodDict[keys[pos]]) is datetime.date():
-                        item.expiry = prodDict[keys[pos]]
+                    item.expiry = prodDict[keys[pos]]
             if pos == 6:
                 if prodDict[keys[pos]] != '' and prodDict[keys[pos]] != 'None':
                     if type(prodDict[keys[pos]]) is int:
@@ -111,34 +110,7 @@ def Put(id):
                     if type(prodDict[keys[pos]]) is int:
                         item.qr_barcode = prodDict[keys[pos]]
         print(f'diccionario desp {item.__dict__}')
-
-#        item.name = request.form.get('pname') if request.form.get('pname\
-#') != 'None' else item.name
-#
-#        item.sucursal = request.form.get('sucursal') if request.form.get('\
-#sucursal') != 'None' else item.sucursal
-#
-#        item.quantity = request.form.get('cant') if request.form.get('\
-#cant') != 'None' else item.quantity
-#        
-#        item.cost = request.form.get('cost') if request.form.get('cost') != '\
-#None' else item.cost
-#        
-#        item.price = request.form.get('price') if request.form.get('price') != '\
-#None' and request.form.get('price') != '' else item.price
-#        expiry = request.form.get('expiry')
-#        if expiry != 'None' and expiry != '' and expiry != None:
-#            if expiry.replace('/', "").isdigit():
-#                item.expiry = datetime.strptime(expiry, '%Y/%m/%d').date()
-#        else:
-#            item.expiry = None
-#        
-#        item.qty_reserved = request.form.get('qty_reserved') if request.form.\
-#get('qty_reserved') != 'None' and request.form.get('qty_reserved') != '' else item.qty_reserved
-#        
-#        item.qr_barcode = request.form.get('qr_barcode') if request.form.get(\
-#'qr_barcode') != 'None' else item.qr_barcode
-#        
+        
         db.session.commit()
 
         flash('Item updated successfully!')
