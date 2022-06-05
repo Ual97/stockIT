@@ -49,6 +49,10 @@ window.addEventListener('load', function() {
       const textQuantity = document.createTextNode("Quantity");
       colQuantity.appendChild(textQuantity);
       rowNames.appendChild(colQuantity);
+      const colCost = document.createElement("th");
+      const textCost = document.createTextNode("Cost");
+      colCost.appendChild(textCost);
+      rowNames.appendChild(colCost);
       const colPrice = document.createElement("th");
       const textPrice = document.createTextNode("Price");
       colPrice.appendChild(textPrice);
@@ -104,6 +108,15 @@ window.addEventListener('load', function() {
       colQuantityInput.setAttribute("value", data.quantity);
       colQuantityValue.appendChild(colQuantityInput);
       rowInputs.appendChild(colQuantityValue);
+      const colCostValue = document.createElement("td");
+      const colCostInput = document.createElement("input");
+      colCostInput.setAttribute("type", "number");
+      colCostInput.setAttribute("placeholder", "")
+      colCostInput.setAttribute("name", "cost");
+      colCostInput.setAttribute("id", "cost");
+      colCostInput.setAttribute("value", data.cost);
+      colCostValue.appendChild(colCostInput);
+      rowInputs.appendChild(colCostValue);
       const colPriceValue = document.createElement("td");
       const colPriceInput = document.createElement("input");
       colPriceInput.setAttribute("type", "number");
@@ -135,8 +148,8 @@ window.addEventListener('load', function() {
       const colqr_barCodeInput = document.createElement("input");
       colqr_barCodeInput.setAttribute("type", "text");
       colqr_barCodeInput.setAttribute("placeholder", "");
-      colqr_barCodeInput.setAttribute("name", "qr_barCode");
-      colqr_barCodeInput.setAttribute("id", "qr_barCode");
+      colqr_barCodeInput.setAttribute("name", "qr_barcode");
+      colqr_barCodeInput.setAttribute("id", "qr_barcode");
       colqr_barCodeInput.setAttribute("value", data.qr_barCode);
       colqr_barCodeValue.appendChild(colqr_barCodeInput);
       rowInputs.appendChild(colqr_barCodeValue);

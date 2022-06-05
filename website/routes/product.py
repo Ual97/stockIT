@@ -65,7 +65,6 @@ def inv():
 @login_required
 def Put(id):
     """updating or consulting item from inventory"""
-    # hacerlo con if coherentes
     item = Product.query.get(id)
 
     if request.method == 'POST':
@@ -78,7 +77,7 @@ def Put(id):
 
         print(f'debug keys: {debugKeys} \n\n keys set: {keys}\n\n diccionario antes de update: {item.__dict__}\n\n datos nuevos: {prodDict}')
         pos = 0
-        for pos in keys[pos]:
+        for pos in range(len(keys)):
             if pos == 0:
                 if prodDict[keys[pos]] != '' and prodDict[keys[pos]] != 'None':
                     if type(prodDict[keys[pos]]) is str:
