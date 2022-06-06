@@ -86,6 +86,10 @@ window.addEventListener('load', function() {
       for (let i = 0; data.ownerBranches[i]; i++) {
         const option = document.createElement("option");
         option.setAttribute("value", data.ownerBranches[i]);
+        if (data.ownerBranches[i] === data.sucursal) {
+          option.setAttribute("selected", "selected");
+        
+        }
         const textOption = document.createTextNode(data.ownerBranches[i]);
         option.appendChild(textOption);
         colSubsidiaryInput.appendChild(option);

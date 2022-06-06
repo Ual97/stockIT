@@ -4,7 +4,7 @@ from flask_login  import LoginManager
 from flask_cors import CORS
 
 db = SQLAlchemy()
-DB_NAME = 'DB'
+DB_NAME = 'stockITdb'
 
 def create_app():
     app = Flask(__name__)
