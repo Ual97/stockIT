@@ -123,6 +123,13 @@ def Put(id):
         # making a diccionary to use the GET method as API
         toDict = product.__dict__
         toDict.pop('_sa_instance_state')
+        branches = Sucursal.query.filter_by(owner=current_user.email).all()
+        listBranches = []
+        for branch in branches:
+            listBranches.append(branch.name)
+        print(f'a ver el diccionariode las sucursales: {listBranches}\n\n')
+        toDict['ownerBranches'] = listBranches
+        print(f'a ver el diccionario: {toDict}\n\n')
         return jsonify(toDict)
     except Exception:
         abort(404)

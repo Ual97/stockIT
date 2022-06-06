@@ -20,6 +20,19 @@ input {-webkit-appearance: none; box-shadow: none !important; }
     margin-left: 5px;
 }
 
+.cancelButton {
+    background-color: rgb(0, 255, 0);
+    color: #fff;
+    border: 1px solid rgb(0, 255, 0);
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-left: 5px;
+}
+
 .addButton {
     background-color: rgb(50, 211, 50);
     color: #fff;

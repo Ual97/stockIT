@@ -6,7 +6,10 @@
     <link rel="stylesheet" href="../static/buttons.css">
     <link rel="stylesheet" href="../static/tables.css">
     <script src="../static/scripts/updateForm.js"></script>
+    <script src="../static/scripts/deleteAlert.js"></script>
 </head>
+<div class="InvisibleDel">
+</div>
 <div class="Invisible">
 <!-- we need to implement this template to use query selector in js
   <form id="updateForm" action="" method="POST">
@@ -236,12 +239,13 @@
         <td>{{ p.expiry }}</td>
         <td>{{ p.qty_reserved }}</td>
         <td>{{ p.qr_barcode }}</td>
-        <td><a id="{{ p.id }}" class="updateButton" onclick="">
+        <td><a id="{{ p.id }}" class="updateButton">
             Update
             </a>
         </td>
         <td>
-            <a class="deleteButton" href="{{ url_for( 'inventory.Delete', id=p.id) }}'">
+            <a id="{{ p.id }}" class="deleteButton">
+            <!--<a class="deleteButton" href=" url_for( 'inventory.Delete', id=p.id) '">-->
             Delete
             </a>
         </td>

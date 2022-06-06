@@ -31,6 +31,25 @@ td {
   margin-top: 12%;
 }
 
+.delete {
+
+  z-index: 10;
+  background-color: rgb(77, 0, 0);
+  border-radius: 10px;
+  width: 88%;
+  height: 50%;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  position: fixed;
+  margin-top: 12%;
+}
+
 .Invisible {
+  display: none;
+}
+
+.InvisibleDel {
   display: none;
 }

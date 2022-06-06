@@ -1,18 +1,3 @@
-
-
-function httpGet(theUrl) {
-  let xmlHttpReq = new XMLHttpRequest();
-  xmlHttpReq.open("GET", theUrl, false); 
-  xmlHttpReq.send(null);
-  const Dict = JSON.parse(xmlHttpReq.responseText);
-  let List = []
-  const results = Dict['results']
-  for (let i = 0; results[i]; i++) {
-    List.push(results[i]['title'])
-  }
-  return List
-}
-
 window.addEventListener('load', function() {
   const elements = document.getElementsByClassName('updateButton');
   console.log(elements);
@@ -72,7 +57,7 @@ window.addEventListener('load', function() {
       const exitButton = document.createElement("th");
       const exit = document.createElement("a");
       
-      // apending header to table:
+      // appending header to table:
       table.appendChild(rowNames);
       // creating table body with col values:
       const rowValues = document.createElement("tr");
@@ -90,15 +75,31 @@ window.addEventListener('load', function() {
       colNameInput.setAttribute("id", "name");
       colNameValue.appendChild(colNameInput);
       rowInputs.appendChild(colNameValue);
-      const colSubsidiaryValue = document.createElement("td");
-      const colSubsidiaryInput = document.createElement("input");
-      colSubsidiaryInput.setAttribute("type", "text");
-      colSubsidiaryInput.setAttribute("placeholder", "");
+      const colSubsidiaryCol = document.createElement("td");
+      const colSubsidiaryValue = document.createElement("label");
+      colSubsidiaryValue.setAttribute("for", "sucursal");
+      const textSubsidiaryValue = document.createTextNode("Select S");
+      colSubsidiaryValue.appendChild(textSubsidiaryValue);
+      const colSubsidiaryInput = document.createElement("select");
       colSubsidiaryInput.setAttribute("name", "sucursal");
       colSubsidiaryInput.setAttribute("id", "sucursal");
-      colSubsidiaryInput.setAttribute("value", data.sucursal);
+      for (let i = 0; data.ownerBranches[i]; i++) {
+        const option = document.createElement("option");
+        option.setAttribute("value", data.ownerBranches[i]);
+        const textOption = document.createTextNode(data.ownerBranches[i]);
+        option.appendChild(textOption);
+        colSubsidiaryInput.appendChild(option);
+      }
       colSubsidiaryValue.appendChild(colSubsidiaryInput);
-      rowInputs.appendChild(colSubsidiaryValue);
+      colSubsidiaryCol.appendChild(colSubsidiaryValue);
+      rowInputs.appendChild(colSubsidiaryCol);
+      //colSubsidiaryInput.setAttribute("type", "text");
+      //colSubsidiaryInput.setAttribute("placeholder", "");
+      //colSubsidiaryInput.setAttribute("name", "sucursal");
+      //colSubsidiaryInput.setAttribute("id", "sucursal");
+      //colSubsidiaryInput.setAttribute("value", data.sucursal);
+      //colSubsidiaryValue.appendChild(colSubsidiaryInput);
+      //rowInputs.appendChild(colSubsidiaryValue);
       const colQuantityValue = document.createElement("td");
       const colQuantityInput = document.createElement("input");
       colQuantityInput.setAttribute("type", "number");
@@ -159,11 +160,25 @@ window.addEventListener('load', function() {
       colSumbitInput.setAttribute("value", "Submit");
       colSubmit.appendChild(colSumbitInput);
       rowInputs.appendChild(colSubmit);
-      // apending body to table
+      // appending body to table
       table.appendChild(rowInputs);
-      // apending table to form
+      // appending table to form
       form.appendChild(table);
-      // apending form to popup div
+
+      // apending cancel button
+      const cancelButton = document.createElement("a");
+      const cancelText = document.createTextNode("Cancel");
+      cancelButton.appendChild(cancelText);
+      cancelButton.setAttribute("class", "cancelButton")
+      function cancel() {
+        form.removeChild(table);
+        form.removeChild(cancelButton);
+        document.querySelector('.update').classList.replace('update', 'Invisible')
+      }
+      cancelButton.addEventListener("click", cancel);
+      form.appendChild(cancelButton);
+
+      // appending form to popup div
       document.querySelector('.update').appendChild(form);
 
       // we need to do the same but only with this
