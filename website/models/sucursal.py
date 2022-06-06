@@ -10,3 +10,4 @@ class Sucursal(db.Model):
     def __init__(self, **kwargs):
         """initialize obj sucursales"""
         self.name = kwargs.get('name')
+        self.owner = kwargs.get('owner')

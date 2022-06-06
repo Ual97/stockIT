@@ -10,8 +10,10 @@ window.addEventListener('load', function() {
         const yesButton = document.createElement('a');  //creating yes button
         const yes = document.createTextNode('Yes');
         yesButton.appendChild(yes);
-        yesButton.setAttribute('class', 'deleteButton')
-        yesButton.setAttribute('href', `/inventario/delete/${element.id}`);
+        yesButton.setAttribute('class', 'deleteButton');
+        tokens = element.id.split('.');
+        yesButton.setAttribute('href', `/${tokens[1]}/delete/${tokens[0]}`);
+        console.log(element.value);
         const noButton = document.createElement('a');   //creating no button
         const no = document.createTextNode('No');
         noButton.appendChild(no);

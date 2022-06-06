@@ -4,7 +4,7 @@ from flask_login  import LoginManager
 from flask_cors import CORS
 
 db = SQLAlchemy()
-DB_NAME = 'stockITdb'
+DB_NAME = 'DB'
 
 def create_app():
     app = Flask(__name__)
@@ -21,10 +21,12 @@ def create_app():
     from .views import views
     from .routes.user import usr
     from .routes.product import inventory
+    from .routes.sucursal import subsidiary
     # registering blueprints
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(usr, url_prefix='/')
     app.register_blueprint(inventory, url_prefix='/')
+    app.register_blueprint(subsidiary, url_prefix='/')
 
     # create tables from models
     from .models.user import User

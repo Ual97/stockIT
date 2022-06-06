@@ -1,3 +1,4 @@
+from curses.ascii import isdigit
 from operator import or_
 from os import abort
 from re import X
@@ -17,6 +18,7 @@ inventory = Blueprint('inventory', __name__)
 @inventory.route('/inventario', methods=['GET', 'POST'])
 @login_required
 def inv():
+    """main page of inventory"""
     print(f'\n\nentre donde pense q entraba chinchulin {request.method}\n\n\n')
     if request.method == 'POST':
         prodDict = request.form.to_dict()
@@ -88,26 +90,27 @@ def Put(id):
                         item.sucursal = prodDict[keys[pos]]
             if pos == 2:
                 if prodDict[keys[pos]] != '' and prodDict[keys[pos]] != 'None':
-                    if type(prodDict[keys[pos]]) is int:
+                    print(f'\n\n\ntype de esta mierda{type(prodDict[keys[pos]])}\n\n')
+                    if prodDict[keys[pos]].isdigit() is True:
                         item.quantity = prodDict[keys[pos]]
             if pos == 3:
                 if prodDict[keys[pos]] != '' and prodDict[keys[pos]] != 'None':
-                    if type(prodDict[keys[pos]]) is int:
+                    if prodDict[keys[pos]].isdigit() is True:
                         item.cost = prodDict[keys[pos]]
             if pos == 4:
                 if prodDict[keys[pos]] != '' and prodDict[keys[pos]] != 'None':
-                    if type(prodDict[keys[pos]]) is int:
+                    if prodDict[keys[pos]].isdigit() is True:
                         item.price = prodDict[keys[pos]]
             if pos == 5:
                 if prodDict[keys[pos]] != '' and prodDict[keys[pos]] != 'None':
                     item.expiry = prodDict[keys[pos]]
             if pos == 6:
                 if prodDict[keys[pos]] != '' and prodDict[keys[pos]] != 'None':
-                    if type(prodDict[keys[pos]]) is int:
+                    if prodDict[keys[pos]].isdigit() is True:
                         item.qty_reserved = prodDict[keys[pos]]
             if pos == 7:
                 if prodDict[keys[pos]] != '' and prodDict[keys[pos]] != 'None':
-                    if type(prodDict[keys[pos]]) is int:
+                    if prodDict[keys[pos]].isdigit() is True:
                         item.qr_barcode = prodDict[keys[pos]]
         print(f'diccionario desp {item.__dict__}')
         
@@ -135,7 +138,6 @@ def Put(id):
         abort(404)
 
 @inventory.route('/inventario/delete/<id>', strict_slashes=False)
-@inventory.route('/inventario/add/delete/<id>', strict_slashes=False)
 @login_required
 def Delete(id):
     """inventory page"""

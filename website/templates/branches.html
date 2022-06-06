@@ -5,7 +5,7 @@
 <head>
     <link rel="stylesheet" href="../static/buttons.css">
     <link rel="stylesheet" href="../static/tables.css">
-    <script src="../static/scripts/updateFormInventory.js"></script>
+    <script src="../static/scripts/updateFormBranch.js"></script>
     <script src="../static/scripts/deleteAlert.js"></script>
 </head>
 <div class="InvisibleDel">
@@ -127,23 +127,16 @@
  
   </style>
 <br>
-    <h1>Inventory / Add</h1>
+    <h1>Branches / Add</h1>
     <br> 
-    <p>Your products will be shown here</p>
-    <p>Add your new product here. First four fields are mandatory</p>
+    <p>Your branches will be shown here</p>
+    <p>Add your new brach here. Name field is mandatory</p>
     <form method="POST">  
         <table>
             <!-- row of clumn names -->    
             <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Sucursal</th>
-              <th>Cantidad</th>
-              <th>Costo</th>
-              <th>Precio</th>
-              <th>F. Vencimiento</th>
-              <th>Reservado</th>
-              <th>Codigo barras</th>
+              <th>Id</th>
+              <th>Name</th>
               <th>Add/Update</th>
               <th>Delete</th>
             </tr>
@@ -152,99 +145,30 @@
                   {{ nextid }}
                 </td>
                 <td>
-                  <label for="pname"></label>
+                  <label for="name"></label>
                   <input 
                    type="text"
-                   id="pname"
-                   name="pname"
+                   id="name"
+                   name="name"
                    placeholder=""
                   />
                 </td>
                 <td>
-                  <label for="sucursal">select s.</label>
-                  <select name="sucursal" id="sucursal">
-                    {% for s in sucursales%}
-                    <option value="{{s.name}}">{{s.name}}</option>
-                    {% endfor %}
-                  </select>
-                </td>
-                <td>
-                  <label for="cant"></label>
-                  <input 
-                  type="number"
-                  id="cant"
-                  name="cant"
-                  placeholder=""
-                />
-                </td>
-                <td>
-                  <label for="cost"></label>
-                  <input 
-                  type="number"
-                  id="cost"
-                  name="cost"
-                  placeholder=""
-                  />
-                </td>
-                <td>
-                  <label for="price"></label>
-                  <input 
-                  type="number"
-                  id="price"
-                  name="price"
-                  placeholder=""
-                  />
-                </td>
-                <td>
-                  <label for="expiry"></label>
-                  <input 
-                  type="date"
-                  id="expiry"
-                  name="expiry"
-                  placeholder=""
-                  />
-                </td>
-                <td>
-                  <label for="reserved"></label>
-                  <input 
-                  type="number"
-                  id="reserved"
-                  name="reserved"
-                  placeholder=""
-                  />
-                </td>
-                <td>
-                  <label for="cbarras"></label>
-                  <input 
-                  type="number"
-                  id="cbarras"
-                  name="cbarras"
-                  placeholder="888 888 888 888"
-                  />
-                </td>
-                <td>
-                  <input name="btn-add" value="add product" type="submit"/>
+                    <input name="btn-add" value="add branch" type="submit"/>
                 </td>
                 <th></th>
             </tr>
     <!-- row of clumn names -->  
-    {% for p in products.items %}    
+    {% for branch in subsidiarys.items %}    
     <tr>
-        <td>{{ p.id }}</td>
-        <td>{{ p.name }}</td>
-        <td>{{ p.sucursal }}</td>
-        <td>{{ p.quantity }}</td>
-        <td>{{ p.cost }}</td>
-        <td>{{ p.price }}</td>
-        <td>{{ p.expiry }}</td>
-        <td>{{ p.qty_reserved }}</td>
-        <td>{{ p.qr_barcode }}</td>
-        <td><a id="{{ p.id }}" class="updateButton">
+        <td>{{ branch.id }}</td>
+        <td>{{ branch.name }}</td>
+        <td><a id="{{ branch.id }}" class="updateButton">
             Update
             </a>
         </td>
         <td>
-            <a id="{{ p.id }}.inventario" class="deleteButton">
+            <a id="{{ branch.id }}.branch" class="deleteButton">
             <!--<a class="deleteButton" href=" url_for( 'inventory.Delete', id=p.id) '">-->
             Delete
             </a>
@@ -254,12 +178,12 @@
 </table>
 
 <!-- pagination of table rows -->
-{% for page_num in products.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=3) %}
+{% for page_num in subsidiarys.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=3) %}
     {% if page_num %}
-        {% if products.page == page_num %}
-            <a  class="btn btn-info mb-4" href="{{url_for('inventory.inv', page=page_num)}}">{{page_num}}</a>
+        {% if subsidiarys.page == page_num %}
+            <a  class="btn btn-info mb-4" href="{{url_for('subsidiary.subsidiary_view', page=page_num)}}">{{page_num}}</a>
         {% else %}
-            <a  class="btn btn-outline-info mb-4" href="{{url_for('inventory.inv', page=page_num)}}">{{page_num}}</a>
+            <a  class="btn btn-outline-info mb-4" href="{{url_for('subsidiary.subsidiary_view', page=page_num)}}">{{page_num}}</a>
         {% endif %}      
     {% else %}
         ...
