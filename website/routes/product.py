@@ -1,13 +1,8 @@
-from curses.ascii import isdigit
-from operator import or_
 from os import abort
-from re import X
-from urllib import response
 from flask import Blueprint, render_template, request, flash, redirect, jsonify, abort
 from website import db
 from website.models.product import Product
 from website.models.sucursal import Sucursal
-from website.models.user import User
 from flask_login import login_required, current_user
 from sqlalchemy.sql.expression import func
 from sqlalchemy import and_
@@ -18,8 +13,11 @@ inventory = Blueprint('inventory', __name__)
 @inventory.route('/inventory', methods=['GET', 'POST'])
 @login_required
 def inv():
+    if current_user.confirmed:
+        flash('Please confirm your account!', 'warning')
+        return redirect('main.home')
+
     """main page of inventory"""
-    print(f'\n\nentre donde pense q entraba chinchulin {request.method}\n\n\n')
     if request.method == 'POST':
         prodDict = request.form.to_dict()
         name = prodDict.get('pname')    
