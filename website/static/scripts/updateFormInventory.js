@@ -7,12 +7,12 @@ window.addEventListener('load', function() {
       document.querySelector('.Invisible').classList.replace('Invisible', 'update');
       console.log(element.id)
       // await in fetch return which with wait to conclude the request to then return the json obj
-      const data = await (await fetch(`/inventario/update/${element.id}`)).json()
+      const data = await (await fetch(`/inventory/${element.id}`)).json()
       // creating form to append in popup div:                
       console.log(data);
       const form = document.createElement("form");
       form.setAttribute("id", "form");
-      form.setAttribute("action", `/inventario/update/${element.id}`);
+      form.setAttribute("action", `/inventory/${element.id}`);
       form.setAttribute("method", "POST");
       const table = document.createElement("table");
       

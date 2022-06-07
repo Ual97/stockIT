@@ -15,7 +15,7 @@ from datetime import datetime
 
 inventory = Blueprint('inventory', __name__)
 
-@inventory.route('/inventario', methods=['GET', 'POST'])
+@inventory.route('/inventory', methods=['GET', 'POST'])
 @login_required
 def inv():
     """main page of inventory"""
@@ -48,7 +48,7 @@ def inv():
             db.session.add(new_prod)
             db.session.commit()
             flash("Poduct added", category='success')
-            return redirect('/inventario')
+            return redirect('/inventory')
         else:
             flash('Name, Sucursal and Quantity are mandatory fields', category='error')
     # sucursales to display as options in add product table
@@ -60,10 +60,10 @@ def inv():
     else:
         nextid += 1
     data = Product.query.filter_by(owner=current_user.email).paginate(per_page=10)
-    return render_template('inventario.html', user=current_user,
+    return render_template('inventory.html', user=current_user,
                            sucursales=sucs, nextid=nextid, products=data)
 
-@inventory.route('/inventario/update/<id>', methods=['POST','GET'], strict_slashes=False)
+@inventory.route('/inventory/<id>', methods=['POST','GET'], strict_slashes=False)
 @login_required
 def Put(id):
     """updating or consulting item from inventory"""
@@ -118,7 +118,7 @@ def Put(id):
 
         flash('Item updated successfully!')
         
-        return redirect('/inventario')
+        return redirect('/inventory')
     try:
         # filter query by logged user and id
         product = Product.query.filter(and_(Product.owner==current_user.email, Product.id==id)).first()
@@ -137,7 +137,7 @@ def Put(id):
     except Exception:
         abort(404)
 
-@inventory.route('/inventario/delete/<id>', strict_slashes=False)
+@inventory.route('/inventory/delete/<id>', strict_slashes=False)
 @login_required
 def Delete(id):
     """inventory page"""
@@ -145,7 +145,4 @@ def Delete(id):
     db.session.commit()
     flash('Item deleted successfully!')
     print(f'\n\n\naaaaaaaaaaaa{request.url_rule}\n\n\n')
-    if request.url_rule == '/inventario/add/delete/<id>':
-        return redirect('/inventario/add/delete/<id>')
-    else:
-        return redirect('/inventario')
+    return redirect('/inventory')
