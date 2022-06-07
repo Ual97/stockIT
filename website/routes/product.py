@@ -22,14 +22,14 @@ def inv():
     print(f'\n\nentre donde pense q entraba chinchulin {request.method}\n\n\n')
     if request.method == 'POST':
         prodDict = request.form.to_dict()
-        name = prodDict.get('pname')    
-        sucursal = prodDict.get('sucursal')
-        qty = prodDict.get('cant')
+        name = prodDict.get('name')    
+        branch = prodDict.get('branch')
+        qty = prodDict.get('quantity')
         cost = prodDict.get('cost')
         price = prodDict.get('price')
         expiry = prodDict.get('expiry')
-        reserved = prodDict.get('reserved')
-        cbarras = prodDict.get('cbarras')
+        reserved = prodDict.get('qty_reserved')
+        cbarras = prodDict.get('qr_barcode')
         
         if cost == '' or cost == 'None':
             prodDict['cost'] = None
@@ -38,11 +38,11 @@ def inv():
         if expiry == '' or expiry == 'None':
             prodDict['expiry'] = None
         if reserved == '' or reserved == 'None':
-            prodDict['reserved'] = None
+            prodDict['qty_reserved'] = None
         if cbarras == '' or cbarras == 'None':
-            prodDict['cbarras'] = None
+            prodDict['qr_barcode'] = None
     
-        if name and sucursal and qty:
+        if name and branch and qty:
             prodDict['owner'] = current_user.email
             new_prod = Product(**prodDict)
             db.session.add(new_prod)
@@ -50,9 +50,9 @@ def inv():
             flash("Poduct added", category='success')
             return redirect('/inventory')
         else:
-            flash('Name, Sucursal and Quantity are mandatory fields', category='error')
-    # sucursales to display as options in add product table
-    sucs = Sucursal.query.filter_by(owner=current_user.email)
+            flash('Name, Branch and Quantity are mandatory fields', category='error')
+    # branches to display as options in add product table
+    branches = Sucursal.query.filter_by(owner=current_user.email)
     # hardprint next id for new product
     nextid = db.session.query(func.max(Product.id)).scalar()
     if nextid is None:
@@ -61,7 +61,7 @@ def inv():
         nextid += 1
     data = Product.query.filter_by(owner=current_user.email).paginate(per_page=10)
     return render_template('inventory.html', user=current_user,
-                           sucursales=sucs, nextid=nextid, products=data)
+                           branches=branches, nextid=nextid, products=data)
 
 @inventory.route('/inventory/<id>', methods=['POST','GET'], strict_slashes=False)
 @login_required
@@ -75,7 +75,7 @@ def Put(id):
             abort(404)
         debugKeys = prodDict.keys()
 
-        keys = ('name', 'sucursal', 'quantity', 'cost', 'price', 'expiry', 'qty_reserved', 'qr_barcode')
+        keys = ('name', 'branch', 'quantity', 'cost', 'price', 'expiry', 'qty_reserved', 'qr_barcode')
 
         print(f'debug keys: {debugKeys} \n\n keys set: {keys}\n\n diccionario antes de update: {item.__dict__}\n\n datos nuevos: {prodDict}')
         pos = 0
@@ -87,7 +87,7 @@ def Put(id):
             if pos == 1:
                 if prodDict[keys[pos]] != '' and prodDict[keys[pos]] != 'None':
                     if type(prodDict[keys[pos]]) is str:
-                        item.sucursal = prodDict[keys[pos]]
+                        item.branch = prodDict[keys[pos]]
             if pos == 2:
                 if prodDict[keys[pos]] != '' and prodDict[keys[pos]] != 'None':
                     print(f'\n\n\ntype de esta mierda{type(prodDict[keys[pos]])}\n\n')

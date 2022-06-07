@@ -81,12 +81,12 @@ window.addEventListener('load', function() {
       const textSubsidiaryValue = document.createTextNode("Select S");
       colSubsidiaryValue.appendChild(textSubsidiaryValue);
       const colSubsidiaryInput = document.createElement("select");
-      colSubsidiaryInput.setAttribute("name", "sucursal");
-      colSubsidiaryInput.setAttribute("id", "sucursal");
+      colSubsidiaryInput.setAttribute("name", "branch");
+      colSubsidiaryInput.setAttribute("id", "branch");
       for (let i = 0; data.ownerBranches[i]; i++) {
         const option = document.createElement("option");
         option.setAttribute("value", data.ownerBranches[i]);
-        if (data.ownerBranches[i] === data.sucursal) {
+        if (data.ownerBranches[i] === data.branch) {
           option.setAttribute("selected", "selected");
         
         }
@@ -155,7 +155,7 @@ window.addEventListener('load', function() {
       colqr_barCodeInput.setAttribute("placeholder", "");
       colqr_barCodeInput.setAttribute("name", "qr_barcode");
       colqr_barCodeInput.setAttribute("id", "qr_barcode");
-      colqr_barCodeInput.setAttribute("value", data.qr_barCode);
+      colqr_barCodeInput.setAttribute("value", data.qr_barcode);
       colqr_barCodeValue.appendChild(colqr_barCodeInput);
       rowInputs.appendChild(colqr_barCodeValue);
       const colSubmit = document.createElement("td");
