@@ -151,7 +151,7 @@ window.addEventListener('load', function() {
       rowInputs.appendChild(colReservedValue);
       const colqr_barCodeValue = document.createElement("td");
       const colqr_barCodeInput = document.createElement("input");
-      colqr_barCodeInput.setAttribute("type", "text");
+      colqr_barCodeInput.setAttribute("type", "number");
       colqr_barCodeInput.setAttribute("placeholder", "");
       colqr_barCodeInput.setAttribute("name", "qr_barcode");
       colqr_barCodeInput.setAttribute("id", "qr_barcode");
