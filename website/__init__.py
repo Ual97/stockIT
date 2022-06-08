@@ -1,17 +1,17 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login  import LoginManager
-from flask_cors import CORS
+from flask_mail import Mail
 
+
+mail = Mail()
 db = SQLAlchemy()
 DB_NAME = 'stockITdb'
 
 def create_app():
     app = Flask(__name__)
     
-    app.config['SECRET_KEY'] = 'wooooa, secret'
-    #CORS(app)
-
+    app.config['SECRET_KEY'] = 'bxf1))xff;[xd9@#xcbxe2N$xc2!'
 
     # sqlalchemy connection config
     app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://root:12345678@localhost/{DB_NAME}'
@@ -21,7 +21,7 @@ def create_app():
     from .views import views
     from .routes.user import usr
     from .routes.product import inventory
-    from .routes.sucursal import subsidiary
+    from .routes.branch import subsidiary
     # registering blueprints
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(usr, url_prefix='/')
@@ -29,14 +29,22 @@ def create_app():
     app.register_blueprint(subsidiary, url_prefix='/')
 
     # create tables from models
-    from .models.user import User
-    
     db.create_all(app=app)
+
+    # initializing mail sending
+    app.config['MAIL_SERVER']='smtp.sl4.tech'
+    app.config['MAIL_PORT'] = 25
+    app.config['MAIL_USERNAME'] = 'admin@sl4.tech'
+    app.config['MAIL_PASSWORD'] = 'csvp#(X2'
+    # app.config['MAIL_USE_TLS'] = True
+    # app.config['MAIL_USE_SSL'] = False
+    mail.init_app(app)
 
     login_manager = LoginManager()
     login_manager.login_view = 'usr.login'
     login_manager.init_app(app)
 
+    from .models.user import User
     @login_manager.user_loader #how the users are loaded
     def load_user(id):
         return User.query.get(id)

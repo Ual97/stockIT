@@ -1,13 +1,8 @@
-from curses.ascii import isdigit
-from operator import or_
 from os import abort
-from re import X
-from urllib import response
 from flask import Blueprint, render_template, request, flash, redirect, jsonify, abort
 from website import db
 from website.models.product import Product
-from website.models.sucursal import Sucursal
-from website.models.user import User
+from website.models.branch import Branch
 from flask_login import login_required, current_user
 from sqlalchemy.sql.expression import func
 from sqlalchemy import and_
@@ -18,8 +13,11 @@ inventory = Blueprint('inventory', __name__)
 @inventory.route('/inventory', methods=['GET', 'POST'])
 @login_required
 def inv():
+    if current_user.confirmed:
+        flash('Please confirm your account!', 'warning')
+        return redirect('main.home')
+
     """main page of inventory"""
-    print(f'\n\nentre donde pense q entraba chinchulin {request.method}\n\n\n')
     if request.method == 'POST':
         prodDict = request.form.to_dict()
         name = prodDict.get('name')    
@@ -52,7 +50,7 @@ def inv():
         else:
             flash('Name, Branch and Quantity are mandatory fields', category='error')
     # branches to display as options in add product table
-    branches = Sucursal.query.filter_by(owner=current_user.email)
+    branches = Branch.query.filter_by(owner=current_user.email)
     # hardprint next id for new product
     nextid = db.session.query(func.max(Product.id)).scalar()
     if nextid is None:
@@ -126,7 +124,7 @@ def Put(id):
         # making a diccionary to use the GET method as API
         toDict = product.__dict__
         toDict.pop('_sa_instance_state')
-        branches = Sucursal.query.filter_by(owner=current_user.email).all()
+        branches = Branch.query.filter_by(owner=current_user.email).all()
         listBranches = []
         for branch in branches:
             listBranches.append(branch.name)

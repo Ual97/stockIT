@@ -1,15 +1,17 @@
 from website import db
 from flask_login import UserMixin
 
+
 class User(db.Model, UserMixin):
     """ model for user in database """
     email = db.Column(db.String(150), primary_key=True)
     password = db.Column(db.String(150))
     usrname = db.Column(db.String(150))
+    confirmed = db.Column(db.Boolean, nullable=False, default=False)
     # stores a list of the user's products
     products = db.relationship('Product')
     # stores a list of the user's sucursales
-    products = db.relationship('Sucursal')
+    products = db.relationship('Branch')
 
     def __init__(self, **kwargs):
         """initialize user objs"""

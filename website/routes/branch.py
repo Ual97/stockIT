@@ -3,7 +3,7 @@ from website import views
 from website import db
 from website.models.user import User
 from website.models.product import Product
-from website.models.sucursal import Sucursal
+from website.models.branch import Branch
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_required, login_user, logout_user, current_user
 from sqlalchemy.sql.expression import func
@@ -26,13 +26,13 @@ def subsidiary_view():
             flash('Name must be a string', category='error')
             return redirect(url_for('subsidiary.subsidiary_view'))
         sucursal_dict['owner'] = current_user.email
-        new_sucursal = Sucursal(**sucursal_dict)
+        new_sucursal = Branch(**sucursal_dict)
         db.session.add(new_sucursal)
         db.session.commit()
         flash('Branch added', category='success')
         return redirect(url_for('subsidiary.subsidiary_view'))
-    subsidiarys = Sucursal.query.filter_by(owner=current_user.email).paginate(per_page=10)
-    nextid = db.session.query(func.max(Sucursal.id)).scalar()
+    subsidiarys = Branch.query.filter_by(owner=current_user.email).paginate(per_page=10)
+    nextid = db.session.query(func.max(Branch.id)).scalar()
     if nextid is None:
         nextid = 1
     else:
@@ -48,15 +48,15 @@ def update_subsidiary(id):
     """
     updates a subsidiary
     """
-    currentSubsidiary = Sucursal.query.filter_by(id=id).first()
+    currentSubsidiary = Branch.query.filter_by(id=id).first()
     if request.method == 'POST':
         subsidiary_dict = request.form.to_dict()
         if subsidiary_dict.get('name') is None:
             flash('Name is mandatory', category='error')
-            return redirect(url_for('sucursal.sucursal_view'))
+            return redirect(url_for('subsidiary.subsidiary_view'))
         if type(subsidiary_dict.get('name')) != str:
             flash('Name must be a string', category='error')
-            return redirect(url_for('sucursal.sucursal_view'))
+            return redirect(url_for('subsidiary.subsidiary_view'))
         currentSubsidiary.name = subsidiary_dict.get('name')
         db.session.commit()
         flash('Sucursal updated', category='success')
@@ -72,7 +72,7 @@ def update_subsidiary(id):
 @login_required
 def Delete(id):
     """inventory page"""
-    db.session.delete(Sucursal.query.get(id))
+    db.session.delete(Branch.query.get(id))
     db.session.commit()
     flash('Branch deleted successfully!')
     print(f'\n\n\naaaaaaaaaaaa{request.url_rule}\n\n\n')

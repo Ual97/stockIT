@@ -1,7 +1,7 @@
 from website import db
-from flask_login import UserMixin
 
-class Sucursal(db.Model):
+
+class Branch(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150), nullable=False)
     # all sucursales have an owner (user)
