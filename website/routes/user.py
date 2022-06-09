@@ -100,4 +100,4 @@ def login():
 @login_required # only allows access to route if user is logged in
 def logout():
     logout_user()
-    return redirect(url_for('usr.login'))
+    return render_template('landingpage.html')
