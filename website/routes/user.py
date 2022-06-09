@@ -39,6 +39,9 @@ def sign_up():
             new_user = User(**usrDict)
             db.session.add(new_user)
             db.session.commit()
+            login_user(new_user, remember=True)
+
+            # generating token and sending email
             token = generate_confirmation_token(email)
             msg = Message(
                 'Confirm your email address',
@@ -58,12 +61,17 @@ def confirm(token):
     """checks if the token is valid, if so it confirms the account and logs user"""
     from website.token import confirm_token
     try:
-        email = confirm_token(token)
+        mail = confirm_token(token)
+        if mail is False:
+            raise Exception
     except:
-        flash('The confirmation link is invalid or has expired.', 'danger')
-    user = User.query.filter_by(email=email).first_or_404()
+        flash('The confirmation link is invalid or has expired.', 'error')
+        return redirect(url_for('views.home'))
+        
+    user = User.query.filter_by(email=mail).first_or_404()
     if user.confirmed:
         flash('Account already confirmed. Please login.', 'error')
+        return redirect(url_for('views.home'))
     else:
         user.confirmed = True
         db.session.add(user)
@@ -97,4 +105,4 @@ def login():
 @login_required # only allows access to route if user is logged in
 def logout():
     logout_user()
-    return redirect(url_for('usr.login'))
+    return render_template('landingpage.html')

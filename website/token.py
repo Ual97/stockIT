@@ -6,7 +6,7 @@ from main import app
 def generate_confirmation_token(email):
     """generates a token using the want-to-be user email, encoded with SECRET_KEY"""
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
-    return serializer.dumps(email)
+    return serializer.dumps(email, salt='ds89yvabsvybiga989vsayd8fv')
 
 
 def confirm_token(token, expiration=3600):
@@ -15,6 +15,7 @@ def confirm_token(token, expiration=3600):
     try:
         email = serializer.loads(
             token,
+            salt='ds89yvabsvybiga989vsayd8fv',
             max_age=expiration
         )
     except:

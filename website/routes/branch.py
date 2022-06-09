@@ -1,11 +1,8 @@
 from flask import Blueprint, jsonify, render_template, request, flash, redirect, url_for
 from website import views
 from website import db
-from website.models.user import User
-from website.models.product import Product
 from website.models.branch import Branch
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import login_required, login_user, logout_user, current_user
+from flask_login import login_required, current_user
 from sqlalchemy.sql.expression import func
 
 subsidiary = Blueprint('subsidiary', __name__)
@@ -16,6 +13,11 @@ def subsidiary_view():
     """
     Branch main page
     """
+    #if user is not confirmed, block access and send to home
+    if current_user.confirmed is False:
+        flash('Please confirm your account, check your email (and spam folder)', 'error')
+        return redirect(url_for('views.home'))
+
     if request.method == 'POST':
         sucursal_dict = request.form.to_dict()
         print(f'\n\n\n{sucursal_dict}\n\n')
