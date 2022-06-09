@@ -1,0 +1,55 @@
+table, td, th {
+    border: 1px solid black;
+    text-align: center;
+    padding: 5px;
+    margin-bottom: 15px;
+  }
+th {
+  background-color: orange;
+}
+input {
+  width: 110px;
+}
+
+td {
+  max-width: 100%; /* ajusta las td al content*/
+  white-space: nowrap;
+}
+
+.update {
+
+  z-index: 10;
+  background-color: cornflowerblue;
+  border-radius: 10px;
+  width: 88%;
+  height: 50%;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  position: fixed;
+  margin-top: 12%;
+}
+
+.delete {
+
+  z-index: 10;
+  background-color: rgb(77, 0, 0);
+  border-radius: 10px;
+  width: 88%;
+  height: 50%;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  position: fixed;
+  margin-top: 12%;
+}
+
+.Invisible {
+  display: none;
+}
+
+.InvisibleDel {
+  display: none;
+}
