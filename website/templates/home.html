@@ -1,12 +1,58 @@
-{% extends "base.html" %}
-{% block title %}Home{% endblock %}
 {% block content %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="/../static/home.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+        crossorigin="anonymous" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    {% block title %}{% endblock %}
+</head>
+
+<body>
+    <img src="/../static/images/logostockit.png" alt="logo" height="95" width="350">
     <h1>Welcome to stockIT!</h1>
     <br>
-    <p>
-        Our goal is to create a esay to use, scalable inventory management system.<br>
-        If you're not paying attention to where your inventory is, how much you have available, re-ordering needs,
-        inventory financing and so much more, you can easily be wasting your money on products no one wants while
-        missing opportunities to offer the products your customers are most excited about.
-    </p>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 text-center">
+                <button id="homelogin" type="button" class="btn btn-primary">Login</button>
+                <button id="homeregister" type="button" class="btn btn-primary">Register</button>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-5 text left">
+                <p>
+                    Our goal is to create an easy to use, scalable inventory management system.<br>
+                    If you're not paying attention to where your inventory is, how much you have available, re-ordering
+                    needs,
+                    inventory financing and so much more, you can easily be wasting your money on products no one wants
+                    while
+                    missing opportunities to offer the products your customers are most excited about.
+                </p>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        document.getElementById("homelogin").onclick = function () {
+            location.href = "/login";
+        };
+    </script>
+    <script type="text/javascript">
+        document.getElementById("homeregister").onclick = function () {
+            location.href = "/sign-up";
+        };
+    </script>
+</body>
+
+</html>
 {% endblock %}

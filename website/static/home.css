@@ -1,0 +1,18 @@
+h1 {
+    padding-top: 25px;
+    margin-left: 80px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+p {
+    text-align: left;
+}
+
+container {
+    padding-right: 50px !important;
+}
+
+img {
+    margin-left: 75px;
+    margin-top: 40px;
+}
