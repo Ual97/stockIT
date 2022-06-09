@@ -51,15 +51,15 @@ def update_subsidiary(id):
     currentSubsidiary = Branch.query.filter_by(id=id).first()
     if request.method == 'POST':
         subsidiary_dict = request.form.to_dict()
-        if subsidiary_dict.get('name') is None:
+        if subsidiary_dict.get('nameUpdate') is None:
             flash('Name is mandatory', category='error')
             return redirect(url_for('subsidiary.subsidiary_view'))
-        if type(subsidiary_dict.get('name')) != str:
+        if type(subsidiary_dict.get('nameUpdate')) != str:
             flash('Name must be a string', category='error')
             return redirect(url_for('subsidiary.subsidiary_view'))
-        currentSubsidiary.name = subsidiary_dict.get('name')
+        currentSubsidiary.name = subsidiary_dict.get('nameUpdate')
         db.session.commit()
-        flash('Sucursal updated', category='success')
+        flash('Branch updated', category='success')
         return redirect(url_for('subsidiary.subsidiary_view'))
     try:
         currentSubsidiaryDict = currentSubsidiary.__dict__

@@ -5,100 +5,102 @@
 <head>
     <link rel="stylesheet" href="../static/buttons.css">
     <link rel="stylesheet" href="../static/tables.css">
-    <script src="../static/scripts/updateFormInventory.js"></script>
-    <script src="../static/scripts/deleteAlert.js"></script>
+    <script src="../static/scripts/updateFormInventory.js" async></script>
+    <script src="../static/scripts/deleteAlert.js" async></script>
 </head>
 <div class="InvisibleDel">
+  <h1>Are you sure you want to delete this item?</h1>
+  <a id="yesDelete" class="deleteButton">Yes</a>
+  <a id="noDelete" class="cancelButton">No</a>
 </div>
 <div class="Invisible">
-<!-- we need to implement this template to use query selector in js
   <form id="updateForm" action="" method="POST">
-    <table>
+    <table id="tableUpdate">
       <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Sucursal</th>
-        <th>Cantidad</th>
-        <th>Costo</th>
-        <th>Precio</th>
-        <th>F. Vencimiento</th>
-        <th>Reservado</th>
-        <th>Codigo barras</th>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Branch</th>
+        <th>Quantity</th>
+        <th>Cost</th>
+        <th>Price</th>
+        <th>Expiricy</th>
+        <th>Reserved</th>
+        <th>Barcode</th>
+        <th>Update</th>
       </tr>
       <tr>
-        <td id="pId" value="">
+        <td id="idUpdate" value="">
         </td>
         <td>
-          <label for="pname"></label>
+          <label for="nameUpdate"></label>
           <input 
           type="text"
-          id="pName"
-          name="pname"
+          id="nameUpdate"
+          name="nameUpdate"
           placeholder=""
           value=""
           />
         </td>
         <td>
-          <label for="sucursal">select s.</label>
-          <select name="sucursal" id="sucursal">
-            <option id="pSubsidiary" value=""></option>
+          <label for="branchesUpdate">select s.</label>
+          <select name="branchesUpdate" id="branchesUpdate">
           </select>
         </td>
         <td>
-          <label for="cant"></label>
+          <label for="quantityUpdate"></label>
           <input 
             type="number"
-            id="pQuant"
-            name="cant"
+            id="quantityUpdate"
+            name="quantityUpdate"
             placeholder=""
             value=""
           />
         </td>
         <td>
-          <label for="cost"></label>
+          <label for="costUpdate"></label>
           <input 
             type="number"
-            id="pCost"
-            name="cost"
+            id="costUpdate"
+            name="costUpdate"
             placeholder=""
             value=""
           />
         </td>
         <td>
-          <label for="price"></label>
+          <label for="priceUpdate"></label>
           <input 
             type="number"
-            id="pPrice"
-            name="price"
+            id="priceUpdate"
+            name="priceUpdate"
             placeholder=""
             value=""
           />
         </td>
         <td>
-          <label for="expiry"></label>
+          <label for="expiryUpdate"></label>
           <input 
             type="date"
-            id="pExpiry"
-            name="expiry"
+            id="expiryUpdate"
+            name="expiryUpdate"
             placeholder=""
             value=""
           />
         </td>
         <td>
-          <label for="reserved"></label>
+          <label for="qty_reserved"></label>
           <input 
             type="number"
-            id="pReserved"
-            name="reserved"
+            id="qty_reservedUpdate"
+            name="qty_reservedUpdate"
             placeholder=""
           />
         </td>
         <td>
-          <label for="cbarras"></label>
+          <label for="qr_barcodeUpdate"></label>
           <input 
             type="number"
-            id="pCbar"
-            name="cbarras"
+            id="qr_barcodeUpdate"
+            name="qr_barcodeUpdate"
             placeholder="888 888 888 888"
             value=""
           />
@@ -108,9 +110,12 @@
         </td>
       </tr>
     </table>
+    <a class="cancelButton" id="cancelButtonUpdate">Cancel</a>
   </form>
--->
 </div>
+
+
+
 <style>
     html {margin-left: 30px;}
 </style>
@@ -135,15 +140,15 @@
         <table>
             <!-- row of clumn names -->    
             <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Sucursal</th>
-              <th>Cantidad</th>
-              <th>Costo</th>
-              <th>Precio</th>
-              <th>F. Vencimiento</th>
-              <th>Reservado</th>
-              <th>Codigo barras</th>
+              <th>Id</th>
+              <th>Name</th>
+              <th>Branch</th>
+              <th>Quantity</th>
+              <th>Cost</th>
+              <th>Price</th>
+              <th>Expiricy</th>
+              <th>Reserved</th>
+              <th>Barcode</th>
               <th>Add/Update</th>
               <th>Delete</th>
             </tr>

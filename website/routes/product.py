@@ -73,9 +73,9 @@ def Put(id):
             abort(404)
         debugKeys = prodDict.keys()
 
-        keys = ('name', 'branch', 'quantity', 'cost', 'price', 'expiry', 'qty_reserved', 'qr_barcode')
+        keys = ('nameUpdate', 'branchesUpdate', 'quantityUpdate', 'costUpdate', 'priceUpdate', 'expiryUpdate', 'qty_reservedUpdate', 'qr_barcodeUpdate')
 
-        print(f'debug keys: {debugKeys} \n\n keys set: {keys}\n\n diccionario antes de update: {item.__dict__}\n\n datos nuevos: {prodDict}')
+        print(f'\n\nlas keys del form: {debugKeys} \n\n keys set: {keys}\n\n diccionario antes de update: {item.__dict__}\n\n datos nuevos: {prodDict}')
         pos = 0
         for pos in range(len(keys)):
             if pos == 0:
