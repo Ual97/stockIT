@@ -61,12 +61,17 @@ def confirm(token):
     """checks if the token is valid, if so it confirms the account and logs user"""
     from website.token import confirm_token
     try:
-        email = confirm_token(token)
+        mail = confirm_token(token)
+        if mail is False:
+            raise Exception
     except:
-        flash('The confirmation link is invalid or has expired.', 'danger')
-    user = User.query.filter_by(email=email).first_or_404()
+        flash('The confirmation link is invalid or has expired.', 'error')
+        return redirect(url_for('views.home'))
+        
+    user = User.query.filter_by(email=mail).first_or_404()
     if user.confirmed:
         flash('Account already confirmed. Please login.', 'error')
+        return redirect(url_for('views.home'))
     else:
         user.confirmed = True
         db.session.add(user)

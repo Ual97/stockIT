@@ -1,11 +1,8 @@
 from flask import Blueprint, jsonify, render_template, request, flash, redirect, url_for
 from website import views
 from website import db
-from website.models.user import User
-from website.models.product import Product
 from website.models.branch import Branch
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import login_required, login_user, logout_user, current_user
+from flask_login import login_required, current_user
 from sqlalchemy.sql.expression import func
 
 subsidiary = Blueprint('subsidiary', __name__)

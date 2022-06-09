@@ -15,7 +15,7 @@ inventory = Blueprint('inventory', __name__)
 def inv():
     #if user is not confirmed, block access and send to home
     if current_user.confirmed is False:
-        flash('Please confirm your account, check your email (and spam folder)', 'errors')
+        flash('Please confirm your account, check your email (and spam folder)', 'error')
         return redirect(url_for('views.home'))
 
     """main page of inventory"""
