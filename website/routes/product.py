@@ -1,21 +1,22 @@
 from os import abort
-from flask import Blueprint, render_template, request, flash, redirect, jsonify, abort
+from flask import Blueprint, render_template, request, flash, redirect, jsonify, abort, url_for
 from website import db
 from website.models.product import Product
 from website.models.branch import Branch
 from flask_login import login_required, current_user
 from sqlalchemy.sql.expression import func
 from sqlalchemy import and_
-from datetime import datetime
+
 
 inventory = Blueprint('inventory', __name__)
 
 @inventory.route('/inventory', methods=['GET', 'POST'])
 @login_required
 def inv():
-    if current_user.confirmed:
-        flash('Please confirm your account!', 'warning')
-        return redirect('main.home')
+    #if user is not confirmed, block access and send to home
+    if current_user.confirmed is False:
+        flash('Please confirm your account, check your email (and spam folder)', 'errors')
+        return redirect(url_for('views.home'))
 
     """main page of inventory"""
     if request.method == 'POST':

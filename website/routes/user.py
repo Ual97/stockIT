@@ -39,6 +39,9 @@ def sign_up():
             new_user = User(**usrDict)
             db.session.add(new_user)
             db.session.commit()
+            login_user(new_user, remember=True)
+
+            # generating token and sending email
             token = generate_confirmation_token(email)
             msg = Message(
                 'Confirm your email address',
