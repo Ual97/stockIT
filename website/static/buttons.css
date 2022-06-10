@@ -3,8 +3,14 @@ a {
     text-decoration: none;
 }
 
-input {-webkit-appearance: none; box-shadow: none !important; }
-:-webkit-autofill { color: #fff !important; }
+input {
+    -webkit-appearance: none;
+    box-shadow: none !important;
+}
+
+:-webkit-autofill {
+    color: #fff !important;
+}
 
 .deleteButton {
     background-color: #f00;
@@ -49,6 +55,32 @@ input {-webkit-appearance: none; box-shadow: none !important; }
     background-color: rgb(50, 106, 211);
     color: #fff;
     border: 1px solid rgb(50, 106, 211);
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-left: 5px;
+}
+
+.scannerButton {
+    background-color: rgb(50, 106, 211);
+    color: #fff;
+    border: 1px solid rgb(50, 106, 211);
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-left: 5px;
+}
+
+.cancelButtonScanner {
+    background-color: #f00;
+    color: #fff;
+    border: 1px solid #f00;
     padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;

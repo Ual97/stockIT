@@ -50,6 +50,10 @@ td {
   display: none;
 }
 
+.InvisibleScanner {
+  display: none;
+}
+
 .InvisibleDel {
   display: none;
 }
