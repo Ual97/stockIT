@@ -1,18 +1,21 @@
 {% extends "base.html" %}
 {% block title %}Inv{% endblock %}
 {% block content %}
-<!-- un poco de css para di -->
 <head>
     <link rel="stylesheet" href="../static/buttons.css">
     <link rel="stylesheet" href="../static/tables.css">
     <script src="../static/scripts/updateFormInventory.js" async></script>
     <script src="../static/scripts/deleteAlert.js" async></script>
 </head>
+
+<!-- pop-up for Delete burron -->
 <div class="InvisibleDel">
   <h1>Are you sure you want to delete this item?</h1>
   <a id="yesDelete" class="deleteButton">Yes</a>
   <a id="noDelete" class="cancelButton">No</a>
 </div>
+
+<!-- form displayed if user clicks Update -->
 <div class="Invisible">
   <form id="updateForm" action="" method="POST">
     <table id="tableUpdate">
@@ -132,13 +135,27 @@
  
   </style>
 <br>
-    <h1>Inventory / Add</h1>
+    <h1>Inventory</h1>
     <br> 
     <p>Your products will be shown here</p>
-    <p>Add your new product here. First four fields are mandatory</p>
+    <p>First four fields are mandatory if you want to add a product</p>
+
+    <!-- form for searching with filters -->
+    <form method="POST">
+      <input type="text" name="search" id="search" placeholder="Search..">
+      <select id="orderby" name="orderby">
+        <option disabled="" value="" selected="">Order By:</option>
+        <option value="higherprice">Higher Price</option>
+        <option value="lowerprice">Lower Price</option>
+        <option value="highercost">Higher Cost</option>
+        <option value="lowercost">Lower Cost</option>
+      </select>
+      <input name="btn-srch" value="Search" type="submit"/>
+    </form>
+
+    <!-- form for adding a product -->
     <form method="POST">  
         <table>
-            <!-- row of clumn names -->    
             <tr>
               <th>Id</th>
               <th>Name</th>
@@ -153,6 +170,7 @@
               <th>Delete</th>
             </tr>
             <tr>
+                <!-- row for adding a  product -->
                 <td>
                   {{ nextid }}
                 </td>
@@ -228,11 +246,11 @@
                   />
                 </td>
                 <td>
-                  <input name="btn-add" value="add product" type="submit"/>
+                  <input id="btn-add" name="btn-add" value="add product" type="submit"/>
                 </td>
                 <th></th>
             </tr>
-    <!-- row of clumn names -->  
+    <!-- start listing the products -->  
     {% for p in products.items %}    
     <tr>
         <td>{{ p.id }}</td>

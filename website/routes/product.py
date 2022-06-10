@@ -5,7 +5,7 @@ from website.models.product import Product
 from website.models.branch import Branch
 from flask_login import login_required, current_user
 from sqlalchemy.sql.expression import func
-from sqlalchemy import and_
+from sqlalchemy import and_, or_, desc, asc
 
 
 inventory = Blueprint('inventory', __name__)
@@ -13,13 +13,51 @@ inventory = Blueprint('inventory', __name__)
 @inventory.route('/inventory', methods=['GET', 'POST'])
 @login_required
 def inv():
+    """inventory of products"""
+
     #if user is not confirmed, block access and send to home
     if current_user.confirmed is False:
         flash('Please confirm your account, check your email (and spam folder)', 'error')
         return redirect(url_for('views.home'))
 
-    """main page of inventory"""
-    if request.method == 'POST':
+    # if user presses Search
+    if request.method == 'POST' and "btn-srch" in request.form:
+        search = request.form.get("search")
+        orderby = request.form.get("orderby")
+        
+        #checks that products are from user
+        userprod = Product.query.filter(Product.owner == current_user.email)
+
+        # search input section
+        srch = userprod.filter(or_(Product.id.like(search),
+                                    Product.name.like('%' + search + '%'), 
+                                    Product.branch.like('%' + search + '%'), 
+                                    Product.qr_barcode.like(search)))
+
+        # Order By select section
+        if orderby == 'higherprice':
+            data = srch.order_by(desc(Product.price)).paginate(per_page=10)
+        elif orderby == 'lowerprice':
+            data = srch.order_by(asc(Product.price)).paginate(per_page=10)
+        elif orderby == 'highercost':
+            data = srch.order_by(desc(Product.cost)).paginate(per_page=10)
+        elif orderby == 'lowercost':
+            data = srch.order_by(asc(Product.cost)).paginate(per_page=10)
+        else:
+            data = srch.paginate(per_page=10)
+
+        # show branches and next prod id for add product row
+        branches = Branch.query.filter_by(owner=current_user.email)
+        nextid = db.session.query(func.max(Product.id)).scalar()
+        if nextid is None:
+            nextid = 1
+        else:
+            nextid += 1
+
+        return render_template('inventory.html', user=current_user,
+                            branches=branches, nextid=nextid, products=data)
+
+    if request.method == 'POST' and "btn-add" in request.form:
         prodDict = request.form.to_dict()
         name = prodDict.get('name')    
         branch = prodDict.get('branch')
