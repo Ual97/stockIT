@@ -12,7 +12,7 @@ class Product(db.Model):
     price = db.Column(db.Integer)
     expiry = db.Column(db.Date)
     qty_reserved = db.Column(db.Integer)
-    qr_barcode = db.Column(db.Integer)
+    qr_barcode = db.Column(db.String(250))
 
     def __init__(self, **kwargs):
         """initialize obj products"""

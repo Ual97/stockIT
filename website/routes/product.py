@@ -104,7 +104,7 @@ def inv():
 @login_required
 def Put(id):
     """updating or consulting item from inventory"""
-    item = Product.query.get(id)
+    item = Product.query.filter(and_(Product.owner==current_user.email, Product.id==id)).first()
 
     if request.method == 'POST':
         prodDict = request.form.to_dict()
@@ -183,3 +183,18 @@ def Delete(id):
     flash('Item deleted successfully!')
     print(f'\n\n\naaaaaaaaaaaa{request.url_rule}\n\n\n')
     return redirect('/inventory')
+
+@inventory.route('/inventory/<qr_barcode>', methods=['GET'], strict_slashes=False)
+@login_required
+def get_item_by_barcode(qr_barcode):
+    """consulting item from inventory from barcode"""
+    try:
+        # filter query by logged user and id
+        product = Product.query.filter(and_(Product.owner==current_user.email, Product.qr_barcode==qr_barcode)).first()
+        
+        # making a diccionary to use the GET method as API
+        toDict = product.__dict__
+        toDict.pop('_sa_instance_state')
+        return jsonify(toDict)
+    except Exception:
+        return None
