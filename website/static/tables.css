@@ -61,3 +61,7 @@ td {
 .InvisibleDel {
   display: none;
 }
+
+.qr {
+  width: 100px;
+}

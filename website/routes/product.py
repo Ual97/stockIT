@@ -6,7 +6,7 @@ from website.models.branch import Branch
 from flask_login import login_required, current_user
 from sqlalchemy.sql.expression import func
 from sqlalchemy import and_, or_, desc, asc
-
+import requests
 
 inventory = Blueprint('inventory', __name__)
 
@@ -84,6 +84,9 @@ def inv():
             new_prod = Product(**prodDict)
             db.session.add(new_prod)
             db.session.commit()
+            generate_qr(new_prod.id)
+            #db.session.commit()
+            #print(f'\n\n\n{new_prod.qr_barcode}\n\n')
             flash("Poduct added", category='success')
             return redirect('/inventory')
         else:
@@ -184,17 +187,27 @@ def Delete(id):
     print(f'\n\n\naaaaaaaaaaaa{request.url_rule}\n\n\n')
     return redirect('/inventory')
 
-@inventory.route('/inventory/<qr_barcode>', methods=['GET'], strict_slashes=False)
+@inventory.route('/inventory/qr/<id>', methods=['GET'], strict_slashes=False)
 @login_required
-def get_item_by_barcode(qr_barcode):
-    """consulting item from inventory from barcode"""
-    try:
-        # filter query by logged user and id
-        product = Product.query.filter(and_(Product.owner==current_user.email, Product.qr_barcode==qr_barcode)).first()
-        
-        # making a diccionary to use the GET method as API
-        toDict = product.__dict__
-        toDict.pop('_sa_instance_state')
-        return jsonify(toDict)
-    except Exception:
-        return None
+def generate_qr(id):
+    """consulting API which generates a qr"""
+    url = "https://qrickit-qr-code-qreator.p.rapidapi.com/api/qrickit.php"
+
+    querystring = {"d":f'{id}'}
+
+    headers = {
+	            "X-RapidAPI-Key": "71760ccf2fmshaa151dcb49bd23cp1ad4b7jsn1d74bdc7fa4e",
+	            "X-RapidAPI-Host": "qrickit-qr-code-qreator.p.rapidapi.com"
+                }
+
+    response = requests.request("GET", url, headers=headers, params=querystring)
+
+    print(f'\n\n\n{response._content}\n\n')
+
+    image_data = response._content
+    path = f'./../static/images/{id}.png'
+    import os
+    with open(os.path.join(os.path.dirname(__file__), path), 'wb+') as out_file:
+        out_file.write(image_data)
+
+    return "listo bro"

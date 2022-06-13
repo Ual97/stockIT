@@ -1,6 +1,5 @@
 from website import db
 
-
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     # all products have an owner (user)
@@ -12,7 +11,7 @@ class Product(db.Model):
     price = db.Column(db.Integer)
     expiry = db.Column(db.Date)
     qty_reserved = db.Column(db.Integer)
-    qr_barcode = db.Column(db.Integer)
+    qr_barcode = db.Column(db.String(1024))
 
     def __init__(self, **kwargs):
         """initialize obj products"""
