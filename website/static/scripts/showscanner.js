@@ -3,8 +3,9 @@ let scanner = null;
 async function scannerF () {
   scanner = await Dynamsoft.DBR.BarcodeScanner.createInstance();
   scanner.onFrameRead = results => { 
-    if (results) {
-      const data = await (await fetch(`/inventory/${results.barcodeText}`)).json();
+/*    if (results[0]) {
+      console.log(results[0].barcodeText)
+      const data = await (await fetch(`/inventory/${results[0].barcodeText}`)).json();
       if (!data)
         () => {
           let flag;
@@ -29,7 +30,7 @@ async function scannerF () {
         document.querySelector('#qty_reservedBarcode').setAttribute('value', data.qty_reserved);
         document.querySelector('#qr_barcodeBarcode').setAttribute('value', data.qr_barcode);
       }
-    }
+    }*/
   
   };
   scanner.onUnduplicatedRead = (txt, result) => { };
