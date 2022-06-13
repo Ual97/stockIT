@@ -54,6 +54,10 @@ td {
   display: none;
 }
 
+.InvisibleBarcode {
+  display: none;
+}
+
 .InvisibleDel {
   display: none;
 }
