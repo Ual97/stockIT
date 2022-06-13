@@ -4,7 +4,7 @@ async function scannerF () {
   scanner = await Dynamsoft.DBR.BarcodeScanner.createInstance();
   scanner.onFrameRead = results => { 
     if (results) {
-      const data = await (await fetch(`/inventory/${results.barcodeText}`)).json()
+      const data = await (await fetch(`/inventory/${results.barcodeText}`)).json();
       if (!data)
         () => {
           let flag;
@@ -14,8 +14,20 @@ async function scannerF () {
             flag = null;
           }
           if (!flag) {
-            scanner.hide()
+            scanner.hide();
           }
+      }
+      else {
+        id = document.querySelector('#idBarcode');
+        id.appendChild(document.createTextNode(data.id));
+        document.querySelector('#nameBarcode').setAttribute('value', data.name);
+        document.querySelector('#branchBarcode').setAttribute('value', data.branch);
+        document.querySelector('#quantityBarcode').setAttribute('value', data.quantity);
+        document.querySelector('#costBarcode').setAttribute('value', data.cost);
+        document.querySelector('#priceBarcode').setAttribute('value', data.price);
+        document.querySelector('#expiryBarcode').setAttribute('value', data.expiry);
+        document.querySelector('#qty_reservedBarcode').setAttribute('value', data.qty_reserved);
+        document.querySelector('#qr_barcodeBarcode').setAttribute('value', data.qr_barcode);
       }
     }
   
