@@ -1,4 +1,5 @@
 from os import abort
+import os
 from flask import Blueprint, render_template, request, flash, redirect, jsonify, abort, url_for
 from website import db
 from website.models.product import Product
@@ -187,8 +188,7 @@ def Delete(id):
     print(f'\n\n\naaaaaaaaaaaa{request.url_rule}\n\n\n')
     return redirect('/inventory')
 
-@inventory.route('/inventory/qr/<id>', methods=['GET'], strict_slashes=False)
-@login_required
+
 def generate_qr(id):
     """consulting API which generates a qr"""
     url = "https://qrickit-qr-code-qreator.p.rapidapi.com/api/qrickit.php"
@@ -203,11 +203,38 @@ def generate_qr(id):
     response = requests.request("GET", url, headers=headers, params=querystring)
 
     print(f'\n\n\n{response._content}\n\n')
-
+    #taking the content's bytes to write the PNG img
     image_data = response._content
     path = f'./../static/images/{id}.png'
-    import os
     with open(os.path.join(os.path.dirname(__file__), path), 'wb+') as out_file:
         out_file.write(image_data)
 
     return "listo bro"
+
+@inventory.route('/inventory/barcode/<id>', strict_slashes=False)
+@login_required
+def generate_barcode(id):
+    """consulting API which generates a barcode"""
+    
+    url = "https://barcode-generator4.p.rapidapi.com/"
+
+    querystring = {"text":"123456","barcodeType":"C128","imageType":"PNG"}
+
+    headers = {
+    	"X-RapidAPI-Key": "71760ccf2fmshaa151dcb49bd23cp1ad4b7jsn1d74bdc7fa4e",
+    	"X-RapidAPI-Host": "barcode-generator4.p.rapidapi.com"
+    }
+
+    response = requests.request("GET", url, headers=headers, params=querystring)
+    image_data = response.json().get('barcode')
+    import base64
+    try:
+        #encoding string to bytes to then write a file with the PNG img
+        image_data = base64.b64decode(image_data.replace('data:image/PNG;base64,', '').encode())
+        path = f'./../static/images/{id}.png'
+        with open(os.path.join(os.path.dirname(__file__), path), 'wb+') as out_file:
+            out_file.write(image_data)
+    except:
+        pass
+
+    return 'listo bro x2'

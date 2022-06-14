@@ -3,6 +3,7 @@ table, td, th {
     text-align: center;
     padding: 5px;
     margin-bottom: 15px;
+    width: 100px;
   }
 th {
   background-color: orange;
