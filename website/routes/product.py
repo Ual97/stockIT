@@ -166,7 +166,7 @@ def Put(id):
     try:
         # filter query by logged user and id
         product = Product.query.filter(and_(Product.owner==current_user.email, Product.id==id)).first()
-        
+        print(f'\n\n\n{product}\n\n')
         # making a diccionary to use the GET method as API
         toDict = product.__dict__
         toDict.pop('_sa_instance_state')
