@@ -24,7 +24,7 @@ def create_app():
     from .routes.user import usr 
     from .routes.product import inventory 
     from .routes.branch import subsidiary 
-    from .routes.csv import csv 
+    from .routes.csv import csv_v
 
     # registering blueprints 
 
@@ -32,7 +32,7 @@ def create_app():
     app.register_blueprint(usr, url_prefix='/') 
     app.register_blueprint(inventory, url_prefix='/') 
     app.register_blueprint(subsidiary, url_prefix='/') 
-    app.register_blueprint(csv, url_prefix='/') 
+    app.register_blueprint(csv_v, url_prefix='/') 
 
     # create tables from models 
 
