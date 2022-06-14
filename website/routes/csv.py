@@ -4,6 +4,7 @@ from website import db
 from website.models.product import Product 
 from website.models.branch import Branch 
 from website.models.csv import UploadFileForm 
+from website.routes.product import generate_qr
 from flask_login import login_required, current_user 
 from sqlalchemy.sql.expression import func 
 from sqlalchemy import and_ 
@@ -47,7 +48,11 @@ def dic_csv():
                 if expiry == '' or expiry == 'None':
                     line['expiry'] = None
                 else:
-                    line['expiry'] = datetime.strptime(line.get('expiry'), "%Y-%m-%d")
+                    try:
+                        line['expiry'] = datetime.strptime(line.get('expiry'), "%Y-%m-%d")
+                    except:
+                        flash("Expiry need the format '%Y-%m-%d'", category='error')
+                        return redirect('/inventory')
                 if reserved == '' or reserved == 'None':
                     line['qty_reserved'] = None
                 if cbarras == '' or cbarras == 'None':
@@ -57,16 +62,16 @@ def dic_csv():
                     line['owner'] = current_user.email
                     new_prod = Product(**line)
                     db.session.add(new_prod)
-                    db.session.commit()
                     if line.get('qr_barcode') == 'qr':
                         generate_qr(new_prod.id)
                     elif line.get('qr_barcode') == 'barcode':
                         new_prod.qr_barcode = generate_barcode(new_prod.id)
-                        db.session.commit()
                     #print(f'\n\n\n{new_prod.qr_barcode}\n\n')
                 else:
                     flash('Name, Branch and Quantity are mandatory fields', category='error')
-            flash("Poduct added", category='success')
+                    return redirect('/inventory')
+            db.session.commit()
+            flash("Poducts added", category='success')
             return redirect('/inventory')
             #db.session.commit()
             #print(f'\n\n\n{new_prod.qr_barcode}\n\n')
