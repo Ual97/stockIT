@@ -66,6 +66,7 @@ def inv():
         cost = prodDict.get('cost')
         price = prodDict.get('price')
         expiry = prodDict.get('expiry')
+        print(type(expiry))
         reserved = prodDict.get('qty_reserved')
         cbarras = prodDict.get('qr_barcode')
         

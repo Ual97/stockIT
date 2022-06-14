@@ -4,6 +4,7 @@ from website import db
 from website.models.product import Product 
 from website.models.branch import Branch 
 from website.models.csv import UploadFileForm 
+from website.routes.product import generate_qr, generate_barcode
 from flask_login import login_required, current_user 
 from sqlalchemy.sql.expression import func 
 from sqlalchemy import and_ 
@@ -11,10 +12,12 @@ from flask import Flask, render_template
 from werkzeug.utils import secure_filename 
 import os 
 from wtforms.validators import InputRequired 
+import csv
+from datetime import datetime
+
+csv_v = Blueprint('csv', __name__) 
  
-csv = Blueprint('csv', __name__) 
- 
-@csv.route('/csv', methods=['GET', 'POST'], strict_slashes=False) 
+@csv_v.route('/csv', methods=['GET', 'POST'], strict_slashes=False) 
 @login_required 
 def dic_csv(): 
     #if user is not confirmed, block access and send to home 
@@ -25,6 +28,53 @@ def dic_csv():
     if form.validate_on_submit(): 
         from main import app     
         file = form.file.data 
-        file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))) 
+        file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename)))
+        with open(os.path.abspath(os.path.dirname(__file__)) + '/files/' + file.filename, 'r') as data:
+            for line in csv.DictReader(data):
+                print(line)
+                name = line.get('name')    
+                branch = line.get('branch')
+                qty = line.get('quantity')
+                cost = line.get('cost')
+                price = line.get('price')
+                expiry = line.get('expiry')
+                reserved = line.get('qty_reserved')
+                cbarras = line.get('qr_barcode')
+                
+                if cost == '' or cost == 'None':
+                    line['cost'] = None
+                if price == '' or price == 'None':
+                    line['price'] = None
+                if expiry == '' or expiry == 'None':
+                    line['expiry'] = None
+                else:
+                    try:
+                        line['expiry'] = datetime.strptime(line.get('expiry'), "%Y-%m-%d")
+                    except:
+                        flash("Expiry need the format '%Y-%m-%d'", category='error')
+                        return redirect('/inventory')
+                if reserved == '' or reserved == 'None':
+                    line['qty_reserved'] = None
+                if cbarras == '' or cbarras == 'None':
+                    line['qr_barcode'] = None
+            
+                if name and branch and qty:
+                    line['owner'] = current_user.email
+                    new_prod = Product(**line)
+                    db.session.add(new_prod)
+                    if line.get('qr_barcode') == 'qr':
+                        generate_qr(new_prod.id)
+                        print("entreee")
+                    elif line.get('qr_barcode') == 'barcode':
+                        new_prod.qr_barcode = generate_barcode(new_prod.id)
+                    #print(f'\n\n\n{new_prod.qr_barcode}\n\n')
+                else:
+                    flash('Name, Branch and Quantity are mandatory fields', category='error')
+                    return redirect('/inventory')
+            db.session.commit()
+            flash("Poducts added", category='success')
+            return redirect('/inventory')
+            #db.session.commit()
+            #print(f'\n\n\n{new_prod.qr_barcode}\n\n')
         return "File has been uploaded." 
     return render_template('csv.html', user=current_user, form=form)
