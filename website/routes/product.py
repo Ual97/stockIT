@@ -85,8 +85,11 @@ def inv():
             new_prod = Product(**prodDict)
             db.session.add(new_prod)
             db.session.commit()
-            generate_qr(new_prod.id)
-            #db.session.commit()
+            if prodDict.get('qr_barcode') == 'qr':
+                generate_qr(new_prod.id)
+            elif prodDict.get('qr_barcode') == 'barcode':
+                new_prod.qr_barcode = generate_barcode(new_prod.id)
+                db.session.commit()
             #print(f'\n\n\n{new_prod.qr_barcode}\n\n')
             flash("Poduct added", category='success')
             return redirect('/inventory')
@@ -209,16 +212,12 @@ def generate_qr(id):
     with open(os.path.join(os.path.dirname(__file__), path), 'wb+') as out_file:
         out_file.write(image_data)
 
-    return "listo bro"
-
-@inventory.route('/inventory/barcode/<id>', strict_slashes=False)
-@login_required
 def generate_barcode(id):
     """consulting API which generates a barcode"""
     
     url = "https://barcode-generator4.p.rapidapi.com/"
 
-    querystring = {"text":"123456","barcodeType":"C128","imageType":"PNG"}
+    querystring = {"text":f'{id}',"barcodeType":"C128","imageType":"PNG"}
 
     headers = {
     	"X-RapidAPI-Key": "71760ccf2fmshaa151dcb49bd23cp1ad4b7jsn1d74bdc7fa4e",
@@ -232,9 +231,9 @@ def generate_barcode(id):
         #encoding string to bytes to then write a file with the PNG img
         image_data = base64.b64decode(image_data.replace('data:image/PNG;base64,', '').encode())
         path = f'./../static/images/{id}.png'
+        print(f'\n\n\n{path}\n\n')
         with open(os.path.join(os.path.dirname(__file__), path), 'wb+') as out_file:
             out_file.write(image_data)
+        return response.json().get('barcode')
     except:
         pass
-
-    return 'listo bro x2'
