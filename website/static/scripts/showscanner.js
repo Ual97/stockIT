@@ -1,37 +1,8 @@
 async function consult(code_content) {
   if (!isNaN(code_content)) {
-    const data = await (await fetch(`/inventory/${code_content}`)).json();
-    document.getElementsByClassName('InvisibleBarcode')[0].classList.replace('InvisibleBarcode', 'barcode')
-    id = document.querySelector('#idBarcode');
-    id.appendChild(document.createTextNode(data.id));
-    code_name = document.querySelector('#nameBarcode');
-    code_name.appendChild(document.createTextNode(data.name));
-    code_branch = document.querySelector('#branchBarcode');
-    code_branch.appendChild(document.createTextNode(data.branch));
-    code_quantity = document.querySelector('#quantityBarcode');
-    code_quantity.appendChild(document.createTextNode(data.quantity));
-    code_cost = document.querySelector('#costBarcode');
-    code_cost.appendChild(document.createTextNode(data.cost));
-    code_price = document.querySelector('#priceBarcode');
-    code_price.appendChild(document.createTextNode(data.price));
-    code_expiry = document.querySelector('#expiryBarcode');
-    code_expiry.appendChild(document.createTextNode(data.expiry));
-    code_reserved = document.querySelector('#qty_reservedBarcode');
-    code_reserved.appendChild(document.createTextNode(data.qty_reserved));
-    document.querySelector('#qr_barcodeBarcode').setAttribute('src', `../images/${data.id}.png`);
-    function cancel() {
-      document.querySelector('.barcode').classList.replace('barcode', 'InvisibleBarcode')
-      id.innerHTML = "";
-      code_name.innerHTML = "";
-      code_branch.innerHTML = "";
-      code_quantity.innerHTML = "";
-      code_cost.innerHTML = "";
-      code_price.innerHTML = "";
-      code_expiry.innerHTML = "";
-      code_reserved.innerHTML = "";
-    }
-    const cancelButton = document.querySelector("#cancelButtonBarcode")
-    cancelButton.addEventListener("click", cancel);
+    console.log(code_content);
+    document.querySelector('#search').setAttribute("value", code_content);
+    document.querySelector('#searchbutton').click();
   }
   else {
     alert("Code is not registered")

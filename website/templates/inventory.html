@@ -82,52 +82,6 @@
   </form>
 </div>
 
-<!-- form displayed if user scann qr_barcode -->
-<div class="InvisibleBarcode">
-  <form id="updateForm" action="" method="POST">
-    <table id="tableUpdate">
-      <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>Branch</th>
-        <th>Quantity</th>
-        <th>Cost</th>
-        <th>Price</th>
-        <th>Expiricy</th>
-        <th>Reserved</th>
-        <th>Barcode</th>
-        <th>Update</th>
-      </tr>
-      <tr>
-        <td id="idBarcode" value="">
-        </td>
-        <td id="nameBarcode">
-        </td>
-        <td id="branchBarcode">
-        </td>
-        <td id="quantityBarcode">
-        </td>
-        <td id="costBarcode">
-        </td>
-        <td id="priceBarcode">
-        </td>
-        <td id="expiryBarcode">
-        </td>
-        <td id="qty_reservedBarcode">
-        </td>
-        <td>
-          <img id="qr_barcodeBarcode" src="">
-        </td>
-        <td>
-          <a id="updateButton">Update</a>
-        </td>
-      </tr>
-    </table>
-    <a class="cancelButton" id="cancelButtonBarcode">Cancel</a>
-  </form>
-</div>
-
-
 <style>
   html {
     margin-left: 30px;
@@ -178,7 +132,7 @@
     <option value="highercost">Higher Cost</option>
     <option value="lowercost">Lower Cost</option>
   </select>
-  <input name="btn-srch" value="Search" type="submit" />
+  <input id="searchbutton" name="btn-srch" value="Search" type="submit" />
   <a id="qr_barcode" class="scannerButton" onclick="scannerF()">
     Open scanner
   </a>
@@ -186,109 +140,109 @@
     Import CSV
   </a>
 
-<!-- form for adding a product -->
-<form method="POST">
-  <table>
-    <tr>
-      <th>Id</th>
-      <th>Name</th>
-      <th>Branch</th>
-      <th>Quantity</th>
-      <th>Cost</th>
-      <th>Price</th>
-      <th>Expiricy</th>
-      <th>Reserved</th>
-      <th>Barcode</th>
-      <th>Add/Update</th>
-      <th>Delete</th>
-    </tr>
-    <tr>
-      <!-- row for adding a  product -->
-      <td>
-        {{ nextid }}
-      </td>
-      <td>
-        <label for="name"></label>
-        <input type="text" id="name" name="name" placeholder="" />
-      </td>
-      <td>
-        <label for="branch">select s.</label>
-        <select name="branch" id="branch">
-          {% for s in branches%}
-          <option value="{{s.name}}">{{s.name}}</option>
-          {% endfor %}
-        </select>
-      </td>
-      <td>
-        <label for="quantity"></label>
-        <input type="number" id="quantity" name="quantity" placeholder="" />
-      </td>
-      <td>
-        <label for="cost"></label>
-        <input type="number" id="cost" name="cost" placeholder="" />
-      </td>
-      <td>
-        <label for="price"></label>
-        <input type="number" id="price" name="price" placeholder="" />
-      </td>
-      <td>
-        <label for="expiry"></label>
-        <input type="date" id="expiry" name="expiry" placeholder="" />
-      </td>
-      <td>
-        <label for="qty_reserved"></label>
-        <input type="number" id="qty_reserved" name="qty_reserved" placeholder="" />
-      </td>
-      <td>
-        <select name="qr_barcode" id="qr_barcode">
-          <option value="qr">QR code</option>
-          <option value="barcode">Barcode</option>
-        </select>
-      </td>
-      <td>
-        <input id="btn-add" name="btn-add" value="add product" type="submit" />
-      </td>
-      <th></th>
-    </tr>
-    <!-- start listing the products -->
-    {% for p in products.items %}
-    <tr>
-      <td>{{ p.id }}</td>
-      <td>{{ p.name }}</td>
-      <td>{{ p.branch }}</td>
-      <td>{{ p.quantity }}</td>
-      <td>{{ p.cost }}</td>
-      <td>{{ p.price }}</td>
-      <td>{{ p.expiry }}</td>
-      <td>{{ p.qty_reserved }}</td>
-      <td>
-        <img class="qr" src="../static/images/{{p.id}}.png" >
-      </td>
-      <td><a id="{{ p.id }}" class="updateButton">
-          Update
-        </a>
-      </td>
-      <td>
-        <a id="{{ p.id }}.inventory" class="deleteButton">
-          <!--<a class="deleteButton" href=" url_for( 'inventory.Delete', id=p.id) '">-->
-          Delete
-        </a>
-      </td>
-    </tr>
-    {% endfor %}
-  </table>
+  <!-- form for adding a product -->
+  <form method="POST">
+    <table>
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Branch</th>
+        <th>Quantity</th>
+        <th>Cost</th>
+        <th>Price</th>
+        <th>Expiricy</th>
+        <th>Reserved</th>
+        <th>Barcode</th>
+        <th>Add/Update</th>
+        <th>Delete</th>
+      </tr>
+      <tr>
+        <!-- row for adding a  product -->
+        <td>
+          {{ nextid }}
+        </td>
+        <td>
+          <label for="name"></label>
+          <input type="text" id="name" name="name" placeholder="" />
+        </td>
+        <td>
+          <label for="branch">select s.</label>
+          <select name="branch" id="branch">
+            {% for s in branches%}
+            <option value="{{s.name}}">{{s.name}}</option>
+            {% endfor %}
+          </select>
+        </td>
+        <td>
+          <label for="quantity"></label>
+          <input type="number" id="quantity" name="quantity" placeholder="" />
+        </td>
+        <td>
+          <label for="cost"></label>
+          <input type="number" id="cost" name="cost" placeholder="" />
+        </td>
+        <td>
+          <label for="price"></label>
+          <input type="number" id="price" name="price" placeholder="" />
+        </td>
+        <td>
+          <label for="expiry"></label>
+          <input type="date" id="expiry" name="expiry" placeholder="" />
+        </td>
+        <td>
+          <label for="qty_reserved"></label>
+          <input type="number" id="qty_reserved" name="qty_reserved" placeholder="" />
+        </td>
+        <td>
+          <select name="qr_barcode" id="qr_barcode">
+            <option value="qr">QR code</option>
+            <option value="barcode">Barcode</option>
+          </select>
+        </td>
+        <td>
+          <input id="btn-add" name="btn-add" value="add product" type="submit" />
+        </td>
+        <th></th>
+      </tr>
+      <!-- start listing the products -->
+      {% for p in products.items %}
+      <tr>
+        <td>{{ p.id }}</td>
+        <td>{{ p.name }}</td>
+        <td>{{ p.branch }}</td>
+        <td>{{ p.quantity }}</td>
+        <td>{{ p.cost }}</td>
+        <td>{{ p.price }}</td>
+        <td>{{ p.expiry }}</td>
+        <td>{{ p.qty_reserved }}</td>
+        <td>
+          <img class="qr" src="../static/images/{{p.id}}.png">
+        </td>
+        <td><a id="{{ p.id }}" class="updateButton">
+            Update
+          </a>
+        </td>
+        <td>
+          <a id="{{ p.id }}.inventory" class="deleteButton">
+            <!--<a class="deleteButton" href=" url_for( 'inventory.Delete', id=p.id) '">-->
+            Delete
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
 
-  <!-- pagination of table rows -->
-  {% for page_num in products.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=3) %}
-  {% if page_num %}
-  {% if products.page == page_num %}
-  <a class="btn btn-info mb-4" href="{{url_for('inventory.inv', page=page_num)}}">{{page_num}}</a>
-  {% else %}
-  <a class="btn btn-outline-info mb-4" href="{{url_for('inventory.inv', page=page_num)}}">{{page_num}}</a>
-  {% endif %}
-  {% else %}
-  ...
-  {% endif %}
-  {% endfor %}
-  <br>
-  {% endblock %}
+    <!-- pagination of table rows -->
+    {% for page_num in products.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=3) %}
+    {% if page_num %}
+    {% if products.page == page_num %}
+    <a class="btn btn-info mb-4" href="{{url_for('inventory.inv', page=page_num)}}">{{page_num}}</a>
+    {% else %}
+    <a class="btn btn-outline-info mb-4" href="{{url_for('inventory.inv', page=page_num)}}">{{page_num}}</a>
+    {% endif %}
+    {% else %}
+    ...
+    {% endif %}
+    {% endfor %}
+    <br>
+    {% endblock %}
