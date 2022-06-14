@@ -77,6 +77,19 @@ input {
     margin-left: 5px;
 }
 
+.csvButton {
+    background-color: rgb(50, 106, 211);
+    color: #fff;
+    border: 1px solid rgb(50, 106, 211);
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-left: 5px;
+}
+
 .cancelButtonScanner {
     background-color: #f00;
     color: #fff;

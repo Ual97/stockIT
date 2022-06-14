@@ -4,7 +4,7 @@ from website import db
 from website.models.product import Product 
 from website.models.branch import Branch 
 from website.models.csv import UploadFileForm 
-from website.routes.product import generate_qr
+from website.routes.product import generate_qr, generate_barcode
 from flask_login import login_required, current_user 
 from sqlalchemy.sql.expression import func 
 from sqlalchemy import and_ 
@@ -64,6 +64,7 @@ def dic_csv():
                     db.session.add(new_prod)
                     if line.get('qr_barcode') == 'qr':
                         generate_qr(new_prod.id)
+                        print("entreee")
                     elif line.get('qr_barcode') == 'barcode':
                         new_prod.qr_barcode = generate_barcode(new_prod.id)
                     #print(f'\n\n\n{new_prod.qr_barcode}\n\n')
