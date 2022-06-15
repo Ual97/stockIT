@@ -1,5 +1,6 @@
 from os import abort
 import os
+from tkinter.messagebox import NO
 from flask import Blueprint, render_template, request, flash, redirect, jsonify, abort, url_for
 from website import db
 from website.models.product import Product
@@ -11,12 +12,13 @@ import requests
 
 inventory = Blueprint('inventory', __name__)
 
+
 @inventory.route('/inventory', methods=['GET', 'POST'])
 @login_required
 def inv():
     """inventory of products"""
 
-    #if user is not confirmed, block access and send to home
+    # if user is not confirmed, block access and send to home
     if current_user.confirmed is False:
         flash('Please confirm your account, check your email (and spam folder)', 'error')
         return redirect(url_for('views.home'))
@@ -25,15 +27,15 @@ def inv():
     if request.method == 'POST' and "btn-srch" in request.form:
         search = request.form.get("search")
         orderby = request.form.get("orderby")
-        
-        #checks that products are from user
+
+        # checks that products are from user
         userprod = Product.query.filter(Product.owner == current_user.email)
 
         # search input section
         srch = userprod.filter(or_(Product.id.like(search),
-                                    Product.name.like('%' + search + '%'), 
-                                    Product.branch.like('%' + search + '%'), 
-                                    Product.qr_barcode.like(search)))
+                                   Product.name.like('%' + search + '%'),
+                                   Product.branch.like('%' + search + '%'),
+                                   Product.qr_barcode.like(search)))
 
         # Order By select section
         if orderby == 'higherprice':
@@ -56,11 +58,11 @@ def inv():
             nextid += 1
 
         return render_template('inventory.html', user=current_user,
-                            branches=branches, nextid=nextid, products=data)
+                               branches=branches, nextid=nextid, products=data)
 
     if request.method == 'POST' and "btn-add" in request.form:
         prodDict = request.form.to_dict()
-        name = prodDict.get('name')    
+        name = prodDict.get('name')
         branch = prodDict.get('branch')
         qty = prodDict.get('quantity')
         cost = prodDict.get('cost')
@@ -68,28 +70,32 @@ def inv():
         expiry = prodDict.get('expiry')
         reserved = prodDict.get('qty_reserved')
         cbarras = prodDict.get('qr_barcode')
-        
+
         if cost == '' or cost == 'None':
             prodDict['cost'] = None
         elif cost.isnumeric() is False:
-            flash("Quantity, cost, price and reserved have to be numbers.", category='error')
-            return redirect('/inventory') 
+            flash("Quantity, cost, price and reserved have to be numbers.",
+                  category='error')
+            return redirect('/inventory')
         if price == '' or price == 'None':
             prodDict['price'] = None
         elif price.isnumeric() is False:
-            flash("Quantity, cost, price and reserved have to be numbers.", category='error')
-            return redirect('/inventory') 
+            flash("Quantity, cost, price and reserved have to be numbers.",
+                  category='error')
+            return redirect('/inventory')
         if expiry == '' or expiry == 'None':
             prodDict['expiry'] = None
         if reserved == '' or reserved == 'None':
             prodDict['qty_reserved'] = None
         elif reserved.isnumeric() is False:
-            flash("Quantity, cost, price and reserved have to be numbers.", category='error')
-            return redirect('/inventory')         
-    
+            flash("Quantity, cost, price and reserved have to be numbers.",
+                  category='error')
+            return redirect('/inventory')
+
         if name and branch and qty:
             if qty.isnumeric() is False:
-                flash("Quantity, cost, price and reserved have to be numbers.", category='error')
+                flash(
+                    "Quantity, cost, price and reserved have to be numbers.", category='error')
                 return redirect('/inventory')
             prodDict['owner'] = current_user.email
             new_prod = Product(**prodDict)
@@ -100,7 +106,7 @@ def inv():
             elif prodDict.get('qr_barcode') == 'barcode':
                 new_prod.qr_barcode = generate_barcode(new_prod.id)
                 db.session.commit()
-            #print(f'\n\n\n{new_prod.qr_barcode}\n\n')
+            # print(f'\n\n\n{new_prod.qr_barcode}\n\n')
             flash("Poduct added", category='success')
             return redirect('/inventory')
         else:
@@ -113,25 +119,52 @@ def inv():
         nextid = 1
     else:
         nextid += 1
-    data = Product.query.filter_by(owner=current_user.email).paginate(per_page=10)
+    data = Product.query.filter_by(
+        owner=current_user.email).paginate(per_page=10)
     return render_template('inventory.html', user=current_user,
                            branches=branches, nextid=nextid, products=data)
 
-@inventory.route('/inventory/<id>', methods=['POST','GET'], strict_slashes=False)
+
+@inventory.route('/inventory/<id>', methods=['POST', 'GET'], strict_slashes=False)
 @login_required
 def Put(id):
     """updating or consulting item from inventory"""
-    item = Product.query.filter(and_(Product.owner==current_user.email, Product.id==id)).first()
+    item = Product.query.filter(
+        and_(Product.owner == current_user.email, Product.id == id)).first()
 
     if request.method == 'POST':
         prodDict = request.form.to_dict()
+        name = prodDict.get('nameUpdate')
+        if name is None:
+            prodDict.get('nameBarcodeUpdate')
+        branches = prodDict.get('branchesUpdate')
+        if branches is None:
+            prodDict.get('branchesBarcodeUpdate')
+        quantity = prodDict.get('quantityUpdate')
+        if quantity is None:
+            prodDict.get('quantityBarcodeUpdate')
+        cost = prodDict.get('costUpdate')
+        if cost is None:
+            prodDict.get('costBarcodeUpdate')
+        price = prodDict.get('priceUpdate')
+        if price is None:
+            prodDict.get('priceBarcodeUpdate')
+        expiry = prodDict.get('expiryUpdate')
+        if expiry is None:
+            prodDict.get('expiryBarcodeUpdate')
+        qty_reserved = prodDict.get('qty_reservedUpdate')
+        if qty_reserved is None:
+            prodDict.get('qty_reservedBarcodeUpdate')
+
         if prodDict is None:
             abort(404)
         debugKeys = prodDict.keys()
 
-        keys = ('nameUpdate', 'branchesUpdate', 'quantityUpdate', 'costUpdate', 'priceUpdate', 'expiryUpdate', 'qty_reservedUpdate', 'qr_barcodeUpdate')
+        keys = ('nameUpdate', 'branchesUpdate', 'quantityUpdate', 'costUpdate',
+                'priceUpdate', 'expiryUpdate', 'qty_reservedUpdate', 'qr_barcodeUpdate')
 
-        print(f'\n\nlas keys del form: {debugKeys} \n\n keys set: {keys}\n\n diccionario antes de update: {item.__dict__}\n\n datos nuevos: {prodDict}')
+        print(
+            f'\n\nlas keys del form: {debugKeys} \n\n keys set: {keys}\n\n diccionario antes de update: {item.__dict__}\n\n datos nuevos: {prodDict}')
         pos = 0
         for pos in range(len(keys)):
             if pos == 0:
@@ -144,7 +177,8 @@ def Put(id):
                         item.branch = prodDict[keys[pos]]
             if pos == 2:
                 if prodDict[keys[pos]] != '' and prodDict[keys[pos]] != 'None':
-                    print(f'\n\n\ntype de esta mierda{type(prodDict[keys[pos]])}\n\n')
+                    print(
+                        f'\n\n\ntype de esta mierda{type(prodDict[keys[pos]])}\n\n')
                     if prodDict[keys[pos]].isdigit() is True:
                         item.quantity = prodDict[keys[pos]]
             if pos == 3:
@@ -167,15 +201,16 @@ def Put(id):
                     if prodDict[keys[pos]].isdigit() is True:
                         item.qr_barcode = prodDict[keys[pos]]
         print(f'diccionario desp {item.__dict__}')
-        
+
         db.session.commit()
 
         flash('Item updated successfully!')
-        
+
         return redirect('/inventory')
     try:
         # filter query by logged user and id
-        product = Product.query.filter(and_(Product.owner==current_user.email, Product.id==id)).first()
+        product = Product.query.filter(
+            and_(Product.owner == current_user.email, Product.id == id)).first()
         print(f'\n\n\n{product}\n\n')
         # making a diccionary to use the GET method as API
         toDict = product.__dict__
@@ -191,13 +226,14 @@ def Put(id):
     except Exception:
         abort(404)
 
+
 @inventory.route('/inventory/delete/<id>', strict_slashes=False)
 @login_required
 def Delete(id):
     """inventory page"""
     product = Product.query.get(id)
     path = f'./../static/images/{id}.png'
-    path =  os.path.join(os.path.dirname(__file__), path)
+    path = os.path.join(os.path.dirname(__file__), path)
     if os.path.exists(path):
         os.remove(path)
     db.session.delete(product)
@@ -206,44 +242,49 @@ def Delete(id):
     print(f'\n\n\naaaaaaaaaaaa{request.url_rule}\n\n\n')
     return redirect('/inventory')
 
+
 def generate_qr(id):
     """consulting API which generates a qr"""
     url = "https://qrickit-qr-code-qreator.p.rapidapi.com/api/qrickit.php"
 
-    querystring = {"d":f'{id}'}
+    querystring = {"d": f'{id}'}
 
     headers = {
-	            "X-RapidAPI-Key": "71760ccf2fmshaa151dcb49bd23cp1ad4b7jsn1d74bdc7fa4e",
-	            "X-RapidAPI-Host": "qrickit-qr-code-qreator.p.rapidapi.com"
-                }
+        "X-RapidAPI-Key": "71760ccf2fmshaa151dcb49bd23cp1ad4b7jsn1d74bdc7fa4e",
+        "X-RapidAPI-Host": "qrickit-qr-code-qreator.p.rapidapi.com"
+    }
 
-    response = requests.request("GET", url, headers=headers, params=querystring)
+    response = requests.request(
+        "GET", url, headers=headers, params=querystring)
 
     print(f'\n\n\n{response._content}\n\n')
-    #taking the content's bytes to write the PNG img
+    # taking the content's bytes to write the PNG img
     image_data = response._content
     path = f'./../static/images/{id}.png'
     with open(os.path.join(os.path.dirname(__file__), path), 'wb+') as out_file:
         out_file.write(image_data)
 
+
 def generate_barcode(id):
     """consulting API which generates a barcode"""
-    
+
     url = "https://barcode-generator4.p.rapidapi.com/"
 
-    querystring = {"text":f'{id}',"barcodeType":"C128","imageType":"PNG"}
+    querystring = {"text": f'{id}', "barcodeType": "C128", "imageType": "PNG"}
 
     headers = {
-    	"X-RapidAPI-Key": "71760ccf2fmshaa151dcb49bd23cp1ad4b7jsn1d74bdc7fa4e",
-    	"X-RapidAPI-Host": "barcode-generator4.p.rapidapi.com"
+        "X-RapidAPI-Key": "71760ccf2fmshaa151dcb49bd23cp1ad4b7jsn1d74bdc7fa4e",
+        "X-RapidAPI-Host": "barcode-generator4.p.rapidapi.com"
     }
 
-    response = requests.request("GET", url, headers=headers, params=querystring)
+    response = requests.request(
+        "GET", url, headers=headers, params=querystring)
     image_data = response.json().get('barcode')
     import base64
     try:
-        #encoding string to bytes to then write a file with the PNG img
-        image_data = base64.b64decode(image_data.replace('data:image/PNG;base64,', '').encode())
+        # encoding string to bytes to then write a file with the PNG img
+        image_data = base64.b64decode(image_data.replace(
+            'data:image/PNG;base64,', '').encode())
         path = f'./../static/images/{id}.png'
         print(f'\n\n\n{path}\n\n')
         with open(os.path.join(os.path.dirname(__file__), path), 'wb+') as out_file:

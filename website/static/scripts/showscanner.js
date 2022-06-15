@@ -1,36 +1,48 @@
 async function consult(code_content) {
   if (!isNaN(code_content)) {
-    
-    const data = await (await fetch(`/inventory/${element.id}`)).json()
-
+    const data = await (await fetch(`/inventory/${code_content}`)).json()    
+    console.log(data);
     console.log(code_content);
     
     document.querySelector('.InvisibleBarcode').setAttribute('class', 'barcode');    
+    
 
     tableName = document.querySelector('#nameBarcode');
-    tableName.appendChild(data.name);
+    tableName.appendChild(document.createTextNode(data.name));
     tableBranch = document.querySelector('#branchBarcode');
-    tableBranch.appendChild(data.branch);
+    tableBranch.appendChild(document.createTextNode(data.branch));
     tableQuantity = document.querySelector('#quantityBarcode');
-    tableQuantity.appendChild(data.quantity);
+    tableQuantity.appendChild(document.createTextNode(data.quantity));
     tableCost = document.querySelector('#costBarcode');
-    tableCost.appendChild(data.cost);
+    if (data.cost) {
+      const textCost = document.createTextNode(data.cost);
+      tableCost.appendChild(textCost);
+    }
     tablePrice = document.querySelector('#priceBarcode');
-    tablePrice.appendChild(data.price);
+    if (data.price) {
+      const textPrice = document.createTextNode(data.price);
+      tablePrice.appendChild(textPrice);
+    }
     tableExpiry = document.querySelector('#expiricy');
-    tableExpiriy.appendChild(data.expiry);
-    tableQty = query.querySelector('#qty_reservedBarcode');
-    tableQty.appendChild(data.qty_reserved);
-    document.querySelector('#qr_barcodeUpdate').setAttribute('src', `/static/images/${id}.png`);
+    if (data.expiry) {
+      const textExpiry = document.createTextNode(data.expiry);
+      tableExpiry.appendChild(textExpiry);
+    }
+    tableQty = document.querySelector('#qty_reservedBarcode');
+    if (data.qty_reserved) {
+      const textQty = document.createTextNode(data.qty_reserved);
+      tableQty.appendChild(textQty);
+    }
+    document.querySelector('#qr_barcodeUpdate').setAttribute('src', `/static/images/${code_content}.png`);
 
-    updateButton = querySelector('#updateButton');
+    updateButton = document.querySelector('#updateButtonBarcode');
     updateButton.addEventListener('click', function () {
 
       document.querySelector('#tableBarcode').setAttribute('class', 'Invisible');
       document.querySelector('#tableBarcodeUpdate').setAttribute('class', '');
 
       // filling form with corresponding item data:
-      document.querySelector("#updateFormBarcode").setAttribute("action", `/inventory/${element.id}`);
+      document.querySelector("#updateFormBarcode").setAttribute("action", `/inventory/${code_content}`);
       const id = document.querySelector("#idUpdate");
       id.appendChild(document.createTextNode(data.id));
       document.querySelector("#nameBarcodeUpdate").setAttribute("value", data.name);
@@ -62,7 +74,6 @@ async function consult(code_content) {
       
 
     });
-
   }
   else {
     alert("Code is not registered")
