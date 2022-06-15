@@ -186,12 +186,16 @@ def Put(id):
 @login_required
 def Delete(id):
     """inventory page"""
-    db.session.delete(Product.query.get(id))
+    product = Product.query.get(id)
+    path = f'./../static/images/{id}.png'
+    path =  os.path.join(os.path.dirname(__file__), path)
+    if os.path.exists(path):
+        os.remove(path)
+    db.session.delete(product)
     db.session.commit()
     flash('Item deleted successfully!')
     print(f'\n\n\naaaaaaaaaaaa{request.url_rule}\n\n\n')
     return redirect('/inventory')
-
 
 def generate_qr(id):
     """consulting API which generates a qr"""
