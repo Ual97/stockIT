@@ -86,8 +86,8 @@
 
 <!-- form displayed if user scann qr_barcode -->
 <div class="InvisibleBarcode">
-  <form id="updateForm" action="" method="POST">
-    <table id="tableUpdate">
+  <form id="updateFormBarcode" action="" method="POST">
+    <table id="tableBarcode">
       <tr>
         <th>Id</th>
         <th>Name</th>
@@ -118,7 +118,7 @@
         <td id="qty_reservedBarcode">
         </td>
         <td>
-          <img id="qr_barcodeUpdate" src="">
+          <img id="qr_barcodeBarcode" src="">
         </td>
         <td>
           <a id="updateButton">Update</a>
@@ -126,6 +126,62 @@
       </tr>
     </table>
     <a class="cancelButton" id="cancelButtonBarcode">Cancel</a>
+    <table id="tableBarcodeUpdate" class="Invisible">
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Branch</th>
+        <th>Quantity</th>
+        <th>Cost</th>
+        <th>Price</th>
+        <th>Expiricy</th>
+        <th>Reserved</th>
+        <th>Barcode</th>
+        <th>Update</th>
+      </tr>
+      <tr>
+        <td id="idBarcodeUpdate" value="">
+        </td>
+        <td>
+          <label for="nameBarcodeUpdate"></label>
+          <input type="text" id="nameBarcodeUpdate" name="nameBarcodeUpdate" placeholder="" value="" />
+        </td>
+        <td>
+          <label for="branchesBarcodeUpdate">select s.</label>
+          <select name="branchesBarcodeUpdate" id="branchesBarcodeUpdate">
+          </select>
+        </td>
+        <td>
+          <label for="quantityBarcodeUpdate"></label>
+          <input type="number" id="quantityBarcodeUpdate" name="quantityBarcodeUpdate" placeholder="" value="" />
+        </td>
+        <td>
+          <label for="costBarcodeUpdate"></label>
+          <input type="number" id="costBarcodeUpdate" name="costBarcodeUpdate" placeholder="" value="" />
+        </td>
+        <td>
+          <label for="priceBarcodeUpdate"></label>
+          <input type="number" id="priceBarcodeUpdate" name="priceBarcodeUpdate" placeholder="" value="" />
+        </td>
+        <td>
+          <label for="expiryBarcodeUpdate"></label>
+          <input type="date" id="expiryBarcodeUpdate" name="expiryBarcodeUpdate" placeholder="" value="" />
+        </td>
+        <td>
+          <label for="qty_reserved"></label>
+          <input type="number" id="qty_reservedBarcodeUpdate" name="qty_reservedBarcodeUpdate" placeholder="" />
+        </td>
+        <td>
+          <select name="qr_barcodeBarcodeUpdate" id="qr_barcodeBarcodeUpdate">
+            <option id="qr_barcodeBarcodeUpdateqr" value="qr">QR code</option>
+            <option id="qr_barcodeBarcodeUpdatebarcode" value="barcode">Barcode</option>
+          </select>
+        </td>
+        <td>
+          <input id="updateBarcodeButton" name="btn-add" value="Update" type="submit" />
+        </td>
+      </tr>
+    </table>
   </form>
 </div>
 
