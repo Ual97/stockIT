@@ -1,4 +1,4 @@
-window.addEventListener('load', function() {
+window.addEventListener('load', function () {
   const elements = document.getElementsByClassName('updateButton');
   for (let element of elements) {
     element.addEventListener('click', async function () { //asyc function which allows make await returns
