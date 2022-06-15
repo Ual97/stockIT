@@ -70,8 +70,7 @@
           <input type="number" id="qty_reservedUpdate" name="qty_reservedUpdate" placeholder="" />
         </td>
         <td>
-          <label for="qr_barcodeUpdate"></label>
-          <input type="number" id="qr_barcodeUpdate" name="qr_barcodeUpdate" placeholder="888 888 888 888" value="" />
+          <img id="qr_barcodeUpdate" src="">
         </td>
         <td>
           <input id="updateButton" name="btn-add" value="Update" type="submit" />
@@ -116,7 +115,10 @@
         <td id="qty_reservedBarcode">
         </td>
         <td>
-          <img id="qr_barcodeBarcode" src="">
+          <select name="qr_barcode" id="qr_barcode">
+            <option value="qr">QR code</option>
+            <option value="barcode">Barcode</option>
+          </select>
         </td>
         <td>
           <a id="updateButton">Update</a>

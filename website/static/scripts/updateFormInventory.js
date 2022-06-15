@@ -26,7 +26,7 @@ window.addEventListener('load', function() {
       document.querySelector("#priceUpdate").setAttribute("value", data.price);
       document.querySelector("#expiryUpdate").setAttribute("value", data.expiry);
       document.querySelector("#qty_reservedUpdate").setAttribute("value", data.qty_reserved);
-      document.querySelector("#qr_barcodeUpdate").setAttribute("value", data.qr_barcode);
+      document.querySelector("#qr_barcodeUpdate").setAttribute("src", `static/images/${data.id}.png`);
       function cancel() {
         document.querySelector('.update').classList.replace('update', 'Invisible')
         branches.innerHTML = "";
