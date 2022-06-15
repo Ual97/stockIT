@@ -29,52 +29,69 @@ def dic_csv():
         from main import app     
         file = form.file.data 
         file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename)))
-        with open(os.path.abspath(os.path.dirname(__file__)) + '/files/' + file.filename, 'r') as data:
-            for line in csv.DictReader(data):
-                print(line)
-                name = line.get('name')    
-                branch = line.get('branch')
-                qty = line.get('quantity')
-                cost = line.get('cost')
-                price = line.get('price')
-                expiry = line.get('expiry')
-                reserved = line.get('qty_reserved')
-                cbarras = line.get('qr_barcode')
-                
-                if cost == '' or cost == 'None':
-                    line['cost'] = None
-                if price == '' or price == 'None':
-                    line['price'] = None
-                if expiry == '' or expiry == 'None':
-                    line['expiry'] = None
-                else:
-                    try:
-                        line['expiry'] = datetime.strptime(line.get('expiry'), "%Y-%m-%d")
-                    except:
-                        flash("Expiry need the format '%Y-%m-%d'", category='error')
+        filename, file_extension = os.path.splitext(file.filename)
+        print(file_extension)
+        branches = Branch.query.filter_by(owner=current_user.email)
+        print(branches)
+        if file_extension == '.csv':
+            with open(os.path.abspath(os.path.dirname(__file__)) + '/files/' + file.filename, 'r') as data:
+                for line in csv.DictReader(data):
+                    name = line.get('name')    
+                    branch = line.get('branch')
+                    qty = line.get('quantity')
+                    cost = line.get('cost')
+                    price = line.get('price')
+                    expiry = line.get('expiry')
+                    reserved = line.get('qty_reserved')
+                    cbarras = line.get('qr_barcode')
+                    
+                    if cost == '' or cost == 'None':
+                        line['cost'] = None
+                    elif cost.isnumeric() is False:
+                        flash("Quantity, cost, price, reserved and barcode have to be numbers.", category='error')
+                        return redirect('/inventory') 
+                    if price == '' or price == 'None':
+                        line['price'] = None
+                    elif price.isnumeric() is False:
+                        flash("Quantity, cost, price, reserved and barcode have to be numbers.", category='error')
+                        return redirect('/inventory') 
+                    if expiry == '' or expiry == 'None':
+                        line['expiry'] = None
+                    else:
+                        try:
+                            line['expiry'] = datetime.strptime(line.get('expiry'), "%Y-%m-%d")
+                        except:
+                            flash("Expiry need the format '%Y-%m-%d'", category='error')
+                            return redirect('/inventory')
+                    if reserved == '' or reserved == 'None':
+                        line['qty_reserved'] = None
+                    elif reserved.isnumeric() is False:
+                        flash("Quantity, cost, price, reserved and barcode have to be numbers.", category='error')
+                        return redirect('/inventory') 
+                    if cbarras == '' or cbarras == 'None':
+                        line['qr_barcode'] = None
+                    elif cbarras.isnumeric() is False:
+                        flash("Quantity, cost, price, reserved and barcode have to be numbers.", category='error')
                         return redirect('/inventory')
-                if reserved == '' or reserved == 'None':
-                    line['qty_reserved'] = None
-                if cbarras == '' or cbarras == 'None':
-                    line['qr_barcode'] = None
-            
-                if name and branch and qty:
-                    line['owner'] = current_user.email
-                    new_prod = Product(**line)
-                    db.session.add(new_prod)
-                    if line.get('qr_barcode') == 'qr':
-                        generate_qr(new_prod.id)
-                        print("entreee")
-                    elif line.get('qr_barcode') == 'barcode':
-                        new_prod.qr_barcode = generate_barcode(new_prod.id)
-                    #print(f'\n\n\n{new_prod.qr_barcode}\n\n')
-                else:
-                    flash('Name, Branch and Quantity are mandatory fields', category='error')
-                    return redirect('/inventory')
-            db.session.commit()
-            flash("Poducts added", category='success')
-            return redirect('/inventory')
-            #db.session.commit()
-            #print(f'\n\n\n{new_prod.qr_barcode}\n\n')
-        return "File has been uploaded." 
+
+                    if name and branch and qty:
+                        line['owner'] = current_user.email
+                        new_prod = Product(**line)
+                        db.session.add(new_prod)
+                        db.session.commit()
+                        if line.get('qr_barcode') == 'qr':
+                            generate_qr(new_prod.id)
+                            print("entreee")
+                        elif line.get('qr_barcode') == 'barcode':
+                            new_prod.qr_barcode = generate_barcode(new_prod.id)
+                        #print(f'\n\n\n{new_prod.qr_barcode}\n\n')
+                    else:
+                        flash('Name, Branch and Quantity are mandatory fields', category='error')
+                        return redirect('/inventory')
+                flash("Poducts added", category='success')
+                return redirect('/inventory')
+                #db.session.commit()
+                #print(f'\n\n\n{new_prod.qr_barcode}\n\n')
+        else:
+            flash("Your file must have extension '.csv'", category='error')
     return render_template('csv.html', user=current_user, form=form)
