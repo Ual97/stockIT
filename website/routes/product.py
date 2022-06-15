@@ -66,22 +66,31 @@ def inv():
         cost = prodDict.get('cost')
         price = prodDict.get('price')
         expiry = prodDict.get('expiry')
-        print(type(expiry))
         reserved = prodDict.get('qty_reserved')
         cbarras = prodDict.get('qr_barcode')
         
         if cost == '' or cost == 'None':
             prodDict['cost'] = None
+        elif cost.isnumeric() is False:
+            flash("Quantity, cost, price and reserved have to be numbers.", category='error')
+            return redirect('/inventory') 
         if price == '' or price == 'None':
             prodDict['price'] = None
+        elif price.isnumeric() is False:
+            flash("Quantity, cost, price and reserved have to be numbers.", category='error')
+            return redirect('/inventory') 
         if expiry == '' or expiry == 'None':
             prodDict['expiry'] = None
         if reserved == '' or reserved == 'None':
             prodDict['qty_reserved'] = None
-        if cbarras == '' or cbarras == 'None':
-            prodDict['qr_barcode'] = None
+        elif reserved.isnumeric() is False:
+            flash("Quantity, cost, price and reserved have to be numbers.", category='error')
+            return redirect('/inventory')         
     
         if name and branch and qty:
+            if qty.isnumeric() is False:
+                flash("Quantity, cost, price and reserved have to be numbers.", category='error')
+                return redirect('/inventory')
             prodDict['owner'] = current_user.email
             new_prod = Product(**prodDict)
             db.session.add(new_prod)

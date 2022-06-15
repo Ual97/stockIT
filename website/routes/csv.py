@@ -45,6 +45,14 @@ def dic_csv():
                     reserved = line.get('qty_reserved')
                     cbarras = line.get('qr_barcode')
                     
+                    branches = Branch.query.filter_by(owner=current_user.email).all()
+                    listBranches = []
+                    for branch2 in branches:
+                        listBranches.append(branch2.name)
+                    if branch not in listBranches:
+                        flash("The branch must be created", category='error')
+                        return redirect('/inventory') 
+
                     if cost == '' or cost == 'None':
                         line['cost'] = None
                     elif cost.isnumeric() is False:
@@ -68,9 +76,11 @@ def dic_csv():
                     elif reserved.isnumeric() is False:
                         flash("Quantity, cost, price and reserved have to be numbers.", category='error')
                         return redirect('/inventory') 
-                    print("ASDFGHJKL")
 
                     if name and branch and qty:
+                        if qty.isnumeric() is False:
+                            flash("Quantity, cost, price and reserved have to be numbers.", category='error')
+                            return redirect('/inventory')
                         line['owner'] = current_user.email
                         new_prod = Product(**line)
                         db.session.add(new_prod)
