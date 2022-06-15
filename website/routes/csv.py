@@ -36,7 +36,7 @@ def dic_csv():
         if file_extension == '.csv':
             with open(os.path.abspath(os.path.dirname(__file__)) + '/files/' + file.filename, 'r') as data:
                 for line in csv.DictReader(data):
-                    name = line.get('name')    
+                    name = line.get('name')
                     branch = line.get('branch')
                     qty = line.get('quantity')
                     cost = line.get('cost')
@@ -48,12 +48,12 @@ def dic_csv():
                     if cost == '' or cost == 'None':
                         line['cost'] = None
                     elif cost.isnumeric() is False:
-                        flash("Quantity, cost, price, reserved and barcode have to be numbers.", category='error')
+                        flash("Quantity, cost, price and reserved have to be numbers.", category='error')
                         return redirect('/inventory') 
                     if price == '' or price == 'None':
                         line['price'] = None
                     elif price.isnumeric() is False:
-                        flash("Quantity, cost, price, reserved and barcode have to be numbers.", category='error')
+                        flash("Quantity, cost, price and reserved have to be numbers.", category='error')
                         return redirect('/inventory') 
                     if expiry == '' or expiry == 'None':
                         line['expiry'] = None
@@ -66,13 +66,9 @@ def dic_csv():
                     if reserved == '' or reserved == 'None':
                         line['qty_reserved'] = None
                     elif reserved.isnumeric() is False:
-                        flash("Quantity, cost, price, reserved and barcode have to be numbers.", category='error')
+                        flash("Quantity, cost, price and reserved have to be numbers.", category='error')
                         return redirect('/inventory') 
-                    if cbarras == '' or cbarras == 'None':
-                        line['qr_barcode'] = None
-                    elif cbarras.isnumeric() is False:
-                        flash("Quantity, cost, price, reserved and barcode have to be numbers.", category='error')
-                        return redirect('/inventory')
+                    print("ASDFGHJKL")
 
                     if name and branch and qty:
                         line['owner'] = current_user.email
@@ -81,9 +77,9 @@ def dic_csv():
                         db.session.commit()
                         if line.get('qr_barcode') == 'qr':
                             generate_qr(new_prod.id)
-                            print("entreee")
                         elif line.get('qr_barcode') == 'barcode':
                             new_prod.qr_barcode = generate_barcode(new_prod.id)
+                            db.session.commit()
                         #print(f'\n\n\n{new_prod.qr_barcode}\n\n')
                     else:
                         flash('Name, Branch and Quantity are mandatory fields', category='error')

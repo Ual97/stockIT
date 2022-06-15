@@ -1,2 +1,4 @@
-"name","branch","quantity","cost","price","expiry","qty_reserved","qr_barcode"
-"papas","city","2","1","2","9/12/1990","2","3124234234"
+name,branch,quantity,cost,price,expiry,qty_reserved,qr_barcode
+bola7,centro2,10,5,20,1899-12-31,2,
+bola6,centro3,5,2,,2023-07-11,,
+bola5,centro4,12,3,5,,3,
