@@ -89,8 +89,9 @@ def inv():
             if prodDict.get('qr_barcode') == 'qr':
                 generate_qr(new_prod.id)
             elif prodDict.get('qr_barcode') == 'barcode':
-                new_prod.qr_barcode = generate_barcode(new_prod.id)
-                db.session.commit()
+                generate_barcode(new_prod.id)
+            new_prod.qr_barcode = prodDict.get('qr_barcode')
+            db.session.commit()
             #print(f'\n\n\n{new_prod.qr_barcode}\n\n')
             flash("Poduct added", category='success')
             return redirect('/inventory')
@@ -153,10 +154,12 @@ def Put(id):
                 if prodDict[keys[pos]] != '' and prodDict[keys[pos]] != 'None':
                     if prodDict[keys[pos]].isdigit() is True:
                         item.qty_reserved = prodDict[keys[pos]]
-            if pos == 7:
-                if prodDict[keys[pos]] != '' and prodDict[keys[pos]] != 'None':
-                    if prodDict[keys[pos]].isdigit() is True:
-                        item.qr_barcode = prodDict[keys[pos]]
+            if prodDict.get('qr_barcodeUpdate') == 'qr':
+                generate_qr(item.id)
+            elif prodDict.get('qr_barcodeUpdate') == 'barcode':
+                generate_barcode(item.id)
+            item.qr_barcode = prodDict.get('qr_barcodeUpdate')
+            db.session.commit()
         print(f'diccionario desp {item.__dict__}')
         
         db.session.commit()
