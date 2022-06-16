@@ -1,7 +1,7 @@
 from os import abort 
 from flask import Blueprint, render_template, request, flash, redirect, jsonify, abort, url_for 
 from website import db 
-from website.models.product import Product 
+from website.models.entries import Entries 
 from website.models.branch import Branch 
 from website.models.csv import UploadFileForm 
 from website.routes.product import generate_qr, generate_barcode
