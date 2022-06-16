@@ -71,21 +71,24 @@ def inv():
         
         if cost == '' or cost == 'None':
             prodDict['cost'] = None
-        elif cost.isnumeric() is False:
-            flash("Quantity, cost, price and reserved have to be numbers.", category='error')
-            return redirect('/inventory') 
+        elif cost: 
+            if cost.isnumeric() is False:
+                flash("Quantity, cost, price and reserved have to be numbers.", category='error')
+                return redirect('/inventory') 
         if price == '' or price == 'None':
             prodDict['price'] = None
-        elif price.isnumeric() is False:
-            flash("Quantity, cost, price and reserved have to be numbers.", category='error')
-            return redirect('/inventory') 
+        elif price:
+            if price.isnumeric() is False:
+                flash("Quantity, cost, price and reserved have to be numbers.", category='error')
+                return redirect('/inventory') 
         if expiry == '' or expiry == 'None':
             prodDict['expiry'] = None
         if reserved == '' or reserved == 'None':
             prodDict['qty_reserved'] = None
-        elif reserved.isnumeric() is False:
-            flash("Quantity, cost, price and reserved have to be numbers.", category='error')
-            return redirect('/inventory')         
+        elif reserved:
+            if reserved.isnumeric() is False:
+                flash("Quantity, cost, price and reserved have to be numbers.", category='error')
+                return redirect('/inventory')         
     
         if name and branch and qty:
             if qty.isnumeric() is False:
@@ -98,8 +101,8 @@ def inv():
             if prodDict.get('qr_barcode') == 'qr':
                 generate_qr(new_prod.id)
             elif prodDict.get('qr_barcode') == 'barcode':
-                new_prod.qr_barcode = generate_barcode(new_prod.id)
-                db.session.commit()
+                generate_barcode(new_prod.id)
+            db.session.commit()
             #print(f'\n\n\n{new_prod.qr_barcode}\n\n')
             flash("Poduct added", category='success')
             return redirect('/inventory')
@@ -132,35 +135,35 @@ def Put(id):
 
         name = prodDict.get('nameUpdate')
         if name is None:
-            prodDict.get('nameBarcodeUpdate')
+            name = prodDict.get('nameBarcodeUpdate')
         
         branch = prodDict.get('branchesUpdate')
         if branch is None:
-            prodDict.get('branchesBarcodeUpdate')
+            branch = prodDict.get('branchesBarcodeUpdate')
 
         quantity = prodDict.get('quantityUpdate')
         if quantity is None:
-            prodDict.get('quantityBarcodeUpdate')
+            quantity = prodDict.get('quantityBarcodeUpdate')
         
         cost = prodDict.get('costUpdate')
         if cost is None:
-            prodDict.get('costBarcodeUpdate')
+            cost = prodDict.get('costBarcodeUpdate')
         
         price = prodDict.get('priceUpdate')
         if price is None:
-            prodDict.get('priceBarcodeUpdate')
+            price = prodDict.get('priceBarcodeUpdate')
 
         expiry = prodDict.get('expiryUpdate')
         if expiry is None:
-            prodDict.get('expiryBarcodeUpdate')
+            expiry = prodDict.get('expiryBarcodeUpdate')
 
         reserved = prodDict.get('qty_reservedUpdate')
         if reserved is None:
-            prodDict.get('qty_reservedBarcodeUpdate')
+            reserved = prodDict.get('qty_reservedBarcodeUpdate')
         
         qr_barcode = prodDict.get('qr_barcodeUpdate')
         if qr_barcode is None:
-            prodDict.get('qr_barcodeBarcodeUpdate')
+            qr_barcode = prodDict.get('qr_barcodeBarcodeUpdate')
         print(f'\n\nllegué acá. form dict:{prodDict}\n\n')
         if name and branch and quantity:
             if type(name) is str:
@@ -173,17 +176,17 @@ def Put(id):
             else:
                 flash("Branch has to be a string", category='error')
                 return redirect('/inventory')
-            if quantity.isnumeric():
+            if quantity and quantity.isnumeric():
                 item.quantity = quantity
             else:
                 flash("Quantity has to be a number", category='error')
                 return redirect('/inventory')
-            if cost.isnumeric():
+            if cost and cost.isnumeric():
                 item.cost = cost
             elif cost != '':
                 flash("Cost has to be a number", category='error')
                 return redirect('/inventory')
-            if price.isnumeric():
+            if price and price.isnumeric():
                 item.price = price
             elif price != '':
                 flash("Price has to be a number", category='error')
@@ -193,11 +196,18 @@ def Put(id):
             elif expiry != '':
                 flash("Expiry has to be a string", category='error')
                 return redirect('/inventory')
-            if reserved.isnumeric():
+            if reserved and reserved.isnumeric():
                 item.qty_reserved = reserved
             elif reserved != '':
                 flash("Reserved has to be a number", category='error')
                 return redirect('/inventory')
+            print(f'\n\n\nque mierda soy? qr_barcode {qr_barcode} item.qr_barcode: {item.qr_barcode}\n\n')
+            if qr_barcode == 'qr' and item.qr_barcode != qr_barcode:
+                print(f'\n\n\nentre lpm al qr\n\n')
+                generate_qr(item.id)
+            elif qr_barcode == 'barcode' and item.qr_barcode != qr_barcode:
+                print(f'\n\n\nentre lpm al barcode\n\n')
+                generate_barcode(item.id)
 
             item.qr_barcode = qr_barcode
 
