@@ -86,46 +86,47 @@
 
 <!-- form displayed if user scann qr_barcode -->
 <div class="InvisibleBarcode">
+  
+  <table id="tableBarcode">
+    <tr>
+      <th>Id</th>
+      <th>Name</th>
+      <th>Branch</th>
+      <th>Quantity</th>
+      <th>Cost</th>
+      <th>Price</th>
+      <th>Expiricy</th>
+      <th>Reserved</th>
+      <th>Barcode</th>
+      <th>Update</th>
+    </tr>
+    <tr>
+      <td id="idBarcode" value="">
+      </td>
+      <td id="nameBarcode">
+      </td>
+      <td id="branchBarcode">
+      </td>
+      <td id="quantityBarcode">
+      </td>
+      <td id="costBarcode">
+      </td>
+      <td id="priceBarcode">
+      </td>
+      <td id="expiryBarcode">
+      </td>
+      <td id="qty_reservedBarcode">
+      </td>
+      <td>
+        <img id="qr_barcodeBarcode" src="">
+      </td>
+      <td>
+        <a id="updateButtonBarcode" class="updateButton">Update</a>
+      </td>
+  </tr>
+</table>
+    
   <form id="updateFormBarcode" action="" method="POST">
-    <table id="tableBarcode">
-      <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>Branch</th>
-        <th>Quantity</th>
-        <th>Cost</th>
-        <th>Price</th>
-        <th>Expiricy</th>
-        <th>Reserved</th>
-        <th>Barcode</th>
-        <th>Update</th>
-      </tr>
-      <tr>
-        <td id="idBarcode" value="">
-        </td>
-        <td id="nameBarcode">
-        </td>
-        <td id="branchBarcode">
-        </td>
-        <td id="quantityBarcode">
-        </td>
-        <td id="costBarcode">
-        </td>
-        <td id="priceBarcode">
-        </td>
-        <td id="expiryBarcode">
-        </td>
-        <td id="qty_reservedBarcode">
-        </td>
-        <td>
-          <img id="qr_barcodeBarcode" src="">
-        </td>
-        <td>
-          <a id="updateButtonBarcode" class="updateButton">Update</a>
-        </td>
-      </tr>
-    </table>
-    <a class="cancelButton" id="cancelButtonBarcode">Cancel</a>
     <table id="tableBarcodeUpdate" class="Invisible">
       <tr>
         <th>Id</th>
@@ -176,10 +177,11 @@
           </select>
         </td>
         <td>
-          <input id="updateBarcodeButton" name="btn-add" value="Update" type="submit" />
+          <input id="updateFormBarcode" name="btn-add" value="Update" type="submit" />
         </td>
       </tr>
     </table>
+    <a class="cancelButton" id="cancelButtonBarcode">Cancel</a>
   </form>
 </div>
 
