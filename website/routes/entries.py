@@ -44,6 +44,11 @@ def entr():
             data = srch.order_by(desc(Entries.cost)).paginate(per_page=10)
         elif orderby == 'lowercost':
             data = srch.order_by(asc(Entries.cost)).paginate(per_page=10)
+        elif orderby == 'higherdate':
+            data = srch.order_by(desc(Entries.date)).paginate(per_page=10)
+        elif orderby == 'lowerdate':
+            data = srch.order_by(asc(Entries.date)).paginate(per_page=10)
+
         else:
             data = srch.paginate(per_page=10)
 

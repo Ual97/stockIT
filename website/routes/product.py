@@ -24,72 +24,32 @@ def prod():
     # if user presses Search
     if request.method == 'POST' and "btn-srch" in request.form:
         search = request.form.get("search")
-        orderby = request.form.get("orderby")
-        
+
         #checks that products are from user
         userprod = Product.query.filter(Product.owner == current_user.email)
 
         # search input section
-        srch = userprod.filter(or_(Product.id.like(search),
+        data = userprod.filter(or_(Product.id.like(search),
                                     Product.name.like('%' + search + '%'), 
-                                    Product.branch.like('%' + search + '%'), 
                                     Product.qr_barcode.like(search)))
 
-        # Order By select section
-        if orderby == 'higherprice':
-            data = srch.order_by(desc(Product.price)).paginate(per_page=10)
-        elif orderby == 'lowerprice':
-            data = srch.order_by(asc(Product.price)).paginate(per_page=10)
-        elif orderby == 'highercost':
-            data = srch.order_by(desc(Product.cost)).paginate(per_page=10)
-        elif orderby == 'lowercost':
-            data = srch.order_by(asc(Product.cost)).paginate(per_page=10)
-        else:
-            data = srch.paginate(per_page=10)
-
-        # show branches and next prod id for add product row
-        branches = Branch.query.filter_by(owner=current_user.email)
-        nextid = db.session.query(func.max(Product.id)).scalar()
-        if nextid is None:
-            nextid = 1
-        else:
-            nextid += 1
-
-        return render_template('product.html', user=current_user,
-                            branches=branches, nextid=nextid, products=data)
+        return render_template('product.html', user=current_user, products=data)
 
     if request.method == 'POST' and "btn-add" in request.form:
         prodDict = request.form.to_dict()
         name = prodDict.get('name')    
-        branch = prodDict.get('branch')
-        qty = prodDict.get('quantity')
-        cost = prodDict.get('cost')
-        price = prodDict.get('price')
-        qr_barcode = prodDict.get('qr_barcode')
-        
-        if cost == '' or cost == 'None':
-            prodDict['cost'] = None
-        elif cost: 
-            if cost.isnumeric() is False:
-                flash("Quantity, cost, price and reserved have to be numbers.", category='error')
-                return redirect('/product') 
-        if price == '' or price == 'None':
-            prodDict['price'] = None
-        elif price:
-            if price.isnumeric() is False:
-                flash("Quantity, cost, price and reserved have to be numbers.", category='error')
-                return redirect('/product') 
-         
-    
-        if name and branch:
+        qr_barcode = prodDict.get('qr_barcode')        
+
+
+        if name:
             # adding new product instance to database
             prodDict['owner'] = current_user.email
             new_prod = Product(**prodDict)
             db.session.add(new_prod)
             db.session.commit()
-            if prodDict.get('qr_barcode') == 'qr':
+            if qr_barcode == 'qr':
                 generate_qr(new_prod.id)
-            elif prodDict.get('qr_barcode') == 'barcode':
+            elif qr_barcode == 'barcode':
                 generate_barcode(new_prod.id)
             db.session.commit()
             #print(f'\n\n\n{new_prod.qr_barcode}\n\n')
@@ -101,10 +61,7 @@ def prod():
     branches = Branch.query.filter_by(owner=current_user.email)
     # hardprint next id for new product
     nextid = db.session.query(func.max(Product.id)).scalar()
-    if nextid is None:
-        nextid = 1
-    else:
-        nextid += 1
+
     data = Product.query.filter_by(owner=current_user.email).paginate(per_page=10)
     return render_template('product.html', user=current_user,
                            branches=branches, nextid=nextid, products=data)
@@ -144,28 +101,13 @@ def prodUpdate(id):
             qr_barcode = prodDict.get('qr_barcodeBarcodeUpdate')
         print(f'\n\nllegué acá. form dict:{prodDict}\n\n')
         if name and branch:
-            if type(name) is str:
-                item.name = name
-            else:
-                flash("Name has to be a string", category='error')
-                return redirect('/product')
+            
             if type(branch) is str:
                 item.branch = branch
             else:
                 flash("Branch has to be a string", category='error')
                 return redirect('/product')
-            if cost and cost.isnumeric():
-                item.cost = cost
-            elif cost != '':
-                flash("Cost has to be a number", category='error')
-                return redirect('/product')
-            if price and price.isnumeric():
-                item.price = price
-            elif price != '':
-                flash("Price has to be a number", category='error')
-                return redirect('/product')
-            
-            print(f'\n\n\nque mierda soy? qr_barcode {qr_barcode} item.qr_barcode: {item.qr_barcode}\n\n')
+
             if qr_barcode == 'qr' and item.qr_barcode != qr_barcode:
                 print(f'\n\n\nentre lpm al qr\n\n')
                 generate_qr(item.id)
@@ -188,12 +130,7 @@ def prodUpdate(id):
         # making a diccionary to use the GET method as API
         toDict = product.__dict__
         toDict.pop('_sa_instance_state')
-        branches = Branch.query.filter_by(owner=current_user.email).all()
-        listBranches = []
-        for branch in branches:
-            listBranches.append(branch.name)
-        print(f'a ver el diccionariode las sucursales: {listBranches}\n\n')
-        toDict['ownerBranches'] = listBranches
+        
         print(f'a ver el diccionario: {toDict}\n\n')
         return jsonify(toDict)
     except Exception:
