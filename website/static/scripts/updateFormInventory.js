@@ -4,9 +4,9 @@ window.addEventListener('load', function () {
     element.addEventListener('click', async function () { //asyc function which allows make await returns
       document.querySelector('.Invisible').classList.replace('Invisible', 'update');
       // await in fetch return which with wait to conclude the request to then return the json obj
-      const data = await (await fetch(`/inventory/${element.id}`)).json()
+      const data = await (await fetch(`/product/${element.id}`)).json()
       // filling form with corresponding item data:
-      document.querySelector("#updateForm").setAttribute("action", `/inventory/${element.id}`);
+      document.querySelector("#updateForm").setAttribute("action", `/product/${element.id}`);
       const id = document.querySelector("#idUpdate");
       id.appendChild(document.createTextNode(data.id));
       document.querySelector("#nameUpdate").setAttribute("value", data.name);

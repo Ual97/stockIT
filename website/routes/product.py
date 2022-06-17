@@ -83,30 +83,14 @@ def prodUpdate(id):
         if name is None:
             name = prodDict.get('nameBarcodeUpdate')
         
-        branch = prodDict.get('branchesUpdate')
-        if branch is None:
-            branch = prodDict.get('branchesBarcodeUpdate')
-        
-        cost = prodDict.get('costUpdate')
-        if cost is None:
-            cost = prodDict.get('costBarcodeUpdate')
-        
-        price = prodDict.get('priceUpdate')
-        if price is None:
-            price = prodDict.get('priceBarcodeUpdate')
-
-        
         qr_barcode = prodDict.get('qr_barcodeUpdate')
         if qr_barcode is None:
             qr_barcode = prodDict.get('qr_barcodeBarcodeUpdate')
         print(f'\n\nllegué acá. form dict:{prodDict}\n\n')
-        if name and branch:
-            
-            if type(branch) is str:
-                item.branch = branch
-            else:
-                flash("Branch has to be a string", category='error')
-                return redirect('/product')
+        if name:
+
+            if name is not "":
+                item.name = name
 
             if qr_barcode == 'qr' and item.qr_barcode != qr_barcode:
                 print(f'\n\n\nentre lpm al qr\n\n')
