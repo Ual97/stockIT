@@ -13,9 +13,9 @@ class Movements(db.Model):
     
     def __init__(self, **kwargs):
         """initialize obj products"""
+        print(f" ahse {kwargs}")
         self.owner = kwargs.get('owner')
         self.prod_id = kwargs.get('prod_id')
-        self.name = kwargs.get('name')
         self.quantity = kwargs.get('quantity')
         self.date = datetime.datetime.now()
         self.branch_id = kwargs.get('branch_id')

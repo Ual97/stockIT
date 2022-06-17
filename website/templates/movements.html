@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+{% block title %}Inv{% endblock %}
+{% block content %}
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="stylesheet" href="../static/buttons.css">
+  <link rel="stylesheet" href="../static/tables.css">
+  <script src="../static/scripts/updateFormInventory.js" async></script>
+  <script src="../static/scripts/deleteAlert.js" async></script>
+  <script src="../static/scripts/showscanner.js" async></script>
+  <script src="https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@9.0.0/dist/dbr.js"></script>
+</head>
+
+<style>
+  html {
+    margin-left: 30px;
+  }
+</style>
+<style>
+  table,
+  td,
+  th {
+    border: 1px solid black;
+    text-align: center;
+    padding: 5px;
+    width: 100px;
+  }
+
+  th {
+    background-color: orange;
+  }
+
+  table {
+    margin-bottom: 15px;
+  }
+
+  input {
+    width: 100px;
+  }
+
+  td {
+    white-space: nowrap;
+    width: 100px;
+  }
+
+  /*ajusta las td al content*/
+</style>
+<br>
+<h1>Movements</h1>
+<br>
+<p>Your movements will be shown here</p>
+
+<!-- form for searching with filters -->
+<form method="POST">
+  <input type="text" name="search" id="search" placeholder="Search..">
+  <select id="orderby" name="orderby">
+    <option disabled="" value="" selected="">Order By:</option>
+    <option value="higherprice">Higher Price</option>
+    <option value="lowerprice">Lower Price</option>
+    <option value="highercost">Higher Cost</option>
+    <option value="lowercost">Lower Cost</option>
+  </select>
+  <input name="btn-srch" value="Search" type="submit" />
+  <a id="qr_barcode" class="scannerButton" onclick="scannerF()">
+    Open scanner
+  </a>
+  <a id="csv_v" class="csvButton" onclick="location.href='csv'">
+    Import CSV
+  </a>
+
+  <!-- form for adding a product -->
+  <form method="POST">
+    <table>
+      <tr>
+        <th>Id</th>
+        <th>Product</th>
+        <th>Branch</th>
+        <th>Quantity</th>
+        <th>Add</th>
+        <th>Delete</th>
+      </tr>
+      <tr>
+        <!-- row for adding a  product -->
+        <td>
+          {{ nextid }}
+        </td>
+        <td>
+          <label for="name"></label>
+          <select name="name" id="products">
+            {% for prod in products %}
+            <option value="{{prod.name}}">{{prod.name}}</option>
+            {% endfor %}
+          </select>
+        </td>
+        <td>
+          <label for="branch">select s.</label>
+          <select name="branch" id="branch">
+            {% for s in branches%}
+            <option value="{{s.name}}">{{s.name}}</option>
+            {% endfor %}
+          </select>
+        </td>
+        <td>
+          <label for="quantity"></label>
+          <input type="number" id="quantity" name="quantity" placeholder="" />
+        </td>
+        <td>
+          <input id="btn-add" name="btn-add" value="add product" type="submit" />
+        </td>
+        <th></th>
+      </tr>
+      <!-- start listing the products -->
+      {% for p in movements.items %}
+      <tr>
+        <td>{{ p.id }}</td>
+        <td>{{ p.prod_name }}</td>
+        <td>{{ p.branch_id }}</td>
+        <td>{{ p.quantity }}</td>
+        <td>
+          <img class="qr" id="qrid" src="../static/images/{{p.id}}.png">
+          <div id="myModal" class="modal">
+
+            <!-- The Close Button -->
+            <span class="close">&times;</span>
+
+            <!-- Modal Content (The Image) -->
+            <img class="modal-content" id="img01">
+
+            <!-- Modal Caption (Image Text) -->
+            <div id="caption"></div>
+          </div>
+          <script>
+            var modal = document.getElementById("myModal");
+            var img = document.getElementById("qrid");
+            var images = document.getElementsByClassName("qr");
+            var modalImg = document.getElementById("img01");
+            var captionText = document.getElementById("caption");
+
+            for (let img of images) {
+              img.onclick = function () {
+                modal.style.display = "block";
+                modalImg.src = this.src;
+                captionText.innerHTML = this.alt;
+              }
+            } 
+
+            var span = document.getElementsByClassName("close")[0];
+
+            span.onclick = function () {
+              modal.style.display = "none";
+            }
+          </script>
+        </td>
+        <td><a id="{{ p.id }}" class="updateButton">
+            Update
+          </a>
+        </td>
+        <td>
+          <a id="{{ p.id }}.inventory" class="deleteButton">
+            <!--<a class="deleteButton" href=" url_for( 'inventory.Delete', id=p.id) '">-->
+            Delete
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <!-- pagination of table rows -->
+    {% for page_num in movements.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=3) %}
+    {% if page_num %}
+    {% if movements.page == page_num %}
+    <a class="btn btn-info mb-4" href="{{url_for('movements.move', page=page_num)}}">{{page_num}}</a>
+    {% else %}
+    <a class="btn btn-outline-info mb-4" href="{{url_for('movements.move', page=page_num)}}">{{page_num}}</a>
+    {% endif %}
+    {% else %}
+    ...
+    {% endif %}
+    {% endfor %}
+    <br>
+    {% endblock %}

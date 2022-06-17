@@ -22,7 +22,7 @@ def create_app():
 
     from .views import views 
     from .routes.user import usr 
-    from .routes.entries import entries
+    from .routes.movements import movements
     from .routes.product import product
     from .routes.branch import subsidiary 
     from .routes.csv import csv_v
@@ -31,7 +31,7 @@ def create_app():
 
     app.register_blueprint(views, url_prefix='/') 
     app.register_blueprint(usr, url_prefix='/') 
-    app.register_blueprint(entries, url_prefix='/')
+    app.register_blueprint(movements, url_prefix='/')
     app.register_blueprint(product, url_prefix='/')
     app.register_blueprint(subsidiary, url_prefix='/') 
     app.register_blueprint(csv_v, url_prefix='/') 
