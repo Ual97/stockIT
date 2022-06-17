@@ -2,19 +2,19 @@ from os import abort
 import os
 from flask import Blueprint, render_template, request, flash, redirect, jsonify, abort, url_for
 from website import db
-from website.models.entries import Entries
+from website.models.product import Product
 from website.models.branch import Branch
 from flask_login import login_required, current_user
 from sqlalchemy.sql.expression import func
 from sqlalchemy import and_, or_, desc, asc
 import requests
 
-inventory = Blueprint('inventory', __name__)
+product = Blueprint('product', __name__)
 
-@inventory.route('/inventory', methods=['GET', 'POST'])
+@product.route('/product', methods=['GET', 'POST'])
 @login_required
-def inv():
-    """inventory of products"""
+def prod():
+    """products available in the inventory and in their entries"""
 
     #if user is not confirmed, block access and send to home
     if current_user.confirmed is False:
@@ -55,7 +55,7 @@ def inv():
         else:
             nextid += 1
 
-        return render_template('inventory.html', user=current_user,
+        return render_template('product.html', user=current_user,
                             branches=branches, nextid=nextid, products=data)
 
     if request.method == 'POST' and "btn-add" in request.form:
@@ -65,35 +65,24 @@ def inv():
         qty = prodDict.get('quantity')
         cost = prodDict.get('cost')
         price = prodDict.get('price')
-        expiry = prodDict.get('expiry')
-        reserved = prodDict.get('qty_reserved')
-        cbarras = prodDict.get('qr_barcode')
+        qr_barcode = prodDict.get('qr_barcode')
         
         if cost == '' or cost == 'None':
             prodDict['cost'] = None
         elif cost: 
             if cost.isnumeric() is False:
                 flash("Quantity, cost, price and reserved have to be numbers.", category='error')
-                return redirect('/inventory') 
+                return redirect('/product') 
         if price == '' or price == 'None':
             prodDict['price'] = None
         elif price:
             if price.isnumeric() is False:
                 flash("Quantity, cost, price and reserved have to be numbers.", category='error')
-                return redirect('/inventory') 
-        if expiry == '' or expiry == 'None':
-            prodDict['expiry'] = None
-        if reserved == '' or reserved == 'None':
-            prodDict['qty_reserved'] = None
-        elif reserved:
-            if reserved.isnumeric() is False:
-                flash("Quantity, cost, price and reserved have to be numbers.", category='error')
-                return redirect('/inventory')         
+                return redirect('/product') 
+         
     
-        if name and branch and qty:
-            if qty.isnumeric() is False:
-                flash("Quantity, cost, price and reserved have to be numbers.", category='error')
-                return redirect('/inventory')
+        if name and branch:
+            # adding new product instance to database
             prodDict['owner'] = current_user.email
             new_prod = Product(**prodDict)
             db.session.add(new_prod)
@@ -105,7 +94,7 @@ def inv():
             db.session.commit()
             #print(f'\n\n\n{new_prod.qr_barcode}\n\n')
             flash("Poduct added", category='success')
-            return redirect('/inventory')
+            return redirect('/product')
         else:
             flash('Name, Branch and Quantity are mandatory fields', category='error')
     # branches to display as options in add product table
@@ -117,13 +106,13 @@ def inv():
     else:
         nextid += 1
     data = Product.query.filter_by(owner=current_user.email).paginate(per_page=10)
-    return render_template('inventory.html', user=current_user,
+    return render_template('product.html', user=current_user,
                            branches=branches, nextid=nextid, products=data)
 
-@inventory.route('/inventory/<id>', methods=['POST','GET'], strict_slashes=False)
+@product.route('/product/<id>', methods=['POST','GET'], strict_slashes=False)
 @login_required
-def Put(id):
-    """updating or consulting item from inventory"""
+def prodUpdate(id):
+    """updating or consulting item from product"""
     print(f'\n\n\n{request.method}\n\n')
     item = Product.query.filter(and_(Product.owner==current_user.email, Product.id==id)).first()
     if request.method == 'POST':
@@ -140,10 +129,6 @@ def Put(id):
         branch = prodDict.get('branchesUpdate')
         if branch is None:
             branch = prodDict.get('branchesBarcodeUpdate')
-
-        quantity = prodDict.get('quantityUpdate')
-        if quantity is None:
-            quantity = prodDict.get('quantityBarcodeUpdate')
         
         cost = prodDict.get('costUpdate')
         if cost is None:
@@ -153,54 +138,33 @@ def Put(id):
         if price is None:
             price = prodDict.get('priceBarcodeUpdate')
 
-        expiry = prodDict.get('expiryUpdate')
-        if expiry is None:
-            expiry = prodDict.get('expiryBarcodeUpdate')
-
-        reserved = prodDict.get('qty_reservedUpdate')
-        if reserved is None:
-            reserved = prodDict.get('qty_reservedBarcodeUpdate')
         
         qr_barcode = prodDict.get('qr_barcodeUpdate')
         if qr_barcode is None:
             qr_barcode = prodDict.get('qr_barcodeBarcodeUpdate')
         print(f'\n\nllegué acá. form dict:{prodDict}\n\n')
-        if name and branch and quantity:
+        if name and branch:
             if type(name) is str:
                 item.name = name
             else:
                 flash("Name has to be a string", category='error')
-                return redirect('/inventory')
+                return redirect('/product')
             if type(branch) is str:
                 item.branch = branch
             else:
                 flash("Branch has to be a string", category='error')
-                return redirect('/inventory')
-            if quantity and quantity.isnumeric():
-                item.quantity = quantity
-            else:
-                flash("Quantity has to be a number", category='error')
-                return redirect('/inventory')
+                return redirect('/product')
             if cost and cost.isnumeric():
                 item.cost = cost
             elif cost != '':
                 flash("Cost has to be a number", category='error')
-                return redirect('/inventory')
+                return redirect('/product')
             if price and price.isnumeric():
                 item.price = price
             elif price != '':
                 flash("Price has to be a number", category='error')
-                return redirect('/inventory')
-            if type(expiry) is str and expiry != '':
-                item.expiry = expiry
-            elif expiry != '':
-                flash("Expiry has to be a string", category='error')
-                return redirect('/inventory')
-            if reserved and reserved.isnumeric():
-                item.qty_reserved = reserved
-            elif reserved != '':
-                flash("Reserved has to be a number", category='error')
-                return redirect('/inventory')
+                return redirect('/product')
+            
             print(f'\n\n\nque mierda soy? qr_barcode {qr_barcode} item.qr_barcode: {item.qr_barcode}\n\n')
             if qr_barcode == 'qr' and item.qr_barcode != qr_barcode:
                 print(f'\n\n\nentre lpm al qr\n\n')
@@ -213,7 +177,7 @@ def Put(id):
 
             db.session.commit()
             flash("Item updated successfully!", category='success')
-            return redirect('/inventory')
+            return redirect('/product')
         else:
             flash('Name, Branch and Quantity are mandatory fields', category='error')
         
@@ -235,10 +199,10 @@ def Put(id):
     except Exception:
         abort(404)
 
-@inventory.route('/inventory/delete/<id>', strict_slashes=False)
+@product.route('/product/delete/<id>', strict_slashes=False)
 @login_required
 def Delete(id):
-    """inventory page"""
+    """product page"""
     product = Product.query.get(id)
     path = f'./../static/images/{id}.png'
     path =  os.path.join(os.path.dirname(__file__), path)
@@ -248,7 +212,7 @@ def Delete(id):
     db.session.commit()
     flash('Item deleted successfully!')
     print(f'\n\n\naaaaaaaaaaaa{request.url_rule}\n\n\n')
-    return redirect('/inventory')
+    return redirect('/product')
 
 def generate_qr(id):
     """consulting API which generates a qr"""
@@ -295,3 +259,4 @@ def generate_barcode(id):
         return response.json().get('barcode')
     except:
         pass
+
