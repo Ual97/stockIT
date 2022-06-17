@@ -73,7 +73,6 @@ def move():
         date = prodDict.get('date')
         
         if name and branch and qty:
-            print("EEEEEEEEEEEEEEOOOOOOOOOOOOOOOOOO")
             if qty.isnumeric() is False:
                 flash("Quantity has to be a number.", category='error')
                 return redirect('/movements')
@@ -81,13 +80,10 @@ def move():
             branch2 = Branch.query.filter_by(name=branch).first()
             prodDict['branch_id'] = branch2.id
             prod = Product.query.filter_by(name=name).first()
-            prodDict['prod_name'] = name
-            prodDict['branch_name'] = branch
             prodDict['prod_id'] = prod.id
             new_prod = Movements(**prodDict)
             db.session.add(new_prod)
             db.session.commit()
-            #print(f'\n\n\n{new_prod.qr_barcode}\n\n')
             flash("Poduct added", category='success')
             return redirect('/movements')
         else:
@@ -95,12 +91,17 @@ def move():
     # branches and products to display as options in add entry table
     branches = Branch.query.filter_by(owner=current_user.email)
     products = Product.query.filter_by(owner=current_user.email)
+
     # hardprint next id for new product
     nextid = db.session.query(func.max(Movements.id)).scalar()
     if nextid is None:
         nextid = 1
     else:
         nextid += 1
-    data = Movements.query.filter_by(owner=current_user.email).paginate(per_page=10)
+    data = Movements.query.filter_by(owner=current_user.email)
+    for item in data:
+        setattr(item, 'prod_name', Product.query.filter_by(id=item.prod_id).first().name)
+        setattr(item, 'prod_branch', Branch.query.filter_by(id=item.branch_id).first().name)
+    data = data.paginate(per_page=10)
     return render_template('movements.html', user=current_user,
                            branches=branches, products=products, nextid=nextid, movements=data)

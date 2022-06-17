@@ -10,7 +10,7 @@ class Movements(db.Model):
     quantity = db.Column(db.Integer, nullable=False)
     date = db.Column(db.DateTime)
     in_out = db.Column(db.Boolean)
-    
+
     def __init__(self, **kwargs):
         """initialize obj products"""
         print(f" ahse {kwargs}")
