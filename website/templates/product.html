@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Inv{% endblock %}
+{% block title %}Product{% endblock %}
 {% block content %}
 
 <head>
@@ -28,12 +28,6 @@
       <tr>
         <th>Id</th>
         <th>Name</th>
-        <th>Branch</th>
-        <th>Quantity</th>
-        <th>Cost</th>
-        <th>Price</th>
-        <th>Expiricy</th>
-        <th>Reserved</th>
         <th>Barcode</th>
         <th>Update</th>
       </tr>
@@ -44,36 +38,10 @@
           <label for="nameUpdate"></label>
           <input type="text" id="nameUpdate" name="nameUpdate" placeholder="" value="" />
         </td>
-        <td>
-          <label for="branchesUpdate">select s.</label>
-          <select name="branchesUpdate" id="branchesUpdate">
-          </select>
-        </td>
-        <td>
-          <label for="quantityUpdate"></label>
-          <input type="number" id="quantityUpdate" name="quantityUpdate" placeholder="" value="" />
-        </td>
-        <td>
-          <label for="costUpdate"></label>
-          <input type="number" id="costUpdate" name="costUpdate" placeholder="" value="" />
-        </td>
-        <td>
-          <label for="priceUpdate"></label>
-          <input type="number" id="priceUpdate" name="priceUpdate" placeholder="" value="" />
-        </td>
-        <td>
-          <label for="expiryUpdate"></label>
-          <input type="date" id="expiryUpdate" name="expiryUpdate" placeholder="" value="" />
-        </td>
-        <td>
-          <label for="qty_reserved"></label>
-          <input type="number" id="qty_reservedUpdate" name="qty_reservedUpdate" placeholder="" />
-        </td>
-        <td>
-          <select name="qr_barcodeUpdate" id="qr_barcodeUpdate">
-            <option id="qr_barcodeUpdateqr" value="qr">QR code</option>
-            <option id="qr_barcodeUpdatebarcode" value="barcode">Barcode</option>
-          </select>
+        <select name="qr_barcodeUpdate" id="qr_barcodeUpdate">
+          <option id="qr_barcodeUpdateqr" value="qr">QR code</option>
+          <option id="qr_barcodeUpdatebarcode" value="barcode">Barcode</option>
+        </select>
         </td>
         <td>
           <input id="updateButton" name="btn-add" value="Update" type="submit" />
@@ -86,7 +54,7 @@
 
 <!-- form displayed if user scann qr_barcode -->
 <div class="InvisibleBarcode">
-  
+
   <table id="tableBarcode">
     <tr>
       <th>Id</th>
@@ -123,9 +91,9 @@
       <td>
         <a id="updateButtonBarcode" class="updateButton">Update</a>
       </td>
-  </tr>
-</table>
-    
+    </tr>
+  </table>
+
   <form id="updateFormBarcode" action="" method="POST">
     <table id="tableBarcodeUpdate" class="Invisible">
       <tr>
@@ -221,10 +189,9 @@
   /*ajusta las td al content*/
 </style>
 <br>
-<h1>Inventory</h1>
+<h1>Products</h1>
 <br>
-<p>Your products will be shown here</p>
-<p>First four fields are mandatory if you want to add a product</p>
+<p>You can manage (add or delete) your products.</p>
 
 <!-- form for searching with filters -->
 <form method="POST">
@@ -298,7 +265,7 @@
                 modalImg.src = this.src;
                 captionText.innerHTML = this.alt;
               }
-            } 
+            }
 
             var span = document.getElementsByClassName("close")[0];
 
