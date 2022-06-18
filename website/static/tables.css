@@ -80,3 +80,17 @@ td {
   position: fixed;
   margin-top: 12%;
 }
+
+.description {
+    z-index: 10;
+    background-color: cornflowerblue;
+    border-radius: 10px;
+    width: 88%;
+    height: 50%;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    position: fixed;
+    margin-top: 12%;
+}
