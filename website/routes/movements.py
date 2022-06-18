@@ -21,6 +21,14 @@ def move():
         flash('Please confirm your account, check your email (and spam folder)', 'error')
         return redirect(url_for('views.home'))
 
+    data = Movements.query.filter_by(owner=current_user.email)
+    prod_name = [0]
+    branch_name = [0]
+
+    for item in data:
+            prod_name.append(Product.query.filter_by(id=item.prod_id).first().name)
+            branch_name.append(Branch.query.filter_by(id=item.branch_id).first().name)
+
     # if user presses Search
     if request.method == 'POST' and "btn-srch" in request.form:
         search = request.form.get("search")
@@ -30,26 +38,7 @@ def move():
         userprod = Movements.query.filter(Movements.owner == current_user.email)
 
         # search input section
-        srch = userprod.filter(or_(Movements.id.like(search),
-                                    Movements.name.like('%' + search + '%'), 
-                                    Movements.branch.like('%' + search + '%')))
-
-        # Order By select section
-        if orderby == 'higherprice':
-            data = srch.order_by(desc(Movements.price)).paginate(per_page=10)
-        elif orderby == 'lowerprice':
-            data = srch.order_by(asc(Movements.price)).paginate(per_page=10)
-        elif orderby == 'highercost':
-            data = srch.order_by(desc(Movements.cost)).paginate(per_page=10)
-        elif orderby == 'lowercost':
-            data = srch.order_by(asc(Movements.cost)).paginate(per_page=10)
-        elif orderby == 'higherdate':
-            data = srch.order_by(desc(Movements.date)).paginate(per_page=10)
-        elif orderby == 'lowerdate':
-            data = srch.order_by(asc(Movements.date)).paginate(per_page=10)
-
-        else:
-            data = srch.paginate(per_page=10)
+        srch = userprod.filter(or_(Movements.date.like(search), Movements.prod_id.like('%' + search + '%'), Movements.branch_id.like('%' + search + '%')))
 
         # show branches and next prod id for add entry row
         branches = Branch.query.filter_by(owner=current_user.email)
@@ -61,8 +50,21 @@ def move():
         else:
             nextid += 1
 
+        # Order By select section
+        if orderby == 'newest':
+            data = srch.order_by(asc(Movements.id))
+        elif orderby == 'older':
+            data = srch.order_by(desc(Movements.id))
+        else:
+            data = srch
+
+        for item in data:
+            prod_name.append(Product.query.filter_by(id=item.prod_id).first().name)
+            branch_name.append(Branch.query.filter_by(id=item.branch_id).first().name)
+
         return render_template('movements.html', user=current_user,
-                            branches=branches, products=products, nextid=nextid, movements=data)
+                            branches=branches, products=products, nextid=nextid, movements=data,
+                            prod_name=prod_name, branch_name=branch_name)
 
     if request.method == 'POST' and "btn-add" in request.form:
         prodDict = request.form.to_dict()
@@ -98,13 +100,7 @@ def move():
         nextid = 1
     else:
         nextid += 1
-    data = Movements.query.filter_by(owner=current_user.email)
-    prod_name = [0]
-    branch_name = [0]
-    for item in data:
-        prod_name.append(Product.query.filter_by(id=item.prod_id).first().name)
-        branch_name.append(Branch.query.filter_by(id=item.branch_id).first().name)
-    data = data.paginate(per_page=10)
+    
     return render_template('movements.html', user=current_user,
                            branches=branches, products=products, nextid=nextid,
                            movements=data, prod_name=prod_name, branch_name=branch_name)

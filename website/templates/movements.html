@@ -57,10 +57,8 @@
   <input type="text" name="search" id="search" placeholder="Search..">
   <select id="orderby" name="orderby">
     <option disabled="" value="" selected="">Order By:</option>
-    <option value="higherprice">Higher Price</option>
-    <option value="lowerprice">Lower Price</option>
-    <option value="highercost">Higher Cost</option>
-    <option value="lowercost">Lower Cost</option>
+    <option value="newest">Newest</option>
+    <option value="oldest">Older</option>
   </select>
   <input name="btn-srch" value="Search" type="submit" />
   <a id="qr_barcode" class="scannerButton" onclick="scannerF()">
@@ -113,28 +111,15 @@
         </td>
       </tr>
       <!-- start listing the products -->
-      {% for p in movements.items %}
+      {% for p in movements %}
       <tr>
         <td>{{ p.id }}</td>
-        <td>{{ prod_name[loop.index] }}</td>
         <td>{{ branch_name[loop.index] }}</td>
+        <td>{{ prod_name[loop.index] }}</td>
         <td>{{ p.quantity }}</td>
         <td>{{ p.date }}</td>
       </tr>
       {% endfor %}
     </table>
 
-    <!-- pagination of table rows -->
-    {% for page_num in movements.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=3) %}
-    {% if page_num %}
-    {% if movements.page == page_num %}
-    <a class="btn btn-info mb-4" href="{{url_for('movements.move', page=page_num)}}">{{page_num}}</a>
-    {% else %}
-    <a class="btn btn-outline-info mb-4" href="{{url_for('movements.move', page=page_num)}}">{{page_num}}</a>
-    {% endif %}
-    {% else %}
-    ...
-    {% endif %}
-    {% endfor %}
-    <br>
     {% endblock %}
