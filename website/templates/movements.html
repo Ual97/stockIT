@@ -77,6 +77,7 @@
         <th>Branch</th>
         <th>Quantity</th>
         <th>Date</th>
+        <th>Action</th>
       </tr>
       <tr>
         <!-- row for adding a  product -->
@@ -107,6 +108,12 @@
           <label for="date">current date time</label>
         </td>
         <td>
+          <select name="in_out" id="in_out">
+            <option value="in">In</option>
+            <option value="out">Out</option>
+          </select>
+        </td>
+        <td>
           <input id="btn-add" name="btn-add" value="add product" type="submit" />
         </td>
       </tr>
@@ -114,10 +121,11 @@
       {% for p in movements %}
       <tr>
         <td>{{ p.id }}</td>
-        <td>{{ branch_name[loop.index] }}</td>
         <td>{{ prod_name[loop.index] }}</td>
+        <td>{{ branch_name[loop.index] }}</td>
         <td>{{ p.quantity }}</td>
         <td>{{ p.date }}</td>
+        <td>{{ p.in_out }}</td>
       </tr>
       {% endfor %}
     </table>
