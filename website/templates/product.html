@@ -10,11 +10,12 @@
   <script src="../static/scripts/updateFormInventory.js" async></script>
   <script src="../static/scripts/deleteAlert.js" async></script>
   <script src="../static/scripts/showscanner.js" async></script>
+  <script src="../static/scripts/showDescription.js" async></script>
   <script src="https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@9.0.0/dist/dbr.js"></script>
 </head>
 
 
-<!-- pop-up for Delete burron -->
+<!-- pop-up for Delete button -->
 <div class="InvisibleDel">
   <h1>Are you sure you want to delete this item?</h1>
   <a id="yesDelete" class="deleteButton">Yes</a>
@@ -28,30 +29,33 @@
       <tr>
         <th>Id</th>
         <th>Name</th>
+        <th>Description</th>
         <th>Barcode</th>
         <th>Update</th>
       </tr>
       <tr>
         <td id="idUpdate" value="">
         </td>
-        <td>
-          <label for="nameUpdate"></label>
-          <input type="text" id="nameUpdate" name="nameUpdate" placeholder="" value="" />
+        <td id="nameUpdate">
         </td>
-        <select name="qr_barcodeUpdate" id="qr_barcodeUpdate">
-          <option id="qr_barcodeUpdateqr" value="qr">QR code</option>
-          <option id="qr_barcodeUpdatebarcode" value="barcode">Barcode</option>
-        </select>
+        <td>
+          <input type="text" value="" id="descriptionUpdate">
+        </td>
+        <td>
+          <select name="qr_barcodeUpdate" id="qr_barcodeUpdate">
+            <option id="qr_barcodeUpdateqr" value="qr">QR code</option>
+            <option id="qr_barcodeUpdatebarcode" value="barcode">Barcode</option>
+          </select>
         </td>
         <td>
           <input id="updateButton" name="btn-add" value="Update" type="submit" />
         </td>
       </tr>
     </table>
-    <a class="cancelButton" id="cancelButtonUpdate">Cancel</a>
   </form>
+    <a class="cancelButton" id="cancelButtonUpdate">Cancel</a>
+  
 </div>
-
 <!-- form displayed if user scann qr_barcode -->
 <div class="InvisibleBarcode">
 
@@ -210,6 +214,7 @@
       <tr>
         <th>Id</th>
         <th>Name</th>
+        <th>Description</th>
         <th>Barcode</th>
         <th>Add/Update</th>
         <th>Delete</th>
@@ -222,6 +227,9 @@
         <td>
           <label for="name"></label>
           <input type="text" id="name" name="name" placeholder="" />
+        </td>
+        <td>
+          <input id="description" name="description" type="text"/>
         </td>
         <td>
           <select name="qr_barcode" id="qr_barcode">
@@ -239,6 +247,7 @@
       <tr>
         <td>{{ p.id }}</td>
         <td>{{ p.name }}</td>
+        <td onclick="showDescription({{ p.description }})">Show</td>  
         <td>
           <img class="qr" id="qrid" src="../static/images/{{p.id}}.png">
           <div id="myModal" class="modal">

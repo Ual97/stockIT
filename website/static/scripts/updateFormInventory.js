@@ -9,27 +9,12 @@ window.addEventListener('load', function () {
       document.querySelector("#updateForm").setAttribute("action", `/product/${element.id}`);
       const id = document.querySelector("#idUpdate");
       id.appendChild(document.createTextNode(data.id));
-      document.querySelector("#nameUpdate").setAttribute("value", data.name);
-      const branches = document.querySelector("#branchesUpdate");
-      for (let i = 0; data.ownerBranches[i]; i++) {
-        const option = document.createElement("option");
-        option.setAttribute("value", data.ownerBranches[i]);
-        option.appendChild(document.createTextNode(data.ownerBranches[i]));
-        option.setAttribute("value", data.ownerBranches[i]);
-        if (data.ownerBranches[i] === data.branch) {
-          option.setAttribute("selected", "selected");
-        }
-        branches.appendChild(option);
-      }
-      document.querySelector("#quantityUpdate").setAttribute("value", data.quantity);
-      document.querySelector("#costUpdate").setAttribute("value", data.cost);
-      document.querySelector("#priceUpdate").setAttribute("value", data.price);
-      document.querySelector("#expiryUpdate").setAttribute("value", data.expiry);
-      document.querySelector("#qty_reservedUpdate").setAttribute("value", data.qty_reserved);
+      nameTxt = document.querySelector("#nameUpdate");
+      nameTxt.appendChild(document.createTextNode(data.name));
       document.querySelector(`#qr_barcodeUpdate${data.qr_barcode}`).setAttribute("selected", 'selected');
+      document.querySelector("#descrptionUpdate").setAttribute("value", data.description);
       function cancel() {
         document.querySelector('.update').classList.replace('update', 'Invisible')
-        branches.innerHTML = "";
         id.innerHTML = "";
       }
       const cancelButton = document.querySelector("#cancelButtonUpdate")

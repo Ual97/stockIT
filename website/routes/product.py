@@ -38,12 +38,15 @@ def prod():
     if request.method == 'POST' and "btn-add" in request.form:
         prodDict = request.form.to_dict()
         name = prodDict.get('name')    
-        qr_barcode = prodDict.get('qr_barcode')        
+        qr_barcode = prodDict.get('qr_barcode')
+        description = prodDict.get('description')
 
 
         if name:
             # adding new product instance to database
             prodDict['owner'] = current_user.email
+            if description == '' or description is None:
+                prodDict['description'] = 'No description'
             new_prod = Product(**prodDict)
             db.session.add(new_prod)
             db.session.commit()
@@ -87,10 +90,8 @@ def prodUpdate(id):
         if qr_barcode is None:
             qr_barcode = prodDict.get('qr_barcodeBarcodeUpdate')
         print(f'\n\nllegué acá. form dict:{prodDict}\n\n')
-        if name:
+        if qr_barcode:
 
-            if name is not "":
-                item.name = name
 
             if qr_barcode == 'qr' and item.qr_barcode != qr_barcode:
                 print(f'\n\n\nentre lpm al qr\n\n')

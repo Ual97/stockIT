@@ -28,12 +28,6 @@
       <tr>
         <th>Id</th>
         <th>Name</th>
-        <th>Branch</th>
-        <th>Quantity</th>
-        <th>Cost</th>
-        <th>Price</th>
-        <th>Expiricy</th>
-        <th>Reserved</th>
         <th>Barcode</th>
         <th>Update</th>
       </tr>
@@ -41,33 +35,8 @@
         <td id="idUpdate" value="">
         </td>
         <td>
-          <label for="nameUpdate"></label>
-          <input type="text" id="nameUpdate" name="nameUpdate" placeholder="" value="" />
-        </td>
-        <td>
-          <label for="branchesUpdate">select s.</label>
-          <select name="branchesUpdate" id="branchesUpdate">
+          <select name="nameUpdate" id="qr_barcodeUpdate">
           </select>
-        </td>
-        <td>
-          <label for="quantityUpdate"></label>
-          <input type="number" id="quantityUpdate" name="quantityUpdate" placeholder="" value="" />
-        </td>
-        <td>
-          <label for="costUpdate"></label>
-          <input type="number" id="costUpdate" name="costUpdate" placeholder="" value="" />
-        </td>
-        <td>
-          <label for="priceUpdate"></label>
-          <input type="number" id="priceUpdate" name="priceUpdate" placeholder="" value="" />
-        </td>
-        <td>
-          <label for="expiryUpdate"></label>
-          <input type="date" id="expiryUpdate" name="expiryUpdate" placeholder="" value="" />
-        </td>
-        <td>
-          <label for="qty_reserved"></label>
-          <input type="number" id="qty_reservedUpdate" name="qty_reservedUpdate" placeholder="" />
         </td>
         <td>
           <select name="qr_barcodeUpdate" id="qr_barcodeUpdate">
@@ -80,8 +49,9 @@
         </td>
       </tr>
     </table>
-    <a class="cancelButton" id="cancelButtonUpdate">Cancel</a>
   </form>
+    <a class="cancelButton" id="cancelButtonUpdate">Cancel</a>
+  
 </div>
 
 <!-- form displayed if user scann qr_barcode -->
