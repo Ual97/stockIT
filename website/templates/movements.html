@@ -78,8 +78,7 @@
         <th>Product</th>
         <th>Branch</th>
         <th>Quantity</th>
-        <th>Add</th>
-        <th>Delete</th>
+        <th>Date</th>
       </tr>
       <tr>
         <!-- row for adding a  product -->
@@ -107,62 +106,20 @@
           <input type="number" id="quantity" name="quantity" placeholder="" />
         </td>
         <td>
+          <label for="date">current date time</label>
+        </td>
+        <td>
           <input id="btn-add" name="btn-add" value="add product" type="submit" />
         </td>
-        <th></th>
       </tr>
       <!-- start listing the products -->
       {% for p in movements.items %}
       <tr>
         <td>{{ p.id }}</td>
-        <td>{{ p.prod_name }}</td>
-        <td>{{ p.prod_branch }}</td>
+        <td>{{ prod_name[loop.index] }}</td>
+        <td>{{ branch_name[loop.index] }}</td>
         <td>{{ p.quantity }}</td>
-        <td>
-          <img class="qr" id="qrid" src="../static/images/{{p.id}}.png">
-          <div id="myModal" class="modal">
-
-            <!-- The Close Button -->
-            <span class="close">&times;</span>
-
-            <!-- Modal Content (The Image) -->
-            <img class="modal-content" id="img01">
-
-            <!-- Modal Caption (Image Text) -->
-            <div id="caption"></div>
-          </div>
-          <script>
-            var modal = document.getElementById("myModal");
-            var img = document.getElementById("qrid");
-            var images = document.getElementsByClassName("qr");
-            var modalImg = document.getElementById("img01");
-            var captionText = document.getElementById("caption");
-
-            for (let img of images) {
-              img.onclick = function () {
-                modal.style.display = "block";
-                modalImg.src = this.src;
-                captionText.innerHTML = this.alt;
-              }
-            } 
-
-            var span = document.getElementsByClassName("close")[0];
-
-            span.onclick = function () {
-              modal.style.display = "none";
-            }
-          </script>
-        </td>
-        <td><a id="{{ p.id }}" class="updateButton">
-            Update
-          </a>
-        </td>
-        <td>
-          <a id="{{ p.id }}.inventory" class="deleteButton">
-            <!--<a class="deleteButton" href=" url_for( 'inventory.Delete', id=p.id) '">-->
-            Delete
-          </a>
-        </td>
+        <td>{{ p.date }}</td>
       </tr>
       {% endfor %}
     </table>

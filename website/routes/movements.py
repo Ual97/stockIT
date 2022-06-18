@@ -99,9 +99,12 @@ def move():
     else:
         nextid += 1
     data = Movements.query.filter_by(owner=current_user.email)
+    prod_name = [0]
+    branch_name = [0]
     for item in data:
-        setattr(item, 'prod_name', Product.query.filter_by(id=item.prod_id).first().name)
-        setattr(item, 'prod_branch', Branch.query.filter_by(id=item.branch_id).first().name)
+        prod_name.append(Product.query.filter_by(id=item.prod_id).first().name)
+        branch_name.append(Branch.query.filter_by(id=item.branch_id).first().name)
     data = data.paginate(per_page=10)
     return render_template('movements.html', user=current_user,
-                           branches=branches, products=products, nextid=nextid, movements=data)
+                           branches=branches, products=products, nextid=nextid,
+                           movements=data, prod_name=prod_name, branch_name=branch_name)
