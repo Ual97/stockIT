@@ -18,6 +18,8 @@ inventory = Blueprint('inventory', __name__)
 def inventory_page():
     """inventory page"""
 
+    formDict = request.form.to_dict()
+
     #if user is not confirmed, block access and send to home
     if current_user.confirmed is False:
         flash('Please confirm your account, check your email (and spam folder)', 'error')
@@ -26,6 +28,9 @@ def inventory_page():
     # consulting stock from all branches
     stockQuery = Inventory.query.filter_by(owner=current_user.email).all()
 
+    # store some  product name if some product is searched
+    search = formDict.get('search')
+    search = search.lower().strip() if search else None
 
     stock = []
 
@@ -34,7 +39,10 @@ def inventory_page():
         stockItem = {}
 
         product = Product.query.filter_by(owner=current_user.email).filter_by(id=item.prod_id).first()
-
+        
+        # if is searched a particular product only that product is gonna be listed
+        if search and search not in product.name.lower():
+            continue
         stockItem['name'] = product.name
         stockItem['quantity'] = item.quantity
         stockItem['description'] = product.description
@@ -46,7 +54,6 @@ def inventory_page():
 
     # if user presses Search
     if request.method == 'POST' and "btn-srch" in request.form:
-        formDict = request.form.to_dict()
 
         print(f'\n\n\nformDict: {formDict}\n\n')
 
@@ -55,7 +62,6 @@ def inventory_page():
         # filtering by branch
         if selectedBranch != 'All Branches (default)':
             selectedBranch = Branch.query.filter_by(owner=current_user.email).filter_by(name=selectedBranch).first()
-            productMovements = Movements.query.filter_by(owner=current_user.email).filter_by(branch_id=selectedBranch.id).all()
 
             for item in stock:
                 # calculating the current stock for

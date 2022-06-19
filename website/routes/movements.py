@@ -23,14 +23,21 @@ def move():
         flash('Please confirm your account, check your email (and spam folder)', 'error')
         return redirect(url_for('views.home'))
 
-    data = Movements.query.filter_by(owner=current_user.email)
-    prod_name = [0]
-    branch_name = [0]
+    data = Movements.query.filter_by(owner=current_user.email).all()
 
+    movementsList = []
+
+    # filling movements history to be displayed by jinja
     for item in data:
-            prod_name.append(Product.query.filter_by(id=item.prod_id).first().name)
-            branch_name.append(Branch.query.filter_by(id=item.branch_id).first().name)
-    print(f'\n\n\nprodname: {prod_name} branchname {branch_name}\n\n')
+        movementDict = {}
+        movementDict['id'] = item.id
+        movementDict['product'] = Product.query.filter_by(id=item.prod_id).first().name
+        movementDict['branch'] = Branch.query.filter_by(id=item.branch_id).first().name
+        movementDict['quantity'] = item.quantity
+        movementDict['date'] = item.date
+        movementDict['in_out'] = "Entry" if item.in_out is True else "Exit"
+        movementsList.append(movementDict)
+
     # if user presses Search
     if request.method == 'POST' and "btn-srch" in request.form:
         search = request.form.get("search")
@@ -39,8 +46,15 @@ def move():
         #checks that products are from user
         userprod = Movements.query.filter(Movements.owner == current_user.email)
 
+        searchProduct = Product.query.filter_by(name=search).first()
+        searchProduct = "None" if not searchProduct else str(searchProduct.id)
+
+        searchBranch = Branch.query.filter_by(name=search).first()
+        searchBranch = "None" if not searchBranch else str(searchBranch.id)
+
+        print(f'\n\n\nproduct  {searchProduct} branch: {searchBranch}\n\n')
         # search input section
-        srch = userprod.filter(or_(Movements.date.like(search), Movements.prod_id.like('%' + search + '%'), Movements.branch_id.like('%' + search + '%')))
+        srch = userprod.filter(or_(Movements.date.like(search), Movements.prod_id.like(searchProduct), Movements.branch_id.like(searchBranch)))
 
         # show branches and next prod id for add entry row
         branches = Branch.query.filter_by(owner=current_user.email)
@@ -59,14 +73,23 @@ def move():
             data = srch.order_by(desc(Movements.id))
         else:
             data = srch
-
+        movementsList = []
+        # filling movements history to be displayed by jinja
         for item in data:
-            prod_name.append(Product.query.filter_by(id=item.prod_id).first().name)
-            branch_name.append(Branch.query.filter_by(id=item.branch_id).first().name)
+            movementDict = {}
+            movementDict['id'] = item.id
+            movementDict['product'] = Product.query.filter_by(id=item.prod_id).first().name
+            movementDict['branch'] = Branch.query.filter_by(id=item.branch_id).first().name
+            movementDict['quantity'] = item.quantity
+            movementDict['date'] = item.date
+            movementDict['in_out'] = "Entry" if item.in_out is True else "Exit"
+            movementsList.append(movementDict)
+        if not movementsList:
+            flash('No results found', 'error')
+            return redirect('/movements')
 
         return render_template('movements.html', user=current_user,
-                            branches=branches, products=products, nextid=nextid, movements=data,
-                            prod_name=prod_name, branch_name=branch_name)
+                            branches=branches, products=products, nextid=nextid, movements=movementsList)
 
     if request.method == 'POST' and "btn-add" in request.form:
         prodDict = request.form.to_dict()
@@ -166,5 +189,5 @@ def move():
         nextid += 1
     
     return render_template('movements.html', user=current_user,
-                           branches=branches, products=products, nextid=nextid,
-                           movements=data, prod_name=prod_name, branch_name=branch_name)
+                           nextid=nextid, movements=movementsList,
+                           branches=branches, products=products)

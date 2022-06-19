@@ -67,6 +67,7 @@
   <a id="csv_v" class="csvButton" onclick="location.href='csv'">
     Import CSV
   </a>
+  <input id="btn-add" name="btn-add" value="add product" type="submit" />
 
   <!-- form for adding a product -->
   <form method="POST">
@@ -113,19 +114,16 @@
             <option value="out">Out</option>
           </select>
         </td>
-        <td>
-          <input id="btn-add" name="btn-add" value="add product" type="submit" />
-        </td>
       </tr>
       <!-- start listing the products -->
       {% for p in movements %}
       <tr>
-        <td>{{ p.id }}</td>
-        <td>{{ prod_name[loop.index] }}</td>
-        <td>{{ branch_name[loop.index] }}</td>
-        <td>{{ p.quantity }}</td>
-        <td>{{ p.date }}</td>
-        <td>{{ p.in_out }}</td>
+        <td>{{ p['id'] }}</td>
+        <td>{{ p['product'] }}</td>
+        <td>{{ p['branch'] }}</td>
+        <td>{{ p['quantity'] }}</td>
+        <td>{{ p['date'] }}</td>
+        <td>{{ p['in_out'] }}</td>
       </tr>
       {% endfor %}
     </table>
