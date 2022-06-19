@@ -27,9 +27,6 @@ def move():
     prod_name = [0]
     branch_name = [0]
 
-    for item in data:
-            prod_name.append(Product.query.filter_by(id=item.prod_id).first().name)
-            branch_name.append(Branch.query.filter_by(id=item.branch_id).first().name)
     print(f'\n\n\nprodname: {prod_name} branchname {branch_name}\n\n')
     # if user presses Search
     if request.method == 'POST' and "btn-srch" in request.form:
@@ -164,6 +161,10 @@ def move():
         nextid = 1
     else:
         nextid += 1
+    
+    for item in data:
+            prod_name.append(Product.query.filter_by(id=item.prod_id).first().name)
+            branch_name.append(Branch.query.filter_by(id=item.branch_id).first().name)
     
     return render_template('movements.html', user=current_user,
                            branches=branches, products=products, nextid=nextid,
