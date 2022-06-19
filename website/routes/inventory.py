@@ -49,8 +49,9 @@ def inventory_page():
         stockItem['id'] = item.prod_id
 
         stock.append(stockItem)
-
-    print(f'\n\n\nlista final:{stockItem}\n\n')
+    if search and not stock:
+        flash("No items with that name", "error")
+        return redirect('/inventory')
 
     # if user presses Search
     if request.method == 'POST' and "btn-srch" in request.form:

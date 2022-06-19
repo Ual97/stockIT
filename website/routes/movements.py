@@ -25,7 +25,6 @@ def move():
 
     data = Movements.query.filter_by(owner=current_user.email).all()
 
-<<<<<<< HEAD
     movementsList = []
 
     # filling movements history to be displayed by jinja
@@ -39,9 +38,6 @@ def move():
         movementDict['in_out'] = "Entry" if item.in_out is True else "Exit"
         movementsList.append(movementDict)
 
-=======
-    print(f'\n\n\nprodname: {prod_name} branchname {branch_name}\n\n')
->>>>>>> 05a059f8d9c84b43da6dc6f43200e1c63bc9eafe
     # if user presses Search
     if request.method == 'POST' and "btn-srch" in request.form:
         search = request.form.get("search")
@@ -191,10 +187,6 @@ def move():
         nextid = 1
     else:
         nextid += 1
-    
-    for item in data:
-            prod_name.append(Product.query.filter_by(id=item.prod_id).first().name)
-            branch_name.append(Branch.query.filter_by(id=item.branch_id).first().name)
     
     return render_template('movements.html', user=current_user,
                            nextid=nextid, movements=movementsList,
