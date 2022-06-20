@@ -19,6 +19,9 @@ class Movements(db.Model):
         self.owner = kwargs.get('owner')
         self.prod_id = kwargs.get('prod_id')
         self.quantity = kwargs.get('quantity')
-        self.date = datetime.datetime.now()
+        if kwargs.get('date') in ['', None]:
+            self.date = datetime.datetime.now()
+        else:
+            self.date = kwargs.get('date')
         self.branch_id = kwargs.get('branch_id')
         self.in_out = kwargs.get('in_out')
