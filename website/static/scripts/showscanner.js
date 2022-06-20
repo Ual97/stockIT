@@ -11,7 +11,7 @@ async function consult(code_content) {
     tableName.appendChild(document.createTextNode(data.name));
     tableQuantity = document.querySelector('#quantityBarcode');
     tableQuantity.appendChild(document.createTextNode(data.quantity));
-    document.querySelector('#qr_barcodeUpdate').setAttribute('src', `/static/images/${code_content}.png`);
+    document.querySelector('#qr_barcodeUpdate').setAttribute('src', `/static/images/.${code_content}.png`);
 
     updateButton = document.querySelector('#updateButtonBarcode');
     

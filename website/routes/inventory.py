@@ -112,8 +112,10 @@ def inventory_product(id):
 
     stockItem['name'] = product.name
     stockItem['quantity'] = stockQuery.quantity
+    stockItem['branch'] = "All Branches"
     stockItem['description'] = product.description
     stockItem['id'] = stockQuery.prod_id
+    stockItem['qr_barcode'] = product.qr_barcode
 
     if not stockItem:
         return None
