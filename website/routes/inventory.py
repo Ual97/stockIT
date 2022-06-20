@@ -84,3 +84,35 @@ def inventory_page():
         branchesList.append(branch.name)
 
     return render_template('inventory.html', stock=stock, user=current_user, branches=branchesList)
+
+
+@login_required
+@inventory.route('/inventory/<id>', methods=['GET'], strict_slashes=False)
+def inventory_product(id):
+    """Api Endpoint for inventory product"""
+
+    # if user is not confirmed, block access and send to home
+    if current_user.confirmed is False:
+        flash('Please confirm your account, check your email (and spam folder)', 'error')
+        return redirect(url_for('views.home'))
+    
+    # consulting stock from all branches
+    stockQuery = Inventory.query.filter_by(owner=current_user.email).filter_by(prod_id=id).first()
+
+
+    #filling stock dictionary with prod name, quantity, description and product id
+    stockItem = {}
+
+    product = Product.query.filter_by(owner=current_user.email).filter_by(id=id).first()
+        
+    # if is searched a particular product only that product is gonna be listed
+
+    stockItem['name'] = product.name
+    stockItem['quantity'] = stockQuery.quantity
+    stockItem['description'] = product.description
+    stockItem['id'] = stockQuery.prod_id
+
+    if not stockItem:
+        return None
+
+    return jsonify(stockItem)
