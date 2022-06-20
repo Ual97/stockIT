@@ -28,102 +28,25 @@
   
   <table id="tableBarcode">
     <tr>
-      <th>Id</th>
       <th>Name</th>
-      <th>Branch</th>
       <th>Quantity</th>
-      <th>Cost</th>
-      <th>Price</th>
-      <th>Expiricy</th>
-      <th>Reserved</th>
+      <th>Description</th>
       <th>Barcode</th>
-      <th>Update</th>
     </tr>
     <tr>
-      <td id="idBarcode" value="">
-      </td>
       <td id="nameBarcode">
-      </td>
-      <td id="branchBarcode">
       </td>
       <td id="quantityBarcode">
       </td>
-      <td id="costBarcode">
-      </td>
-      <td id="priceBarcode">
-      </td>
-      <td id="expiryBarcode">
-      </td>
-      <td id="qty_reservedBarcode">
+      <td id="descriptionBarcode" onclick="">
+        Show Description
       </td>
       <td>
         <img id="qr_barcodeBarcode" src="">
       </td>
-      <td>
-        <a id="updateButtonBarcode" class="updateButton">Update</a>
-      </td>
-  </tr>
-</table>
-    
-  <form id="updateFormBarcode" action="" method="POST">
-    <table id="tableBarcodeUpdate" class="Invisible">
-      <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>Branch</th>
-        <th>Quantity</th>
-        <th>Cost</th>
-        <th>Price</th>
-        <th>Expiricy</th>
-        <th>Reserved</th>
-        <th>Barcode</th>
-        <th>Update</th>
-      </tr>
-      <tr>
-        <td>
-          <label for="nameBarcodeUpdate"></label>
-          <input type="text" id="nameBarcodeUpdate" name="nameBarcodeUpdate" placeholder="" value="" />
-        </td>
-        <td>
-          <label for="branchesBarcodeUpdate">select s.</label>
-          <select name="branchesBarcodeUpdate" id="branchesBarcodeUpdate">
-          </select>
-        </td>
-        <td>
-          <label for="quantityBarcodeUpdate"></label>
-          <input type="number" id="quantityBarcodeUpdate" name="quantityBarcodeUpdate" placeholder="" value="" />
-        </td>
-        <td>
-          <label for="costBarcodeUpdate"></label>
-          <input type="number" id="costBarcodeUpdate" name="costBarcodeUpdate" placeholder="" value="" />
-        </td>
-        <td>
-          <label for="priceBarcodeUpdate"></label>
-          <input type="number" id="priceBarcodeUpdate" name="priceBarcodeUpdate" placeholder="" value="" />
-        </td>
-        <td>
-          <label for="expiryBarcodeUpdate"></label>
-          <input type="date" id="expiryBarcodeUpdate" name="expiryBarcodeUpdate" placeholder="" value="" />
-        </td>
-        <td>
-          <label for="qty_reserved"></label>
-          <input type="number" id="qty_reservedBarcodeUpdate" name="qty_reservedBarcodeUpdate" placeholder="" />
-        </td>
-        <td>
-          <select name="qr_barcodeBarcodeUpdate" id="qr_barcodeBarcodeUpdate">
-            <option id="qr_barcodeBarcodeUpdateqr" value="qr">QR code</option>
-            <option id="qr_barcodeBarcodeUpdatebarcode" value="barcode">Barcode</option>
-          </select>
-        </td>
-        <td>
-          <input id="updateFormBarcode" name="btn-add" value="Update" type="submit" />
-        </td>
-      </tr>
-    </table>
-    <a class="cancelButton" id="cancelButtonBarcode">Cancel</a>
-  </form>
+    </tr>
+  </table>
 </div>
-
 
 <style>
   html {
@@ -162,8 +85,7 @@
 <br>
 <h1>Inventory</h1>
 <br>
-<p>Your products will be shown here</p>
-<p>First four fields are mandatory if you want to add a product</p>
+<p>Your stock will be shown here</p>
 
 <!-- form for searching with filters -->
 <form method="POST">
