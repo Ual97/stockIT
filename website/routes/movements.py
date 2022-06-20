@@ -23,9 +23,13 @@ def move():
         flash('Please confirm your account, check your email (and spam folder)', 'error')
         return redirect(url_for('views.home'))
 
-    data = Movements.query.filter_by(owner=current_user.email).all()
+    data = Movements.query.filter_by(owner=current_user.email).order_by(desc(Movements.date)).all()
 
     movementsList = []
+
+    # branches and products to display as options in add entry table
+    branches = Branch.query.filter_by(owner=current_user.email)
+    products = Product.query.filter_by(owner=current_user.email)
 
     # filling movements history to be displayed by jinja
     for item in data:
@@ -37,6 +41,7 @@ def move():
         movementDict['date'] = item.date
         movementDict['in_out'] = "Entry" if item.in_out is True else "Exit"
         movementsList.append(movementDict)
+    
 
     # if user presses Search
     if request.method == 'POST' and "btn-srch" in request.form:
@@ -113,9 +118,9 @@ def move():
             prod = Product.query.filter_by(name=name).first()
             prodDict['prod_id'] = prod.id
             # checking if exists prevs entries of this new entrie in all branches
-            prodMov = Movements.query.filter_by(prod_id=prod.id).all()
+            prodMov = Movements.query.filter_by(prod_id=prod.id).order_by(desc(Movements.date)).all()
             # checking if exists prevs entries of this new entry in their respective branch
-            branchStock = Movements.query.filter(and_(Movements.prod_id == prod.id, Movements.branch_id == branch2.id)).all()
+            branchStock = Movements.query.filter(and_(Movements.prod_id == prod.id, Movements.branch_id == branch2.id)).order_by(desc(Movements.date)).all()
 
             if not branchStock and in_out == False:
                 flash('Error. Cannot make outs of products on branch without stock', category='error')
@@ -142,8 +147,11 @@ def move():
             db.session.add(new_prod)
             db.session.commit()
 
-
-            prodMov = Movements.query.filter_by(prod_id=prod.id).all()
+            item2 = Movements.query.filter_by(prod_id=prod.id).order_by(desc(Movements.date)).all()
+            for item in item2:
+                print("aaaaaaasheeee")
+                print(item.date)
+            prodMov = Movements.query.filter_by(prod_id=prod.id).order_by(desc(Movements.date)).all()
             if len(prodMov) == 1:
                 """new product to the inventory"""
                 print(f'\n\n\nvamos a hacer un nuevo producto :3\n\n')
@@ -169,12 +177,9 @@ def move():
                     item.quantity -= qty
 
                 db.session.commit()
+            return redirect('/movements')
         else:
             flash('Name, Branch and Quantity are mandatory fields', category='error')
-    # branches and products to display as options in add entry table
-    branches = Branch.query.filter_by(owner=current_user.email)
-    products = Product.query.filter_by(owner=current_user.email)
-
     
     return render_template('movements.html', user=current_user,
                            movements=movementsList,
