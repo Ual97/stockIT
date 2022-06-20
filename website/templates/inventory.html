@@ -31,6 +31,7 @@
       <th>Name</th>
       <th>Quantity</th>
       <th>Description</th>
+      <th>Branch</th>th>
       <th>Barcode</th>
     </tr>
     <tr>
@@ -38,6 +39,7 @@
       </td>
       <td id="quantityBarcode">
       </td>
+      <td id="branchBarcode"></td>
       <td id="descriptionBarcode" onclick="">
         Show Description
       </td>
@@ -114,6 +116,7 @@
     <tr>
       <th>Name</th>
       <th>Quantity</th>
+      <th>Branch</th>
       <th>Description</th>
       <th>QR/Barcode</th>
     </tr>
@@ -123,6 +126,7 @@
       <tr>
         <td>{{ p['name'] }}</td>
         <td>{{ p['quantity'] }}</td>
+        <td>{{ p['branch'] }}</td>
         <td value="{{ p['description'] }}" onclick="showDescription(this)"> Show </td>
         <td>
           <img class="qr" id="qrid" src="../static/images/{{p['id']}}.png">

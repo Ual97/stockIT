@@ -45,6 +45,7 @@ def inventory_page():
             continue
         stockItem['name'] = product.name
         stockItem['quantity'] = item.quantity
+        stockItem['branch'] = "All Branches"
         stockItem['description'] = product.description
         stockItem['id'] = item.prod_id
 
@@ -75,6 +76,8 @@ def inventory_page():
                     elif mov.in_out is False:
                         currentStock -= mov.quantity
                 item['quantity'] = currentStock
+                item['branch'] = selectedBranch.name
+        
 
         
     # branches from user

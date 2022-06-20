@@ -43,6 +43,13 @@ def prod():
 
 
         if name:
+            name = name.strip()
+            currentName = Product.query.filter_by(name=name).first()
+            if currentName and name.lower() == currentName.name.lower():
+                flash('Product already exists', 'error')
+                return redirect(url_for('product.prod'))
+
+            prodDict['name'] = name
             # adding new product instance to database
             prodDict['owner'] = current_user.email
             if description == '' or description is None:
@@ -152,7 +159,7 @@ def generate_qr(id):
     print(f'\n\n\n{response._content}\n\n')
     #taking the content's bytes to write the PNG img
     image_data = response._content
-    path = f'./../static/images/{id}.png'
+    path = f'./../static/images/qr.{id}.png'
     with open(os.path.join(os.path.dirname(__file__), path), 'wb+') as out_file:
         out_file.write(image_data)
 
@@ -174,7 +181,7 @@ def generate_barcode(id):
     try:
         #encoding string to bytes to then write a file with the PNG img
         image_data = base64.b64decode(image_data.replace('data:image/PNG;base64,', '').encode())
-        path = f'./../static/images/{id}.png'
+        path = f'./../static/images/barcode.{id}.png'
         print(f'\n\n\n{path}\n\n')
         with open(os.path.join(os.path.dirname(__file__), path), 'wb+') as out_file:
             out_file.write(image_data)

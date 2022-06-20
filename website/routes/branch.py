@@ -19,17 +19,31 @@ def subsidiary_view():
         return redirect(url_for('views.home'))
 
     if request.method == 'POST':
-        sucursal_dict = request.form.to_dict()
-        print(f'\n\n\n{sucursal_dict}\n\n')
-        if sucursal_dict.get('name') is None:
+        branch_dict = request.form.to_dict()
+        name = branch_dict.get('name')
+        print(f'\n\n\n{branch_dict}\n\n')
+        if not name:
             flash('Name is mandatory', category='error')
             return redirect(url_for('subsidiary.subsidiary_view'))
-        if type(sucursal_dict.get('name')) != str:
+
+        if type(name) != str:
             flash('Name must be a string', category='error')
             return redirect(url_for('subsidiary.subsidiary_view'))
-        sucursal_dict['owner'] = current_user.email
-        new_sucursal = Branch(**sucursal_dict)
-        db.session.add(new_sucursal)
+
+        name = name.strip()
+
+        branch_dict['name'] = name
+
+        currentBranch = Branch.query.filter_by(name=name).first()
+        currentBranchName = currentBranch.name.strip()
+        print(f"\n\n\nnew {name.lower()} current {currentBranchName.lower()}\n\n")
+        if name.lower() == currentBranchName.lower():
+            flash('This branch already exists', category='error')
+            return redirect(url_for('subsidiary.subsidiary_view'))
+
+        branch_dict['owner'] = current_user.email
+        new_branch = Branch(**branch_dict)
+        db.session.add(new_branch)
         db.session.commit()
         flash('Branch added', category='success')
         return redirect(url_for('subsidiary.subsidiary_view'))
