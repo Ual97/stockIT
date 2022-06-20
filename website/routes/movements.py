@@ -9,9 +9,9 @@ from website.models.inventory import Inventory
 from flask_login import login_required, current_user
 from sqlalchemy.sql.expression import func
 from sqlalchemy import and_, or_, desc, asc
-import requests
 
 movements = Blueprint('movements', __name__)
+
 
 @movements.route('/movements', methods=['GET', 'POST'], strict_slashes=False)
 @login_required
@@ -59,12 +59,7 @@ def move():
         # show branches and next prod id for add entry row
         branches = Branch.query.filter_by(owner=current_user.email)
         products = Product.query.filter_by(owner=current_user.email)
-        nextid = db.session.query(func.max(Movements.id)).scalar()
-
-        if nextid is None:
-            nextid = 1
-        else:
-            nextid += 1
+ 
 
         # Order By select section
         if orderby == 'newest':
@@ -89,7 +84,7 @@ def move():
             return redirect('/movements')
 
         return render_template('movements.html', user=current_user,
-                            branches=branches, products=products, nextid=nextid, movements=movementsList)
+                            branches=branches, products=products, movements=movementsList)
 
     if request.method == 'POST' and "btn-add" in request.form:
         prodDict = request.form.to_dict()
@@ -110,7 +105,6 @@ def move():
             in_out = False
             prodDict['in_out'] = False
 
-        date = prodDict.get('date')
         
         if name and branch and qty:
             prodDict['owner'] = current_user.email
@@ -181,13 +175,7 @@ def move():
     branches = Branch.query.filter_by(owner=current_user.email)
     products = Product.query.filter_by(owner=current_user.email)
 
-    # hardprint next id for new product
-    nextid = db.session.query(func.max(Movements.id)).scalar()
-    if nextid is None:
-        nextid = 1
-    else:
-        nextid += 1
     
     return render_template('movements.html', user=current_user,
-                           nextid=nextid, movements=movementsList,
+                           movements=movementsList,
                            branches=branches, products=products)

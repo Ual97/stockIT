@@ -73,7 +73,6 @@
   <form method="POST">
     <table>
       <tr>
-        <th>Id</th>
         <th>Product</th>
         <th>Branch</th>
         <th>Quantity</th>
@@ -82,9 +81,6 @@
       </tr>
       <tr>
         <!-- row for adding a  product -->
-        <td>
-          {{ nextid }}
-        </td>
         <td>
           <label for="name"></label>
           <select name="name" id="products">
@@ -118,7 +114,6 @@
       <!-- start listing the products -->
       {% for p in movements %}
       <tr>
-        <td>{{ p['id'] }}</td>
         <td>{{ p['product'] }}</td>
         <td>{{ p['branch'] }}</td>
         <td>{{ p['quantity'] }}</td>

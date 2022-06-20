@@ -71,7 +71,6 @@
 
   <table id="tableBarcode">
     <tr>
-      <th>Id</th>
       <th>Name</th>
       <th>Branch</th>
       <th>Quantity</th>
@@ -83,8 +82,6 @@
       <th>Update</th>
     </tr>
     <tr>
-      <td id="idBarcode" value="">
-      </td>
       <td id="nameBarcode">
       </td>
       <td id="branchBarcode">
@@ -222,7 +219,6 @@
   <form method="POST">
     <table>
       <tr>
-        <th>Id</th>
         <th>Name</th>
         <th>Description</th>
         <th>Barcode</th>
@@ -231,9 +227,6 @@
       </tr>
       <tr>
         <!-- row for adding a  product -->
-        <td>
-          Auto-generated
-        </td>
         <td>
           <label for="name"></label>
           <input type="text" id="name" name="name" placeholder="" />
@@ -255,9 +248,8 @@
       <!-- start listing the products -->
       {% for p in products.items %}
       <tr>
-        <td>{{ p.id }}</td>
         <td>{{ p.name }}</td>
-        <td value="{{ p.description }}" name="" id="description.{{p.id}}" onclick="showDescription(this)">
+        <td value="{{ p.description }}" name="" id="description" onclick="showDescription(this)">
           Show
         </td>  
         <td>

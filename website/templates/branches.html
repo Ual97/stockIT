@@ -65,15 +65,11 @@
         <table>
             <!-- row of clumn names -->    
             <tr>
-              <th>Id</th>
               <th>Name</th>
               <th>Add/Update</th>
               <th>Delete</th>
             </tr>
             <tr>
-                <td>
-                  {{ nextid }}
-                </td>
                 <td>
                   <label for="name"></label>
                   <input 
@@ -91,7 +87,6 @@
     <!-- row of clumn names -->  
     {% for branch in subsidiarys.items %}    
     <tr>
-        <td>{{ branch.id }}</td>
         <td>{{ branch.name }}</td>
         <td><a id="{{ branch.id }}" class="updateButton">
             Update

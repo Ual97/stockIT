@@ -34,13 +34,9 @@ def subsidiary_view():
         flash('Branch added', category='success')
         return redirect(url_for('subsidiary.subsidiary_view'))
     subsidiarys = Branch.query.filter_by(owner=current_user.email).paginate(per_page=10)
-    nextid = db.session.query(func.max(Branch.id)).scalar()
-    if nextid is None:
-        nextid = 1
-    else:
-        nextid += 1
+
     return render_template('branches.html', subsidiarys=subsidiarys,
-                           user=current_user, nextid=nextid)
+                           user=current_user)
 
 @subsidiary.route('/branch/<int:id>', methods=['GET', 'POST'],
                   strict_slashes=False)

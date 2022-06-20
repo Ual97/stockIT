@@ -1,8 +1,9 @@
 from website import db
+from uuid import uuid4
 
 
 class Product(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(64), nullable=False, primary_key=True)
     # all products have an owner (user)
     owner = db.Column(db.String(124), db.ForeignKey('user.email'))
     name = db.Column(db.String(124))
@@ -11,6 +12,7 @@ class Product(db.Model):
 
     def __init__(self, **kwargs):
         """initialize obj products"""
+        self.id = str(uuid4())
         self.owner = kwargs.get('owner')
         self.name = kwargs.get('name')
         self.qr_barcode = kwargs.get('qr_barcode')
