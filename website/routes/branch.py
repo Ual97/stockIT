@@ -35,11 +35,12 @@ def subsidiary_view():
         branch_dict['name'] = name
 
         currentBranch = Branch.query.filter_by(name=name).first()
-        currentBranchName = currentBranch.name.strip()
-        print(f"\n\n\nnew {name.lower()} current {currentBranchName.lower()}\n\n")
-        if name.lower() == currentBranchName.lower():
-            flash('This branch already exists', category='error')
-            return redirect(url_for('subsidiary.subsidiary_view'))
+        if currentBranch:
+            currentBranchName = currentBranch.name.strip()
+            print(f"\n\n\nnew {name.lower()} current {currentBranchName.lower()}\n\n")
+            if name.lower() == currentBranchName.lower():
+                flash('This branch already exists', category='error')
+                return redirect(url_for('subsidiary.subsidiary_view'))
 
         branch_dict['owner'] = current_user.email
         new_branch = Branch(**branch_dict)
