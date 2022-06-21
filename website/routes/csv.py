@@ -46,7 +46,7 @@ def dic_csv():
                     for name2 in names2:
                         listNames.append(name2.name)
                     if name not in listNames:
-                        flash("The product must be created", category='error')
+                        flash("The product must already be created", category='error')
                         return redirect('/movements') 
                     branch = line.get('branch')
                     branches = Branch.query.filter_by(owner=current_user.email).all()
@@ -54,7 +54,7 @@ def dic_csv():
                     for branch2 in branches:
                         listBranches.append(branch2.name)
                     if branch not in listBranches:
-                        flash("The branch must be created", category='error')
+                        flash("The branch must already be created", category='error')
                         return redirect('/movements') 
                     qty = line.get('quantity')
 
@@ -70,19 +70,21 @@ def dic_csv():
                             print(str(line.get('date')) + ' 00:00:00')
                             line['date'] = datetime.strptime(str(line.get('date')) + ' 00:00:00', '%Y-%m-%d %H:%M:%S')
                         except:
-                            flash("Expiry need the format '%Y-%m-%d'", category='error')
+                            flash("Date need the format '%Y-%m-%d'", category='error')
                             return redirect('/movements')
 
-                    in_out = line.get('in_out')
+                    in_out = line.get('action')
                     if in_out == 'in':
                         in_out = True
                         line['in_out'] = True
                     elif in_out == 'out':
                         in_out = False
                         line['in_out'] = False
+                    else:
+                        flash("Action must be 'in' or 'out'", category='error')
+                        return redirect('/movements')
 
-                    
-                    if name and branch and qty and (line['in_out'] == False or line['in_out'] == True):
+                    if name and branch and qty:
                         line['owner'] = current_user.email
                         branch2 = Branch.query.filter_by(name=branch).first()
                         line['branch_id'] = branch2.id
@@ -145,6 +147,7 @@ def dic_csv():
                             else:
                                 print(f'\n\n\nle sumamos al producto :3\n\n')
                                 item.quantity -= qty
+                            db.session.commit()
                     else:
                         flash('Name, Branch, Quantity and Action are mandatory fields', category='error')
                         return redirect('/movements')

@@ -3,7 +3,16 @@
 {% block content %}
 <body>
     <h1>Import your CSV</h1>
-
+    <h2>Requeriments</h2>
+    <ul>
+        <li>Product, Branch and Quantity are mandatory fields</li>
+        <li>The product must already be created</li>
+        <li>The branch must already be created</li>
+        <li>Quantity has to be a number</li>
+        <li>If you want an especific date: Date need the format '%Y-%m-%d'</li>
+        <li>if you want the current date, leave the space empty</li>
+        <li>Action must be 'in' or 'out'</li>
+    </ul>
     <form method='POST' enctype='multipart/form-data'>
         {{form.hidden_tag()}}
         {{form.file()}}
