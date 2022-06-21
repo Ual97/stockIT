@@ -46,6 +46,8 @@ def move():
     # if user presses Search
     if request.method == 'POST' and "btn-srch" in request.form:
         search = request.form.get("search")
+        if search:
+            search = search.strip()
         orderby = request.form.get("orderby")
         
         #checks that products are from user
@@ -57,9 +59,9 @@ def move():
         searchBranch = Branch.query.filter_by(name=search).first()
         searchBranch = "None" if not searchBranch else str(searchBranch.id)
 
-        print(f'\n\n\nproduct  {searchProduct} branch: {searchBranch}\n\n')
         # search input section
         srch = userprod.filter(or_(Movements.date.like(search), Movements.prod_id.like(searchProduct), Movements.branch_id.like(searchBranch)))
+
 
         # show branches and next prod id for add entry row
         branches = Branch.query.filter_by(owner=current_user.email)
@@ -67,10 +69,14 @@ def move():
  
 
         # Order By select section
-        if orderby == 'newest':
-            data = srch.order_by(asc(Movements.id))
-        elif orderby == 'older':
-            data = srch.order_by(desc(Movements.id))
+        if orderby == 'newest' and srch:
+            data = srch.order_by(asc(Movements.date)).all()
+        elif orderby == 'newest' and not srch:
+            data = userprod.order_by(desc(Movements.date)).all()
+        elif orderby == 'oldest' and srch:
+            data = srch.order_by(desc(Movements.date)).all()
+        elif orderby == 'oldest' and not srch:
+            data = userprod.order_by(asc(Movements.date)).all()
         else:
             data = srch
         movementsList = []
@@ -84,7 +90,7 @@ def move():
             movementDict['date'] = item.date
             movementDict['in_out'] = "Entry" if item.in_out is True else "Exit"
             movementsList.append(movementDict)
-        if not movementsList:
+        if not movementsList and not orderby:
             flash('No results found', 'error')
             return redirect('/movements')
 
@@ -166,7 +172,6 @@ def move():
                 """quantity addition of the product"""
                 item = Inventory.query.filter_by(prod_id=prod.id).first()
                 if in_out is True:
-                    print(f'\n\n\nle sumamos al producto :3\n\n')
                     item.quantity += qty
                 elif in_out is False and qty > item.quantity or item.quantity is None:
                     print(f'\n\n\nflasheaste :3\n\n')
