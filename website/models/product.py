@@ -12,7 +12,7 @@ class Product(db.Model):
 
     def __init__(self, **kwargs):
         """initialize obj products"""
-        self.id = str(uuid4())
+        self.id = str(uuid4())[-6:-1]
         self.owner = kwargs.get('owner')
         self.name = kwargs.get('name')
         self.qr_barcode = kwargs.get('qr_barcode')
