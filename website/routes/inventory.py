@@ -63,7 +63,9 @@ def inventory_page():
 
         # filtering by branch
         if selectedBranch != 'All Branches (default)':
+            print(f'\n\n\nselectedBranch: {selectedBranch}\n\n\n')
             selectedBranch = Branch.query.filter_by(owner=current_user.email).filter_by(name=selectedBranch).first()
+            print(f'\n\n\nselectedBranch: {selectedBranch}\n\n\n')
 
             for item in stock:
                 # calculating the current stock for
