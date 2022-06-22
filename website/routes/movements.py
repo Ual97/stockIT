@@ -18,6 +18,11 @@ movements = Blueprint('movements', __name__)
 def move():
     """movements of products"""
 
+    graph_data = {'Task' : 'Hours per Day'}
+    graph_data2 = {'Task' : 'Hours per Day'}
+    graph_data3 = {'Task' : 'Hours per Day'}
+    graph_data4 = {'Task' : 'Hours per Day'}
+
     #if user is not confirmed, block access and send to home
     if current_user.confirmed is False:
         flash('Please confirm your account, check your email (and spam folder)', 'error')
@@ -41,7 +46,30 @@ def move():
         movementDict['date'] = item.date
         movementDict['in_out'] = "Entry" if item.in_out is True else "Exit"
         movementsList.append(movementDict)
-    
+        
+        if movementDict['in_out'] == 'Entry':
+            if movementDict['product'] in graph_data:
+                graph_data[movementDict['product']] += movementDict['quantity']
+            else: 
+                graph_data[movementDict['product']] = movementDict['quantity']
+        if movementDict['in_out'] == 'Exit':
+            if movementDict['product'] in graph_data2:
+                graph_data2[movementDict['product']] += movementDict['quantity']
+            else: 
+                graph_data2[movementDict['product']] = movementDict['quantity']
+        for selectedBranch2 in Branch.query.filter_by(owner=current_user.email).all():
+            print(selectedBranch2.name)
+            print("BOOOLAS")
+            if movementDict['in_out'] == 'Entry' and selectedBranch2.name == movementDict['branch']:
+                if movementDict['product'] + " On(" + movementDict['branch'] + ")" in graph_data3:
+                    graph_data3[movementDict['product'] + " On(" + movementDict['branch'] + ")"] += movementDict['quantity']
+                else: 
+                    graph_data3[movementDict['product'] + " On(" + movementDict['branch'] + ")"] = movementDict['quantity']
+            if movementDict['in_out'] == 'Exit' and selectedBranch2.name == movementDict['branch']:
+                if movementDict['product'] + " On(" + movementDict['branch'] + ")" in graph_data4:
+                    graph_data4[movementDict['product'] + " On(" + movementDict['branch'] + ")"] += movementDict['quantity']
+                else: 
+                    graph_data4[movementDict['product'] + " On(" + movementDict['branch'] + ")"] = movementDict['quantity']
 
     # if user presses Search
     if request.method == 'POST' and "btn-srch" in request.form:
@@ -96,7 +124,7 @@ def move():
             return redirect('/movements')
 
         return render_template('movements.html', user=current_user,
-                            branches=branches, products=products, movements=movementsList)
+                            branches=branches, products=products, movements=movementsList, data=graph_data, data2=graph_data2, data3=graph_data3, data4=graph_data4)
 
     if request.method == 'POST' and "btn-add" in request.form:
         prodDict = request.form.to_dict()
@@ -189,4 +217,4 @@ def move():
     
     return render_template('movements.html', user=current_user,
                            movements=movementsList,
-                           branches=branches, products=products)
+                           branches=branches, products=products, data=graph_data, data2=graph_data2, data3=graph_data3, data4=graph_data4)

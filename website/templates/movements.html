@@ -16,6 +16,126 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      google.charts.setOnLoadCallback(drawChart2);
+      google.charts.setOnLoadCallback(drawChart3);
+      google.charts.setOnLoadCallback(drawChart4);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            {% for key, value in data.items() %}
+                {% if value is string %}
+                    ['{{ key }}', '{{ value }}'],
+                {% else %}
+                    ['{{ key }}', {{ value }}],
+                {% endif %}
+            {% endfor %}
+        ]);
+ 
+        var options = {
+          title: 'Products per Entry Totally',
+          is3D: true,
+          //pieHole: 0.5
+          pieStartAngle: 100
+          /*slices: {  
+            2: {offset: 0.2},
+            3: {offset: 0.3}
+          }*/
+          /*slices: {
+            1: { color: 'transparent' }
+          }*/
+        };
+ 
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+        chart.draw(data, options);
+      }
+      function drawChart2() {
+        var data = google.visualization.arrayToDataTable([
+            {% for key, value in data2.items() %}
+                {% if value is string %}
+                    ['{{ key }}', '{{ value }}'],
+                {% else %}
+                    ['{{ key }}', {{ value }}],
+                {% endif %}
+            {% endfor %}
+        ]);
+ 
+        var options = {
+          title: 'Products per Exit Totally',
+          is3D: true,
+          //pieHole: 0.5
+          pieStartAngle: 100
+          /*slices: {  
+            2: {offset: 0.2},
+            3: {offset: 0.3}
+          }*/
+          /*slices: {
+            1: { color: 'transparent' }
+          }*/
+        };
+ 
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_4d'));
+        chart.draw(data, options);
+      }
+      function drawChart3() {
+        var data = google.visualization.arrayToDataTable([
+            {% for key, value in data3.items() %}
+                {% if value is string %}
+                    ['{{ key }}', '{{ value }}'],
+                {% else %}
+                    ['{{ key }}', {{ value }}],
+                {% endif %}
+            {% endfor %}
+        ]);
+ 
+        var options = {
+          title: 'Products per Entry and Branch',
+          is3D: true,
+          //pieHole: 0.5
+          pieStartAngle: 100
+          /*slices: {  
+            2: {offset: 0.2},
+            3: {offset: 0.3}
+          }*/
+          /*slices: {
+            1: { color: 'transparent' }
+          }*/
+        };
+ 
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_5d'));
+        chart.draw(data, options);
+      }
+      function drawChart4() {
+        var data = google.visualization.arrayToDataTable([
+            {% for key, value in data4.items() %}
+                {% if value is string %}
+                    ['{{ key }}', '{{ value }}'],
+                {% else %}
+                    ['{{ key }}', {{ value }}],
+                {% endif %}
+            {% endfor %}
+        ]);
+ 
+        var options = {
+          title: 'Products per Exit and Branch',
+          is3D: true,
+          //pieHole: 0.5
+          pieStartAngle: 100
+          /*slices: {  
+            2: {offset: 0.2},
+            3: {offset: 0.3}
+          }*/
+          /*slices: {
+            1: { color: 'transparent' }
+          }*/
+        };
+ 
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_6d'));
+        chart.draw(data, options);
+      }
+    </script>
 </head>
 
 <style>
@@ -117,6 +237,13 @@
     <div class="container">
       <div class="row">
         <div class="col-6-lg">
+          <div style="margin: 10px 0 0 10px;width: 1000px">
+            <h3>Python Flask Show Data on Google Pie Chart</h3>
+            <div id="piechart_3d" style="width: 900px; height: 500px;"></div>
+            <div id="piechart_4d" style="width: 900px; height: 500px;"></div>
+            <div id="piechart_5d" style="width: 900px; height: 500px;"></div>
+            <div id="piechart_6d" style="width: 900px; height: 500px;"></div>
+        </div>
         </div>
       </div>
     </div>
