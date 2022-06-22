@@ -69,13 +69,14 @@ def move():
  
 
         # Order By select section
-        if orderby == 'newest' and srch:
+        if orderby == 'newest' and search:
             data = srch.order_by(asc(Movements.date)).all()
-        elif orderby == 'newest' and not srch:
+        elif orderby == 'newest' and not search:
+            print(f"\n\n\n{srch}\n\n")
             data = userprod.order_by(desc(Movements.date)).all()
-        elif orderby == 'oldest' and srch:
+        elif orderby == 'oldest' and search:
             data = srch.order_by(desc(Movements.date)).all()
-        elif orderby == 'oldest' and not srch:
+        elif orderby == 'oldest' and not search:
             data = userprod.order_by(asc(Movements.date)).all()
         else:
             data = srch
