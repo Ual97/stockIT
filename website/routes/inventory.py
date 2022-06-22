@@ -17,6 +17,8 @@ inventory = Blueprint('inventory', __name__)
 @inventory.route('/inventory', methods=['GET', 'POST'], strict_slashes=False)
 def inventory_page():
     """inventory page"""
+    
+    graph_data = {'Task' : 'Products per branch'}
 
     formDict = request.form.to_dict()
 
@@ -50,6 +52,8 @@ def inventory_page():
         stockItem['id'] = item.prod_id
 
         stock.append(stockItem)
+        
+        graph_data[product.name] = item.quantity
     if search and not stock:
         flash("No items with that name", "error")
         return redirect('/inventory')
@@ -77,16 +81,37 @@ def inventory_page():
                         currentStock -= mov.quantity
                 item['quantity'] = currentStock
                 item['branch'] = selectedBranch.name
-        
+                graph_data[item['name']] = item['quantity']
+                print(item)            
+        if selectedBranch == 'All Branches (default)' and search:
+            for selectedBranch in Branch.query.filter_by(owner=current_user.email).all():
+                print(selectedBranch)
+                for item in stock:
+                    # calculating the current stock for
+                    # each branch distinct from the selected
+                    currentStock = 0
+                    for mov in Movements.query.filter_by(owner=current_user.email).filter(and_(Movements.prod_id == item['id'],
+                                                        Movements.branch_id == selectedBranch.id)).all():
+                        if mov.in_out is True:
+                            currentStock += mov.quantity
+                        elif mov.in_out is False:
+                            currentStock -= mov.quantity
+                    if item['name'] == search:
+                        graph_data[item['name'] + " " + "On(" + selectedBranch.name + ")"] = currentStock
+                        if item['name'] in graph_data:
+                            graph_data.pop(item['name'])
+                        print("sdf")
+                        print(graph_data)
+                        print("sadf")
+                    print(item)
 
-        
     # branches from user
     branches = Branch.query.filter_by(owner=current_user.email).all()
     branchesList = ["All Branches (default)"]
     for branch in branches:
         branchesList.append(branch.name)
 
-    return render_template('inventory.html', stock=stock, user=current_user, branches=branchesList)
+    return render_template('inventory.html', stock=stock, user=current_user, branches=branchesList, data=graph_data)
 
 
 @login_required

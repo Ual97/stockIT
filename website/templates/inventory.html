@@ -12,7 +12,45 @@
   <script src="../static/scripts/showscanner.js" async></script>
   <script src="../static/scripts/showDescription.js" async></script>
   <script src="https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@9.0.0/dist/dbr.js"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable([
+          {% for key, value in data.items() %}
+              {% if value is string %}
+                  ['{{ key }}', '{{ value }}'],
+              {% else %}
+                  ['{{ key }}', {{ value }}],
+              {% endif %}
+          {% endfor %}
+      ]);
+
+      var options = {
+        title: 'My Daily Activities',
+        is3D: true,
+        //pieHole: 0.5
+        pieStartAngle: 100
+        /*slices: {  
+          2: {offset: 0.2},
+          3: {offset: 0.3}
+        }*/
+        /*slices: {
+          1: { color: 'transparent' }
+        }*/
+      };
+
+      var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+      chart.draw(data, options);
+    }
+  </script>
 </head>
+
+<div style="margin: 10px 0 0 10px;width: 1000px">
+  <h3>Python Flask Show Data on Google Pie Chart</h3>
+  <div id="piechart_3d" style="width: 900px; height: 500px;"></div>
+</div>
 
 <!-- pop-up for product description. needs bootstrap --> 
 <div id="InvisibleDescription" class="Invisible" id="productDescription">

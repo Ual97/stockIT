@@ -20,7 +20,7 @@ def subsidiary_view():
 
     if request.method == 'POST':
         branch_dict = request.form.to_dict()
-        name = branch_dict.get('nameUpdate')
+        name = branch_dict.get('name')
         print(f'\n\n\n{branch_dict}\n\n')
         if not name:
             flash('Name is mandatory', category='error')
