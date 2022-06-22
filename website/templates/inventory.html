@@ -62,33 +62,35 @@
 </div>
 
 <!-- form displayed if user scann qr_barcode -->
-<div class="InvisibleBarcode">
+<div class="InvisibleBarcode" id="divBarcode">
   
   <table id="tableBarcode">
     <tr>
       <th>Name</th>
       <th>Quantity</th>
       <th>Description</th>
-      <th>Branch</th>th>
+      <th>Branch</th>
       <th>Barcode</th>
     </tr>
     <tr>
-      <td id="nameBarcode">
+      <td class="tdBarcode" id="nameBarcode">
       </td>
-      <td id="quantityBarcode">
+      <td class="tdBarcode" id="quantityBarcode">
       </td>
-      <td id="branchBarcode"></td>
-      <td id="descriptionBarcode" onclick="">
-        Show Description
+      <td class="tdBarcode" id="descriptionBarcode" onclick="showDescription(this)">
+      <td class="tdBarcode" id="branchBarcode"></td>
       </td>
       <td>
         <img id="qr_barcodeBarcode" src="">
       </td>
     </tr>
-    <a class="closeButton" id="closeBarcode" 
-       onclick="document.querySelector('.barcode').setAttribute('class', 'InvisibleBarcode')">
-       Close
-    </a>
+    <td>
+      <a class="closeButton" id="closeBarcode" 
+        onclick="document.querySelector('#divBarcode').setAttribute('class', 'InvisibleBarcode')
+                 document.querySelectorAll('.tdBarcode').forEach(function(text) {text.innerHTML = ''} )">
+        Close
+      </a>
+    </td>
   </table>
 </div>
 

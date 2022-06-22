@@ -50,6 +50,7 @@ def inventory_page():
         stockItem['branch'] = "All Branches"
         stockItem['description'] = product.description
         stockItem['id'] = item.prod_id
+        stockItem['qr_barcode'] = product.qr_barcode
 
         stock.append(stockItem)
         

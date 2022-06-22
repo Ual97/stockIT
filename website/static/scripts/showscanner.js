@@ -1,19 +1,24 @@
-async function consult(code_content, type_barcode) {
-  if (!isNaN(code_content)) {
+async function consult(code_content) {
+  if (code_content) {
     const data = await (await fetch(`/inventory/${code_content}`)).json()
     console.log(data);
     console.log(code_content);
 
-    document.querySelector('.InvisibleBarcode').setAttribute('class', 'barcode');
+    const updclass = document.querySelector('.InvisibleBarcode');
+    console.log(updclass);
+    updclass.setAttribute('class', '');
 
 
     tableName = document.querySelector('#nameBarcode');
     tableName.appendChild(document.createTextNode(data.name));
-    tableQuantity = document.querySelector('#quantityBarcode');
+    const tableQuantity = document.querySelector('#quantityBarcode');
     tableQuantity.appendChild(document.createTextNode(data.quantity));
-    document.querySelector('#qr_barcodeUpdate').setAttribute('src', `/static/images/${type_barcode}.${code_content}.png`);
+    const tableDescription = document.querySelector('#descriptionBarcode');
+    tableDescription.appendChild(document.createTextNode('Show Description'));
+    tableDescription.setAttribute('value', data.description); 
+    document.querySelector('#qr_barcodeBarcode').setAttribute('src', `/ static/images/${data.qr_barcode}.${code_content}.png`);
 
-    updateButton = document.querySelector('#updateButtonBarcode');
+    //exitButton = document.querySelector('#updateButtonBarcode');
 
   }
   else {
@@ -29,12 +34,6 @@ async function scannerF() {
     let type_barcode;
     if (results[0]) {
       const code_content = results[0].barcodeText;
-      if (results[0].barcodeFormatString === "QR_CODE") {
-        type_barcode = "qr";
-      }
-      else {
-        type_barcode = "barcode";
-      }
       console.log(results.barcodeFormatString);
       consult(code_content, type_barcode);
       scanner.hide();
