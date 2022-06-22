@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="../static/buttons.css">
   <link rel="stylesheet" href="../static/tables.css">
   <script src="../static/scripts/updateFormInventory.js" async></script>
-  <script src="../static/scripts/deleteAlert.js" async></script>
   <script src="../static/scripts/showscanner.js" async></script>
   <script src="../static/scripts/showDescription.js" async></script>
   <script src="https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@9.0.0/dist/dbr.js"></script>
@@ -27,14 +26,6 @@
   <p id="productDescriptionText"></p>
 
   <a class="closeButton" id="closeProductDescription">Close</a>
-</div>
-
-
-<!-- pop-up for Delete button -->
-<div class="InvisibleDel">
-  <h1>Are you sure you want to delete this item?</h1>
-  <a id="yesDelete" class="deleteButton">Yes</a>
-  <a id="noDelete" class="cancelButton">No</a>
 </div>
 
 <!-- form displayed if user clicks Update -->
@@ -134,7 +125,6 @@
                 <th scope="col">Description</th>
                 <th scope="col">Barcode</th>
                 <th scope="col">Add/Update</th>
-                <th scope="col">Delete</th>
               </tr>
             </thead>
             <tbody>
@@ -156,7 +146,6 @@
                 <td>
                   <input id="btn-add" name="btn-add" value="add product" type="submit" />
                 </td>
-                <th></th>
               </tr>
               <!-- start listing the products -->
               {% for p in products.items %}
@@ -202,12 +191,6 @@
                 </td>
                 <td><a id="{{ p.id }}" class="updateButton">
                     Update
-                  </a>
-                </td>
-                <td>
-                  <a id="{{ p.id }}.product" class="deleteButton">
-                    <!--<a class="deleteButton" href=" url_for( 'inventory.Delete', id=p.id) '">-->
-                    Delete
                   </a>
                 </td>
               </tr>

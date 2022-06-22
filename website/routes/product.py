@@ -142,21 +142,6 @@ def prodUpdate(id):
     except Exception:
         abort(404)
 
-@product.route('/product/delete/<id>', strict_slashes=False)
-@login_required
-def Delete(id):
-    """product page"""
-    product = Product.query.get(id)
-    path = f'./../static/images/{id}.png'
-    path =  os.path.join(os.path.dirname(__file__), path)
-    if os.path.exists(path):
-        os.remove(path)
-    db.session.delete(product)
-    db.session.commit()
-    flash('Item deleted successfully!')
-    print(f'\n\n\naaaaaaaaaaaa{request.url_rule}\n\n\n')
-    return redirect('/product')
-
 def generate_qr(id):
     """consulting API which generates a qr"""
     url = "https://qrickit-qr-code-qreator.p.rapidapi.com/api/qrickit.php"
