@@ -12,11 +12,16 @@
   <script src="../static/scripts/showscanner.js" async></script>
   <script src="../static/scripts/showDescription.js" async></script>
   <script src="https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@9.0.0/dist/dbr.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+    integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 
 
-<!-- pop-up for product description. needs bootstrap --> 
-<div id="InvisibleDescription" class="Invisible" id="productDescription">
+<!-- pop-up for product description. needs bootstrap -->
+<div id="InvisibleDescription" class="InvisibleDescription" id="productDescription">
   <h2>Product Description</h2>
 
   <p id="productDescriptionText"></p>
@@ -35,141 +40,44 @@
 <!-- form displayed if user clicks Update -->
 <div class="Invisible">
   <form id="updateForm" action="" method="POST">
-    <table id="tableUpdate">
-      <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Barcode</th>
-        <th>Update</th>
-      </tr>
-      <tr>
-        <td id="idUpdate" value="">
-        </td>
-        <td id="nameUpdate">
-        </td>
-        <td>
-          <input type="text" value="" id="descriptionUpdate">
-        </td>
-        <td>
-          <select name="qr_barcodeUpdate" id="qr_barcodeUpdate">
-            <option id="qr_barcodeUpdateqr" value="qr">QR code</option>
-            <option id="qr_barcodeUpdatebarcode" value="barcode">Barcode</option>
-          </select>
-        </td>
-        <td>
-          <input id="updateButton" name="btn-add" value="Update" type="submit" />
-        </td>
-      </tr>
-    </table>
+    <div class="table-responsive-lg">
+      <table class="table table-hover" id="tableUpdate">
+        <thead>
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">Barcode</th>
+            <th scope="col">Update</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td id="idUpdate" value="">
+            </td>
+            <td id="nameUpdate">
+            </td>
+            <td>
+              <input type="text" value="" id="descriptionUpdate">
+            </td>
+            <td>
+              <select name="qr_barcodeUpdate" id="qr_barcodeUpdate">
+                <option id="qr_barcodeUpdateqr" value="qr">QR code</option>
+                <option id="qr_barcodeUpdatebarcode" value="barcode">Barcode</option>
+              </select>
+            </td>
+            <td>
+              <input id="updateButton" name="btn-add" value="Update" type="submit" />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </form>
-    <a class="cancelButton" id="cancelButtonUpdate">Cancel</a>
-  
-</div>
-<!-- form displayed if user scann qr_barcode -->
-<div class="InvisibleBarcode">
+  <a class="cancelButton" id="cancelButtonUpdate">Cancel</a>
 
-  <table id="tableBarcode">
-    <tr>
-      <th>Name</th>
-      <th>Branch</th>
-      <th>Quantity</th>
-      <th>Cost</th>
-      <th>Price</th>
-      <th>Expiricy</th>
-      <th>Reserved</th>
-      <th>Barcode</th>
-      <th>Update</th>
-    </tr>
-    <tr>
-      <td id="nameBarcode">
-      </td>
-      <td id="branchBarcode">
-      </td>
-      <td id="quantityBarcode">
-      </td>
-      <td id="costBarcode">
-      </td>
-      <td id="priceBarcode">
-      </td>
-      <td id="expiryBarcode">
-      </td>
-      <td id="qty_reservedBarcode">
-      </td>
-      <td>
-        <img id="qr_barcodeBarcode" src="">
-      </td>
-      <td>
-        <a id="updateButtonBarcode" class="updateButton">Update</a>
-      </td>
-    </tr>
-  </table>
-
-  <form id="updateFormBarcode" action="" method="POST">
-    <table id="tableBarcodeUpdate" class="Invisible">
-      <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>Branch</th>
-        <th>Quantity</th>
-        <th>Cost</th>
-        <th>Price</th>
-        <th>Expiricy</th>
-        <th>Reserved</th>
-        <th>Barcode</th>
-        <th>Update</th>
-      </tr>
-      <tr>
-        <td>
-          <label for="nameBarcodeUpdate"></label>
-          <input type="text" id="nameBarcodeUpdate" name="nameBarcodeUpdate" placeholder="" value="" />
-        </td>
-        <td>
-          <label for="branchesBarcodeUpdate">select s.</label>
-          <select name="branchesBarcodeUpdate" id="branchesBarcodeUpdate">
-          </select>
-        </td>
-        <td>
-          <label for="quantityBarcodeUpdate"></label>
-          <input type="number" id="quantityBarcodeUpdate" name="quantityBarcodeUpdate" placeholder="" value="" />
-        </td>
-        <td>
-          <label for="costBarcodeUpdate"></label>
-          <input type="number" id="costBarcodeUpdate" name="costBarcodeUpdate" placeholder="" value="" />
-        </td>
-        <td>
-          <label for="priceBarcodeUpdate"></label>
-          <input type="number" id="priceBarcodeUpdate" name="priceBarcodeUpdate" placeholder="" value="" />
-        </td>
-        <td>
-          <label for="expiryBarcodeUpdate"></label>
-          <input type="date" id="expiryBarcodeUpdate" name="expiryBarcodeUpdate" placeholder="" value="" />
-        </td>
-        <td>
-          <label for="qty_reserved"></label>
-          <input type="number" id="qty_reservedBarcodeUpdate" name="qty_reservedBarcodeUpdate" placeholder="" />
-        </td>
-        <td>
-          <select name="qr_barcodeBarcodeUpdate" id="qr_barcodeBarcodeUpdate">
-            <option id="qr_barcodeBarcodeUpdateqr" value="qr">QR code</option>
-            <option id="qr_barcodeBarcodeUpdatebarcode" value="barcode">Barcode</option>
-          </select>
-        </td>
-        <td>
-          <input id="updateFormBarcode" name="btn-add" value="Update" type="submit" />
-        </td>
-      </tr>
-    </table>
-    <a class="cancelButton" id="cancelButtonBarcode">Cancel</a>
-  </form>
 </div>
 
-
-<style>
-  html {
-    margin-left: 30px;
-  }
-</style>
 <style>
   table,
   td,
@@ -180,12 +88,21 @@
     width: 100px;
   }
 
+  a {
+    margin-left: 15px;
+  }
+
   th {
     background-color: orange;
   }
 
+  p, h1 {
+    margin-left: 15px;
+  }
+
   table {
     margin-bottom: 15px;
+    margin-left: 15px;
   }
 
   input {
@@ -204,114 +121,116 @@
 <br>
 <p>You can manage (add or delete) your products.</p>
 
-<!-- form for searching with filters -->
-<form method="POST">
-  <input type="text" name="search" id="search" placeholder="Search..">
-  <input name="btn-srch" value="Search" type="submit" />
-  <a id="qr_barcode" class="scannerButton" onclick="scannerF()">
-    Open scanner
-  </a>
-  <a id="csv_v" class="csvButton" onclick="location.href='csv'">
-    Import CSV
-  </a>
+<!-- form for adding a product -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12-lg">
+      <form method="POST">
+        <div class="table-responsive-lg">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Barcode</th>
+                <th scope="col">Add/Update</th>
+                <th scope="col">Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <!-- row for adding a  product -->
+                <td>
+                  <label for="name"></label>
+                  <input type="text" id="name" name="name" placeholder="" />
+                </td>
+                <td>
+                  <input id="description" name="description" type="text" />
+                </td>
+                <td>
+                  <select name="qr_barcode" id="qr_barcode">
+                    <option value="qr">QR code</option>
+                    <option value="barcode">Barcode</option>
+                  </select>
+                </td>
+                <td>
+                  <input id="btn-add" name="btn-add" value="add product" type="submit" />
+                </td>
+                <th></th>
+              </tr>
+              <!-- start listing the products -->
+              {% for p in products.items %}
+              <tr>
+                <td>{{ p.name }}</td>
+                <td value="{{ p.description }}" name="" id="description" onclick="showDescription(this)">
+                  Show
+                </td>
+                <td>
+                  <img class="qr" id="qrid" src="../static/images/{{p.qr_barcode}}.{{p.id}}.png">
+                  <div id="myModal" class="modal">
 
-  <!-- form for adding a product -->
-  <form method="POST">
-    <table>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Barcode</th>
-        <th>Add/Update</th>
-        <th>Delete</th>
-      </tr>
-      <tr>
-        <!-- row for adding a  product -->
-        <td>
-          <label for="name"></label>
-          <input type="text" id="name" name="name" placeholder="" />
-        </td>
-        <td>
-          <input id="description" name="description" type="text"/>
-        </td>
-        <td>
-          <select name="qr_barcode" id="qr_barcode">
-            <option value="qr">QR code</option>
-            <option value="barcode">Barcode</option>
-          </select>
-        </td>
-        <td>
-          <input id="btn-add" name="btn-add" value="add product" type="submit" />
-        </td>
-        <th></th>
-      </tr>
-      <!-- start listing the products -->
-      {% for p in products.items %}
-      <tr>
-        <td>{{ p.name }}</td>
-        <td value="{{ p.description }}" name="" id="description" onclick="showDescription(this)">
-          Show
-        </td>  
-        <td>
-          <img class="qr" id="qrid" src="../static/images/{{p.qr_barcode}}.{{p.id}}.png">
-          <div id="myModal" class="modal">
+                    <!-- The Close Button -->
+                    <span class="close">&times;</span>
 
-            <!-- The Close Button -->
-            <span class="close">&times;</span>
+                    <!-- Modal Content (The Image) -->
+                    <img class="modal-content" id="img01">
 
-            <!-- Modal Content (The Image) -->
-            <img class="modal-content" id="img01">
+                    <!-- Modal Caption (Image Text) -->
+                    <div id="caption"></div>
+                  </div>
+                  <script>
+                    var modal = document.getElementById("myModal");
+                    var img = document.getElementById("qrid");
+                    var images = document.getElementsByClassName("qr");
+                    var modalImg = document.getElementById("img01");
+                    var captionText = document.getElementById("caption");
 
-            <!-- Modal Caption (Image Text) -->
-            <div id="caption"></div>
-          </div>
-          <script>
-            var modal = document.getElementById("myModal");
-            var img = document.getElementById("qrid");
-            var images = document.getElementsByClassName("qr");
-            var modalImg = document.getElementById("img01");
-            var captionText = document.getElementById("caption");
+                    for (let img of images) {
+                      img.onclick = function () {
+                        modal.style.display = "block";
+                        modalImg.src = this.src;
+                        captionText.innerHTML = this.alt;
+                      }
+                    }
 
-            for (let img of images) {
-              img.onclick = function () {
-                modal.style.display = "block";
-                modalImg.src = this.src;
-                captionText.innerHTML = this.alt;
-              }
-            }
+                    var span = document.getElementsByClassName("close")[0];
 
-            var span = document.getElementsByClassName("close")[0];
+                    span.onclick = function () {
+                      modal.style.display = "none";
+                    }
+                  </script>
+                </td>
+                <td><a id="{{ p.id }}" class="updateButton">
+                    Update
+                  </a>
+                </td>
+                <td>
+                  <a id="{{ p.id }}.product" class="deleteButton">
+                    <!--<a class="deleteButton" href=" url_for( 'inventory.Delete', id=p.id) '">-->
+                    Delete
+                  </a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
-            span.onclick = function () {
-              modal.style.display = "none";
-            }
-          </script>
-        </td>
-        <td><a id="{{ p.id }}" class="updateButton">
-            Update
-          </a>
-        </td>
-        <td>
-          <a id="{{ p.id }}.product" class="deleteButton">
-            <!--<a class="deleteButton" href=" url_for( 'inventory.Delete', id=p.id) '">-->
-            Delete
-          </a>
-        </td>
-      </tr>
-      {% endfor %}
-    </table>
-
-    <!-- pagination of table rows -->
-    {% for page_num in products.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=3) %}
-    {% if page_num %}
-    {% if products.page == page_num %}
-    <a class="btn btn-info mb-4" href="{{url_for('product.prod', page=page_num)}}">{{page_num}}</a>
-    {% else %}
-    <a class="btn btn-outline-info mb-4" href="{{url_for('product.prod', page=page_num)}}">{{page_num}}</a>
-    {% endif %}
-    {% else %}
-    ...
-    {% endif %}
-    {% endfor %}
-    <br>
-    {% endblock %}
+<!-- pagination of table rows -->
+{% for page_num in products.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=3) %}
+{% if page_num %}
+{% if products.page == page_num %}
+<a class="btn btn-info mb-4" href="{{url_for('product.prod', page=page_num)}}">{{page_num}}</a>
+{% else %}
+<a class="btn btn-outline-info mb-4" href="{{url_for('product.prod', page=page_num)}}">{{page_num}}</a>
+{% endif %}
+{% else %}
+...
+{% endif %}
+{% endfor %}
+<br>
+{% endblock %}

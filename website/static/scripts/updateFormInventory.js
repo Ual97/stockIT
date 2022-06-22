@@ -11,8 +11,9 @@ window.addEventListener('load', function () {
       id.appendChild(document.createTextNode(data.id));
       nameTxt = document.querySelector("#nameUpdate");
       nameTxt.appendChild(document.createTextNode(data.name));
+      console.log(`adasdasd${data.description}`);
       document.querySelector(`#qr_barcodeUpdate${data.qr_barcode}`).setAttribute("selected", 'selected');
-      document.querySelector("#descrptionUpdate").setAttribute("value", data.description);
+      document.querySelector("#descriptionUpdate").setAttribute("value", data.description);
       function cancel() {
         document.querySelector('.update').classList.replace('update', 'Invisible')
         id.innerHTML = "";

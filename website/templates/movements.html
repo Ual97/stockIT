@@ -11,116 +11,114 @@
   <script src="../static/scripts/deleteAlert.js" async></script>
   <script src="../static/scripts/showscanner.js" async></script>
   <script src="https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@9.0.0/dist/dbr.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+    integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 
 <style>
-  html {
-    margin-left: 30px;
+  #orderby {
+    background: #6c747c;
+    color: white;
+  }
+
+  .container-fluid {
+    margin-left: 15px;
   }
 </style>
-<style>
-  table,
-  td,
-  th {
-    border: 1px solid black;
-    text-align: center;
-    padding: 5px;
-    width: 100px;
-  }
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-6-lg">
+      <h1>Movements</h1>
+      <p>Your movements will be shown here</p>
 
-  th {
-    background-color: orange;
-  }
-
-  table {
-    margin-bottom: 15px;
-  }
-
-  input {
-    width: 100px;
-  }
-
-  td {
-    white-space: nowrap;
-    width: 100px;
-  }
-
-  /*ajusta las td al content*/
-</style>
-<br>
-<h1>Movements</h1>
-<br>
-<p>Your movements will be shown here</p>
-
-<!-- form for searching with filters -->
-<form method="POST">
-  <input type="text" name="search" id="search" placeholder="Search..">
-  <select id="orderby" name="orderby">
-    <option disabled="" value="" selected="">Order By:</option>
-    <option value="newest">Newest</option>
-    <option value="oldest">Older</option>
-  </select>
-  <input name="btn-srch" value="Search" type="submit" />
-  <a id="qr_barcode" class="scannerButton" onclick="scannerF()">
-    Open scanner
-  </a>
-  <a id="csv_v" class="csvButton" onclick="location.href='csv'">
-    Import CSV
-  </a>
-  <input id="btn-add" name="btn-add" value="add product" type="submit" />
-
-  <!-- form for adding a product -->
-  <form method="POST">
-    <table>
-      <tr>
-        <th>Product</th>
-        <th>Branch</th>
-        <th>Quantity</th>
-        <th>Date</th>
-        <th>Action</th>
-      </tr>
-      <tr>
-        <!-- row for adding a  product -->
-        <td>
-          <label for="name"></label>
-          <select name="name" id="products">
-            {% for prod in products %}
-            <option value="{{prod.name}}">{{prod.name}}</option>
-            {% endfor %}
-          </select>
-        </td>
-        <td>
-          <label for="branch">select s.</label>
-          <select name="branch" id="branch">
-            {% for s in branches%}
-            <option value="{{s.name}}">{{s.name}}</option>
-            {% endfor %}
-          </select>
-        </td>
-        <td>
-          <label for="quantity"></label>
-          <input type="number" id="quantity" name="quantity" placeholder="" />
-        </td>
-        <td>
-          <label for="date">current date time</label>
-        </td>
-        <td>
-          <select name="in_out" id="in_out">
-            <option value="in">In</option>
-            <option value="out">Out</option>
-          </select>
-        </td>
-      </tr>
-      <!-- start listing the products -->
-      {% for p in movements %}
-      <tr>
-        <td>{{ p['product'] }}</td>
-        <td>{{ p['branch'] }}</td>
-        <td>{{ p['quantity'] }}</td>
-        <td>{{ p['date'] }}</td>
-        <td>{{ p['in_out'] }}</td>
-      </tr>
-      {% endfor %}
-    </table>
-
-    {% endblock %}
+      <!-- form for searching with filters -->
+      <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+        <form method="POST">
+          <input type="text" name="search" id="search" placeholder="Search..">
+          <div class="btn-group" role="group">
+            <select id="orderby" name="orderby">
+              <option disabled="" value="" selected="">Order By:</option>
+              <option value="newest">Newest</option>
+              <option value="oldest">Older</option>
+            </select>
+            <input name="btn-srch" value="Search" class="btn btn-secondary" type="submit" />
+            <a id="qr_barcode" class="btn btn-secondary" onclick="scannerF()">
+              Open scanner
+            </a>
+            <a id="csv_v" class="btn btn-secondary" onclick="location.href='csv'">
+              Import CSV
+            </a>
+            <input id="btn-add" name="btn-add" class="btn btn-secondary" value="Add" type="submit" />
+          </div>
+          <!-- form for adding a product -->
+          <form method="POST">
+            <div class="table-responsive-lg">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">Product</th>
+                    <th scope="col">Branch</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <!-- row for adding a  product -->
+                    <td>
+                      <label for="name"></label>
+                      <select name="name" id="products">
+                        {% for prod in products %}
+                        <option value="{{prod.name}}">{{prod.name}}</option>
+                        {% endfor %}
+                      </select>
+                    </td>
+                    <td>
+                      <label for="branch">select s.</label>
+                      <select name="branch" id="branch">
+                        {% for s in branches%}
+                        <option value="{{s.name}}">{{s.name}}</option>
+                        {% endfor %}
+                      </select>
+                    </td>
+                    <td>
+                      <label for="quantity"></label>
+                      <input type="number" id="quantity" name="quantity" placeholder="" />
+                    </td>
+                    <td>
+                      <label for="date">current date time</label>
+                    </td>
+                    <td>
+                      <select name="in_out" id="in_out">
+                        <option value="in">In</option>
+                        <option value="out">Out</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <!-- start listing the products -->
+                  {% for p in movements %}
+                  <tr>
+                    <td>{{ p['product'] }}</td>
+                    <td>{{ p['branch'] }}</td>
+                    <td>{{ p['quantity'] }}</td>
+                    <td>{{ p['date'] }}</td>
+                    <td>{{ p['in_out'] }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-6-lg">
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endblock %}

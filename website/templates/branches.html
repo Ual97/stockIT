@@ -67,7 +67,6 @@
             <tr>
               <th>Name</th>
               <th>Add/Update</th>
-              <th>Delete</th>
             </tr>
             <tr>
                 <td>
@@ -82,7 +81,6 @@
                 <td>
                     <input name="btn-add" value="add branch" type="submit"/>
                 </td>
-                <th></th>
             </tr>
     <!-- row of clumn names -->  
     {% for branch in subsidiarys.items %}    
@@ -90,12 +88,6 @@
         <td>{{ branch.name }}</td>
         <td><a id="{{ branch.id }}" class="updateButton">
             Update
-            </a>
-        </td>
-        <td>
-            <a id="{{ branch.id }}.branch" class="deleteButton">
-            <!--<a class="deleteButton" href=" url_for( 'inventory.Delete', id=p.id) '">-->
-            Delete
             </a>
         </td>
     </tr>
