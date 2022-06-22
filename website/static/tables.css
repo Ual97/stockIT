@@ -55,6 +55,10 @@ td {
   display: none;
 }
 
+.InvisibleDescription {
+  display: none;
+}
+
 .InvisibleBarcode {
   display: none;
 }

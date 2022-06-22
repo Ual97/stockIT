@@ -81,7 +81,7 @@ def prod():
 def prodUpdate(id):
     """updating or consulting item from product"""
     print(f'\n\n\n{request.method}\n\n')
-    item = Product.query.filter(and_(Product.owner==current_user.email, Product.id==id)).first()
+    item = Product.query.filter_by(id=id).first()
     if request.method == 'POST':
         prodDict = request.form.to_dict()
         print(f'donde teniaq entrar, entré lpm keys:{prodDict.keys()}')
@@ -89,10 +89,25 @@ def prodUpdate(id):
         if prodDict is None:
             abort(404)
 
-        name = prodDict.get('nameUpdate')
-        if name is None:
-            name = prodDict.get('nameBarcodeUpdate')
-        
+        #updating description if exists
+
+        description = prodDict.get('descriptionUpdate')
+        print(f'\n\ndescription del primer get {description}\n')
+        if description is None:
+            print(f'\n\nentre al if q no debía xd\n')
+
+            description = prodDict.get('descriptionBarcodeUpdate')
+
+        print(f'antes de setear descripción qr_barcodeUpdate{prodDict.get("qr_barcodeUpdate")}\n\n{item.description}\n')
+        if description:
+            print(f"\n\nentré a setear nueva descripción item.description {item.description} description {description}\n")
+            item.description = description
+            db.session.commit()
+            print(f"\n\ndespués de setear nueva descripción item.description {item.description} description {description}\n")
+
+
+        print(f'\n\nitem descrption en obj{item.description}\n')
+
         qr_barcode = prodDict.get('qr_barcodeUpdate')
         if qr_barcode is None:
             qr_barcode = prodDict.get('qr_barcodeBarcodeUpdate')
@@ -108,13 +123,12 @@ def prodUpdate(id):
                 generate_barcode(item.id)
 
             item.qr_barcode = qr_barcode
-
             db.session.commit()
+
             flash("Item updated successfully!", category='success')
             return redirect('/product')
         else:
             flash('Name, Branch and Quantity are mandatory fields', category='error')
-        
     try:
         # filter query by logged user and id
         product = Product.query.filter(and_(Product.owner==current_user.email, Product.id==id)).first()

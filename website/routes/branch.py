@@ -20,7 +20,7 @@ def subsidiary_view():
 
     if request.method == 'POST':
         branch_dict = request.form.to_dict()
-        name = branch_dict.get('name')
+        name = branch_dict.get('nameUpdate')
         print(f'\n\n\n{branch_dict}\n\n')
         if not name:
             flash('Name is mandatory', category='error')
@@ -53,7 +53,7 @@ def subsidiary_view():
     return render_template('branches.html', subsidiarys=subsidiarys,
                            user=current_user)
 
-@subsidiary.route('/branch/<int:id>', methods=['GET', 'POST'],
+@subsidiary.route('/branch/<id>', methods=['GET', 'POST'],
                   strict_slashes=False)
 @login_required
 
@@ -64,19 +64,29 @@ def update_subsidiary(id):
     currentSubsidiary = Branch.query.filter_by(id=id).first()
     if request.method == 'POST':
         subsidiary_dict = request.form.to_dict()
-        if subsidiary_dict.get('nameUpdate') is None:
+        name = subsidiary_dict.get('nameUpdate')
+        if name is None:
             flash('Name is mandatory', category='error')
             return redirect(url_for('subsidiary.subsidiary_view'))
-        if type(subsidiary_dict.get('nameUpdate')) != str:
+        if type(name) != str:
             flash('Name must be a string', category='error')
             return redirect(url_for('subsidiary.subsidiary_view'))
-        currentSubsidiary.name = subsidiary_dict.get('nameUpdate')
+        currentBranch = Branch.query.filter_by(name=name).first()
+        if currentBranch:
+            currentBranchName = currentBranch.name.strip()
+            print(f"\n\n\nnew {name.lower()} current {currentBranchName.lower()}\n\n")
+            if name.lower() == currentBranchName.lower():
+                flash('This branch already exists', category='error')
+                return redirect(url_for('subsidiary.subsidiary_view'))
+
+        currentSubsidiary.name = name
         db.session.commit()
         flash('Branch updated', category='success')
         return redirect(url_for('subsidiary.subsidiary_view'))
     try:
         currentSubsidiaryDict = currentSubsidiary.__dict__
         currentSubsidiaryDict.pop('_sa_instance_state')
+        print(f'\n\n\ndiccionario tas? {currentSubsidiaryDict}\n\n')
         return jsonify(currentSubsidiaryDict)
     except:
         pass
