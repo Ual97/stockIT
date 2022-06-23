@@ -1,5 +1,3 @@
-from codecs import strict_errors
-from website import db
 from website.models.product import Product
 from website.models.movements import Movements
 from website.models.branch import Branch
@@ -7,9 +5,7 @@ from website.models.inventory import Inventory
 from flask_login import login_required
 from flask import Blueprint, render_template, request, flash, redirect, jsonify, abort, url_for
 from flask_login import login_required, current_user
-from sqlalchemy.sql.expression import func
-from sqlalchemy import and_, or_, desc, asc
-import requests
+from sqlalchemy import and_
 
 inventory = Blueprint('inventory', __name__)
 
@@ -17,32 +13,28 @@ inventory = Blueprint('inventory', __name__)
 @inventory.route('/inventory', methods=['GET', 'POST'], strict_slashes=False)
 def inventory_page():
     """inventory page"""
-    
-    graph_data = {'Task' : 'Products per branch'}
-
-    formDict = request.form.to_dict()
 
     #if user is not confirmed, block access and send to home
     if current_user.confirmed is False:
         flash('Please confirm your account, check your email (and spam folder)', 'error')
         return redirect(url_for('views.home'))
-    
-    # consulting stock from all branches
-    stockQuery = Inventory.query.filter_by(owner=current_user.email).all()
+
+    graph_data = {'Task' : 'Products per branch'}
+
+    formDict = request.form.to_dict()
 
     # store some  product name if some product is searched
     search = formDict.get('search')
     search = search.lower().strip() if search else None
 
+    # consulting stock from all branches
+    stockQuery = Inventory.query.filter_by(owner=current_user.email).all()
     stock = []
-
-    #filling stock dictionary with prod name, quantity, description and product id
+    # filling stock dictionary with prod name, quantity, description and product id
     for item in stockQuery:
         stockItem = {}
-
         product = Product.query.filter_by(owner=current_user.email).filter_by(id=item.prod_id).first()
-        
-        # if is searched a particular product only that product is gonna be listed
+        # if search not in product name then its not listed
         if search and search not in product.name.lower():
             continue
         stockItem['name'] = product.name
@@ -62,20 +54,17 @@ def inventory_page():
     # if user presses Search
     if request.method == 'POST' and "btn-srch" in request.form:
 
-        print(f'\n\n\nformDict: {formDict}\n\n')
-
         selectedBranch = formDict.get('selectBranch')
 
         # filtering by branch
         if selectedBranch != 'All Branches (default)':
             selectedBranch = Branch.query.filter_by(owner=current_user.email).filter_by(name=selectedBranch).first()
-
             for item in stock:
-                # calculating the current stock for
-                # each branch distinct from the selected
+                # calculating the current stock for specific branch
                 currentStock = 0
-                for mov in Movements.query.filter_by(owner=current_user.email).filter(and_(Movements.prod_id == item['id'],
-                                                     Movements.branch_id == selectedBranch.id)).all():
+                for mov in Movements.query.filter_by(owner=current_user.email).filter(and_(
+                                                                                      Movements.prod_id == item['id'],
+                                                                                      Movements.branch_id == selectedBranch.id)).all():
                     if mov.in_out is True:
                         currentStock += mov.quantity
                     elif mov.in_out is False:
@@ -83,13 +72,12 @@ def inventory_page():
                 item['quantity'] = currentStock
                 item['branch'] = selectedBranch.name
                 graph_data[item['name']] = item['quantity']
-                print(item)            
+                print(item)         
+
         if selectedBranch == 'All Branches (default)' and search:
             for selectedBranch in Branch.query.filter_by(owner=current_user.email).all():
-                print(selectedBranch)
                 for item in stock:
-                    # calculating the current stock for
-                    # each branch distinct from the selected
+                    # calculating the current stock for all branches
                     currentStock = 0
                     for mov in Movements.query.filter_by(owner=current_user.email).filter(and_(Movements.prod_id == item['id'],
                                                         Movements.branch_id == selectedBranch.id)).all():
@@ -101,12 +89,10 @@ def inventory_page():
                         graph_data[item['name'] + " " + "On(" + selectedBranch.name + ")"] = currentStock
                         if item['name'] in graph_data:
                             graph_data.pop(item['name'])
-                        print("sdf")
                         print(graph_data)
-                        print("sadf")
                     print(item)
 
-    # branches from user
+    # branches from user to pass to jinja
     branches = Branch.query.filter_by(owner=current_user.email).all()
     branchesList = ["All Branches (default)"]
     for branch in branches:

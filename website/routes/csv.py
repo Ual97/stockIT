@@ -1,5 +1,4 @@
-from os import abort
-from flask import Blueprint, render_template, request, flash, redirect, jsonify, abort, url_for 
+from flask import Blueprint, render_template, flash, redirect, url_for 
 from website import db 
 from website.models.movements import Movements
 from website.models.inventory import Inventory
@@ -12,9 +11,8 @@ from sqlalchemy.sql.expression import func
 from sqlalchemy import and_ 
 from flask import Flask, render_template  
 from werkzeug.utils import secure_filename 
-from sqlalchemy import and_, or_, desc, asc
+from sqlalchemy import and_, desc
 import os 
-from wtforms.validators import InputRequired 
 import csv
 from datetime import datetime
 
@@ -122,7 +120,6 @@ def dic_csv():
 
                         item2 = Movements.query.filter_by(prod_id=prod.id).order_by(desc(Movements.date)).all()
                         for item in item2:
-                            print("aaaaaaasheeee")
                             print(item.date)
                         prodMov = Movements.query.filter_by(prod_id=prod.id).order_by(desc(Movements.date)).all()
                         if len(prodMov) == 1:
@@ -156,5 +153,4 @@ def dic_csv():
                 return redirect('/movements')
         else:
             flash("Your file must have extension '.csv'", category='error')
-        print("llego acaaaaa")
     return render_template('csv.html', user=current_user, form=form)

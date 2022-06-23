@@ -28,7 +28,7 @@
       ]);
 
       var options = {
-        title: 'My Daily Activities',
+        title: 'Product stock',
         is3D: true,
         //pieHole: 0.5
         pieStartAngle: 100
@@ -47,23 +47,44 @@
   </script>
 </head>
 
-<div style="margin: 10px 0 0 10px;width: 1000px">
-  <h3>Python Flask Show Data on Google Pie Chart</h3>
-  <div id="piechart_3d" style="width: 900px; height: 500px;"></div>
-</div>
+<style>
+  html {
+    margin-left: 30px;
+  }
+  table, td, th {
+    border: 1px solid black;
+    text-align: center;
+    padding: 5px;
+    width: 100px;
+  }
+
+  th {
+    background-color: orange;
+  }
+
+  table {
+    margin-bottom: 15px;
+  }
+
+  input {
+    width: 100px;
+  }
+
+  td {
+    white-space: nowrap;
+    width: 100px;
+  } /*ajusta las td al content*/
+</style>
 
 <!-- pop-up for product description. needs bootstrap --> 
 <div id="InvisibleDescription" class="Invisible" id="productDescription">
   <h2>Product Description</h2>
-
   <p id="productDescriptionText"></p>
-
   <a class="closeButton" id="closeProductDescription">Close</a>
 </div>
 
 <!-- form displayed if user scann qr_barcode -->
-<div class="InvisibleBarcode" id="divBarcode">
-  
+<div class="InvisibleBarcode" id="divBarcode"> 
   <table id="tableBarcode">
     <tr>
       <th>Name</th>
@@ -93,41 +114,6 @@
     </td>
   </table>
 </div>
-
-<style>
-  html {
-    margin-left: 30px;
-  }
-</style>
-<style>
-  table,
-  td,
-  th {
-    border: 1px solid black;
-    text-align: center;
-    padding: 5px;
-    width: 100px;
-  }
-
-  th {
-    background-color: orange;
-  }
-
-  table {
-    margin-bottom: 15px;
-  }
-
-  input {
-    width: 100px;
-  }
-
-  td {
-    white-space: nowrap;
-    width: 100px;
-  }
-
-  /*ajusta las td al content*/
-</style>
 <br>
 <h1>Inventory</h1>
 <br>
@@ -139,7 +125,7 @@
   <select id="selectBranch" name="selectBranch">
     
     {% for branch in branches %}
-      <option>{{ branch }} </option>
+      <option>{{ branch }}</option>
     {% endfor %}
       
   </select>
@@ -147,6 +133,7 @@
   <a id="qr_barcode" class="scannerButton" onclick="scannerF()">
     Open scanner
   </a>
+
   <a id="csv_v" class="csvButton" onclick="location.href='csv'">
     Import CSV
   </a>
@@ -206,5 +193,10 @@
       </tr>
       {% endfor %}
     </table>
+
+    <!-- Google Pie chart -->
+    <div style="margin: 10px 0 0 10px;width: 1000px">
+      <div id="piechart_3d" style="width: 900px; height: 500px;"></div>
+    </div>
 
     {% endblock %}
