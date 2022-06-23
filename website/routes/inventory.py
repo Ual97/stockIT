@@ -59,6 +59,7 @@ def inventory_page():
         # filtering by branch
         if selectedBranch != 'All Branches (default)':
             selectedBranch = Branch.query.filter_by(owner=current_user.email).filter_by(name=selectedBranch).first()
+            item_no_quantity = []
             for item in stock:
                 # calculating the current stock for specific branch
                 currentStock = 0
@@ -72,7 +73,11 @@ def inventory_page():
                 item['quantity'] = currentStock
                 item['branch'] = selectedBranch.name
                 graph_data[item['name']] = item['quantity']
-                print(item)         
+                print(item)
+                if item['quantity'] == 0:
+                    item_no_quantity.append(item)    
+            for item2 in item_no_quantity:
+                stock.remove(item2)
 
         if selectedBranch == 'All Branches (default)' and search:
             for selectedBranch in Branch.query.filter_by(owner=current_user.email).all():
