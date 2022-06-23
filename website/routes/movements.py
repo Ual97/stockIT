@@ -1,5 +1,3 @@
-from codecs import strict_errors
-import os
 from flask import Blueprint, render_template, request, flash, redirect, jsonify, abort, url_for
 from website import db
 from website.models.movements import Movements
@@ -7,7 +5,6 @@ from website.models.branch import Branch
 from website.models.product import Product
 from website.models.inventory import Inventory
 from flask_login import login_required, current_user
-from sqlalchemy.sql.expression import func
 from sqlalchemy import and_, or_, desc, asc
 
 movements = Blueprint('movements', __name__)
@@ -18,25 +15,24 @@ movements = Blueprint('movements', __name__)
 def move():
     """movements of products"""
 
-    graph_data = {'Task' : 'Hours per Day'}
-    graph_data2 = {'Task' : 'Hours per Day'}
-    graph_data3 = {'Task' : 'Hours per Day'}
-    graph_data4 = {'Task' : 'Hours per Day'}
-
     #if user is not confirmed, block access and send to home
     if current_user.confirmed is False:
         flash('Please confirm your account, check your email (and spam folder)', 'error')
         return redirect(url_for('views.home'))
 
-    data = Movements.query.filter_by(owner=current_user.email).order_by(desc(Movements.date)).all()
-
-    movementsList = []
+    graph_data = {'Task' : 'Hours per Day'}
+    graph_data2 = {'Task' : 'Hours per Day'}
+    graph_data3 = {'Task' : 'Hours per Day'}
+    graph_data4 = {'Task' : 'Hours per Day'}
 
     # branches and products to display as options in add entry table
     branches = Branch.query.filter_by(owner=current_user.email)
     products = Product.query.filter_by(owner=current_user.email)
 
-    # filling movements history to be displayed by jinja
+    # getting all current user's movements from db (more recent movements first)
+    data = Movements.query.filter_by(owner=current_user.email).order_by(desc(Movements.date)).all()
+    # filling a list of movements to paass them to jinja. Each movement is a dict
+    movementsList = []
     for item in data:
         movementDict = {}
         movementDict['id'] = item.id
@@ -47,19 +43,21 @@ def move():
         movementDict['in_out'] = "Entry" if item.in_out is True else "Exit"
         movementsList.append(movementDict)
         
+        # filling movement data for pie charts
         if movementDict['in_out'] == 'Entry':
             if movementDict['product'] in graph_data:
                 graph_data[movementDict['product']] += movementDict['quantity']
             else: 
                 graph_data[movementDict['product']] = movementDict['quantity']
+
         if movementDict['in_out'] == 'Exit':
             if movementDict['product'] in graph_data2:
                 graph_data2[movementDict['product']] += movementDict['quantity']
             else: 
                 graph_data2[movementDict['product']] = movementDict['quantity']
+
         for selectedBranch2 in Branch.query.filter_by(owner=current_user.email).all():
             print(selectedBranch2.name)
-            print("BOOOLAS")
             if movementDict['in_out'] == 'Entry' and selectedBranch2.name == movementDict['branch']:
                 if movementDict['product'] + " On(" + movementDict['branch'] + ")" in graph_data3:
                     graph_data3[movementDict['product'] + " On(" + movementDict['branch'] + ")"] += movementDict['quantity']
@@ -71,14 +69,18 @@ def move():
                 else: 
                     graph_data4[movementDict['product'] + " On(" + movementDict['branch'] + ")"] = movementDict['quantity']
 
-    # if user presses Search
+    # if user presses Search button
     if request.method == 'POST' and "btn-srch" in request.form:
+        # show branches and products for add movement row
+        branches = Branch.query.filter_by(owner=current_user.email)
+        products = Product.query.filter_by(owner=current_user.email)
+        
         search = request.form.get("search")
         if search:
             search = search.strip()
         orderby = request.form.get("orderby")
         
-        #checks that products are from user
+        #checks that movements are from user
         userprod = Movements.query.filter(Movements.owner == current_user.email)
 
         searchProduct = Product.query.filter_by(name=search).first()
@@ -88,14 +90,10 @@ def move():
         searchBranch = "None" if not searchBranch else str(searchBranch.id)
 
         # search input section
-        srch = userprod.filter(or_(Movements.date.like(search), Movements.prod_id.like(searchProduct), Movements.branch_id.like(searchBranch)))
-
-
-        # show branches and next prod id for add entry row
-        branches = Branch.query.filter_by(owner=current_user.email)
-        products = Product.query.filter_by(owner=current_user.email)
+        srch = userprod.filter(or_(Movements.date.like(search),
+                                   Movements.prod_id.like(searchProduct),
+                                   Movements.branch_id.like(searchBranch)))
  
-
         # Order By select section
         if orderby == 'newest' and search:
             data = srch.order_by(asc(Movements.date)).all()
