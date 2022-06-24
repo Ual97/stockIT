@@ -165,9 +165,9 @@ def inventory_product(id):
     """Api Endpoint for inventory product"""
 
     # if user is not confirmed, block access and send to home
-    if current_user.confirmed is False:
-        flash('Please confirm your account, check your email (and spam folder)', 'error')
-        return redirect(url_for('views.home'))
+    #if current_user.confirmed is False:
+    #    flash('Please confirm your account, check your email (and spam folder)', 'error')
+    #    return redirect(url_for('views.home'))
     
     # consulting stock from all branches
     stockQuery = Inventory.query.filter_by(owner=current_user.email).filter_by(prod_id=id).first()
