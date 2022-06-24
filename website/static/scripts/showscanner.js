@@ -31,11 +31,9 @@ let scanner = null;
 async function scannerF() {
   scanner = await Dynamsoft.DBR.BarcodeScanner.createInstance();
   scanner.onFrameRead = results => {
-    let type_barcode;
     if (results[0]) {
       const code_content = results[0].barcodeText;
-      console.log(results.barcodeFormatString);
-      consult(code_content, type_barcode);
+      consult(code_content);
       scanner.hide();
     }
 

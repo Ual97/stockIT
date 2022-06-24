@@ -15,9 +15,9 @@ def inventory_page():
     """inventory page"""
 
     #if user is not confirmed, block access and send to home
-    if current_user.confirmed is False:
-        flash('Please confirm your account, check your email (and spam folder)', 'error')
-        return redirect(url_for('views.home'))
+    #if current_user.confirmed is False:
+    #    flash('Please confirm your account, check your email (and spam folder)', 'error')
+    #    return redirect(url_for('views.home'))
 
     graph_data = {'Task' : 'Products per branch'}
 
@@ -76,7 +76,12 @@ def inventory_page():
                 item['branch'] = selectedBranch.name
                 graph_data[item['name']] = item['quantity']
                 print(item)
-<<<<<<< HEAD
+
+                if item['quantity'] == 0:
+                    item_no_quantity.append(item)    
+            for item2 in item_no_quantity:
+                stock.remove(item2)
+
         selectedBranch = formDict.get('selectBranch')
 
         if selectedBranch != 'All Branches (default)' and search:
@@ -125,15 +130,6 @@ def inventory_page():
                     if i == prodMovementsLen -1:
                         graph_data.append(new_data)
             border_case = True
-
-
-
-=======
-                if item['quantity'] == 0:
-                    item_no_quantity.append(item)    
-            for item2 in item_no_quantity:
-                stock.remove(item2)
->>>>>>> 8e566d017af4206ce579e8822036c53a8f95ca6f
 
         if selectedBranch == 'All Branches (default)' and search:
             for selectedBranch in Branch.query.filter_by(owner=current_user.email).all():
