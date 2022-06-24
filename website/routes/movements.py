@@ -16,9 +16,9 @@ def move():
     """movements of products"""
 
     #if user is not confirmed, block access and send to home
-    if current_user.confirmed is False:
-        flash('Please confirm your account, check your email (and spam folder)', 'error')
-        return redirect(url_for('views.home'))
+    #if current_user.confirmed is False:
+    #    flash('Please confirm your account, check your email (and spam folder)', 'error')
+    #    return redirect(url_for('views.home'))
 
     graph_data = {'Task' : 'Hours per Day'}
     graph_data2 = {'Task' : 'Hours per Day'}
