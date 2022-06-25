@@ -8,18 +8,20 @@ from flask_login import login_required, current_user
 from sqlalchemy.sql.expression import func
 from sqlalchemy import and_, or_, desc, asc
 import requests
+from website import limiter
 
 product = Blueprint('product', __name__)
 
 @product.route('/product', methods=['GET', 'POST'])
+@limiter.limit("10/minute")
 @login_required
 def prod():
     """products available in the inventory and in their entries"""
 
     #if user is not confirmed, block access and send to home
-    if current_user.confirmed is False:
-        flash('Please confirm your account, check your email (and spam folder)', 'error')
-        return redirect(url_for('views.home'))
+    #if current_user.confirmed is False:
+    #    flash('Please confirm your account, check your email (and spam folder)', 'error')
+    #    return redirect(url_for('views.home'))
 
     # if user presses Search
     if request.method == 'POST' and "btn-srch" in request.form:
@@ -44,7 +46,7 @@ def prod():
 
         if name:
             name = name.strip()
-            currentName = Product.query.filter_by(name=name).first()
+            currentName = Product.query.filter((Product.name==name) & (Product.owner==current_user.email)).first()
             if currentName and name.lower() == currentName.name.lower():
                 flash('Product already exists', 'error')
                 return redirect(url_for('product.prod'))
@@ -77,6 +79,7 @@ def prod():
                            branches=branches, nextid=nextid, products=data)
 
 @product.route('/product/<id>', methods=['POST','GET'], strict_slashes=False)
+@limiter.limit("10/minute")
 @login_required
 def prodUpdate(id):
     """updating or consulting item from product"""

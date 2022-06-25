@@ -4,6 +4,7 @@ from website.models.user import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_required, login_user, logout_user, current_user
 from flask_mail import Message
+from website import limiter
 
 
 # This file is a blueprint, it has urls in it
@@ -11,6 +12,7 @@ from flask_mail import Message
 usr = Blueprint('usr', __name__)
 
 @usr.route('/sign-up', methods=['GET', 'POST'])
+@limiter.limit("10/minute")
 def sign_up():
     if request.method == 'POST':
         # get info submitted on form
@@ -56,6 +58,7 @@ def sign_up():
 
 
 @usr.route('/confirm/<token>')
+@limiter.limit("10/minute")
 def confirm(token):
     """checks if the token is valid, if so it confirms the account and logs user"""
     from website.token import confirm_token
@@ -81,6 +84,7 @@ def confirm(token):
 
 
 @usr.route('/login', methods=['GET', 'POST'])
+@limiter.limit("10/minute")
 def login():
     if request.method == 'POST':
         mail = request.form.get('email')
@@ -101,6 +105,7 @@ def login():
     return render_template("login.html", user=current_user)
 
 @usr.route('/logout')
+@limiter.limit("10/minute")
 @login_required # only allows access to route if user is logged in
 def logout():
     logout_user()

@@ -15,11 +15,13 @@ from sqlalchemy import and_, desc
 import os 
 import csv
 from datetime import datetime
+from website import limiter
 
 csv_v = Blueprint('csv', __name__) 
  
 @csv_v.route('/csv', methods=['GET', 'POST'], strict_slashes=False) 
-@login_required 
+@limiter.limit("10/minute")
+@login_required
 def dic_csv(): 
     #if user is not confirmed, block access and send to home 
     if current_user.confirmed is False: 

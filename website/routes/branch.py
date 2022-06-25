@@ -5,11 +5,13 @@ from website.models.branch import Branch
 from website.models.user import User
 from flask_login import login_required, current_user
 from sqlalchemy.sql.expression import func
+from website import limiter
 
 subsidiary = Blueprint('subsidiary', __name__)
 
 @subsidiary.route('/branch', methods=['GET', 'POST'], strict_slashes=False)
 @login_required
+@limiter.limit("10/minute")
 def subsidiary_view():
     """
     Branch main page
@@ -57,7 +59,7 @@ def subsidiary_view():
 @subsidiary.route('/branch/<id>', methods=['GET', 'POST'],
                   strict_slashes=False)
 @login_required
-
+@limiter.limit("10/minute")
 def update_subsidiary(id):
     """
     updates a subsidiary

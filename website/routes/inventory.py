@@ -6,10 +6,12 @@ from flask_login import login_required
 from flask import Blueprint, render_template, request, flash, redirect, jsonify, abort, url_for
 from flask_login import login_required, current_user
 from sqlalchemy import and_, asc
+from website import limiter
 
 inventory = Blueprint('inventory', __name__)
 
 @login_required
+@limiter.limit("10/minute")
 @inventory.route('/inventory', methods=['GET', 'POST'], strict_slashes=False)
 def inventory_page():
     """inventory page"""
@@ -160,6 +162,7 @@ def inventory_page():
 
 
 @login_required
+@limiter.limit("10/minute")
 @inventory.route('/inventory/<id>', methods=['GET'], strict_slashes=False)
 def inventory_product(id):
     """Api Endpoint for inventory product"""
