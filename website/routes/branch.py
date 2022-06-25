@@ -1,11 +1,10 @@
 from flask import Blueprint, jsonify, render_template, request, flash, redirect, url_for
 from website import views
-from website import db
+from website import db, limiter
 from website.models.branch import Branch
 from website.models.user import User
 from flask_login import login_required, current_user
 from sqlalchemy.sql.expression import func
-from website import limiter
 
 subsidiary = Blueprint('subsidiary', __name__)
 

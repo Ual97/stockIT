@@ -1,14 +1,13 @@
 from os import abort
 import os
 from flask import Blueprint, render_template, request, flash, redirect, jsonify, abort, url_for
-from website import db
+from website import db, limiter
 from website.models.product import Product
 from website.models.branch import Branch
 from flask_login import login_required, current_user
 from sqlalchemy.sql.expression import func
 from sqlalchemy import and_, or_, desc, asc
 import requests
-from website import limiter
 
 product = Blueprint('product', __name__)
 

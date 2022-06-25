@@ -1,15 +1,15 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from website import db, mail
+from website import db, mail, limiter
 from website.models.user import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_required, login_user, logout_user, current_user
 from flask_mail import Message
-from website import limiter
 
 
 # This file is a blueprint, it has urls in it
 # We can have url routes in different files because of this
 usr = Blueprint('usr', __name__)
+
 
 @usr.route('/sign-up', methods=['GET', 'POST'])
 @limiter.limit("10/minute")

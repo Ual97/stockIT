@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash, redirect, jsonify, abort, url_for
-from website import db
+from website import db, limiter
 from website.models.movements import Movements
 from website.models.branch import Branch
 from website.models.product import Product
@@ -9,8 +9,8 @@ from sqlalchemy import and_, or_, desc, asc
 
 movements = Blueprint('movements', __name__)
 
-
 @movements.route('/movements', methods=['GET', 'POST'], strict_slashes=False)
+@limiter.limit("10/minute")
 @login_required
 def move():
     """movements of products"""

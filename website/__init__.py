@@ -1,13 +1,14 @@
 from flask import Flask 
 from flask_sqlalchemy import SQLAlchemy 
 from flask_login  import LoginManager 
-from flask_mail import Mail 
+from flask_mail import Mail
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
 mail = Mail() 
 db = SQLAlchemy() 
-DB_NAME = 'stockITdb' 
+DB_NAME = 'stockITdb'
+limiter = Limiter(key_func=get_remote_address)
 
 def create_app():
 
@@ -66,5 +67,4 @@ def create_app():
 
         return User.query.get(id) 
 
-    return app 
-limiter = Limiter(create_app, key_func=get_remote_address)
+    return app
