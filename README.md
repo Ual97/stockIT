@@ -33,7 +33,7 @@ If you’re not paying attention to your inventory, how much product you have av
 
 ## Authors
 - [Salvador Diaz](https://github.com/sl4dex)
-- [Jaquin Victoria](https://github.com/Joaquin2000zz)
+- [Joaquin Victoria](https://github.com/Joaquin2000zz)
 - [Santiago Negreyra](https://github.com/Santi3948)
 - [Mateo Victorica](https://github.com/Ual97)
 
