@@ -34,6 +34,7 @@ def move():
     # filling a list of movements to paass them to jinja. Each movement is a dict
     movementsList = []
     for item in data:
+        movementDict = {}
         movementDict['id'] = item.id
         movementDict['product'] = Product.query.filter_by(id=item.prod_id).first().name
         movementDict['branch'] = Branch.query.filter_by(id=item.branch_id).first().name
@@ -67,7 +68,6 @@ def move():
                     graph_data4[movementDict['product'] + " On (" + movementDict['branch'] + ")"] += movementDict['quantity']
                 else: 
                     graph_data4[movementDict['product'] + " On (" + movementDict['branch'] + ")"] = movementDict['quantity']
-
 
     # if user presses Search button
     if request.method == 'POST' and "btn-srch" in request.form:
