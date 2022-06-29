@@ -23,9 +23,9 @@ csv_v = Blueprint('csv', __name__)
 @login_required
 def dic_csv(): 
     #if user is not confirmed, block access and send to home 
-    if current_user.confirmed is False: 
-        flash('Please confirm your account, check your email (and spam folder)', 'error') 
-        return redirect(url_for('views.home')) 
+    #if current_user.confirmed is False: 
+    #    flash('Please confirm your account, check your email (and spam folder)', 'error') 
+    #    return redirect(url_for('views.home')) 
     form = UploadFileForm() 
     if form.validate_on_submit(): 
         from main import app     
