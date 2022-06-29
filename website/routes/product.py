@@ -12,7 +12,7 @@ import requests
 product = Blueprint('product', __name__)
 
 @product.route('/product', methods=['GET', 'POST'])
-@limiter.limit("10/minute")
+@limiter.limit("20/minute")
 @login_required
 def prod():
     """products available in the inventory and in their entries"""
@@ -78,7 +78,7 @@ def prod():
                            branches=branches, nextid=nextid, products=data)
 
 @product.route('/product/<id>', methods=['POST','GET'], strict_slashes=False)
-@limiter.limit("10/minute")
+@limiter.limit("20/minute")
 @login_required
 def prodUpdate(id):
     """updating or consulting item from product"""
@@ -189,4 +189,3 @@ def generate_barcode(id):
         return response.json().get('barcode')
     except:
         pass
-

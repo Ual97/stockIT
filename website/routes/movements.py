@@ -10,7 +10,7 @@ from sqlalchemy import and_, or_, desc, asc
 movements = Blueprint('movements', __name__)
 
 @movements.route('/movements', methods=['GET', 'POST'], strict_slashes=False)
-@limiter.limit("10/minute")
+@limiter.limit("20/minute")
 @login_required
 def move():
     """movements of products"""

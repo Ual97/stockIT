@@ -19,7 +19,7 @@ from datetime import datetime
 csv_v = Blueprint('csv', __name__) 
  
 @csv_v.route('/csv', methods=['GET', 'POST'], strict_slashes=False) 
-@limiter.limit("10/minute")
+@limiter.limit("20/minute")
 @login_required
 def dic_csv(): 
     #if user is not confirmed, block access and send to home 
