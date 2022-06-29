@@ -13,48 +13,54 @@
   <script src="../static/scripts/showDescription.js" async></script>
   <script src="https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@9.0.0/dist/dbr.js"></script>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+    integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script type="text/javascript">
-    google.charts.load("current", {packages:["corechart"]});
-    google.charts.load('current', {'packages':['bar']});
+    google.charts.load("current", { packages: ["corechart"] });
+    google.charts.load('current', { 'packages': ['bar'] });
 
     google.charts.setOnLoadCallback(drawChart);
     function drawChart() {
-      {% if border_case == False%}
+      {% if border_case == False %}
       var data = google.visualization.arrayToDataTable([
-          {% for key, value in data.items() %}
-              {% if value is string %}
-                  ['{{ key }}', '{{ value }}'],
-              {% else %}
-                  ['{{ key }}', {{ value }}],
-              {% endif %}
-          {% endfor %}
+        {% for key, value in data.items() %}
+    {% if value is string %}
+    ['{{ key }}', '{{ value }}'],
+      {% else %}
+    ['{{ key }}', {{ value }}],
+      {% endif %}
+    {% endfor %}
       ]);
 
-      var options = {
-        title: 'Product stock',
-        is3D: true,
-        pieStartAngle: 100
+    var options = {
+      title: 'Product stock',
+      is3D: true,
+      pieStartAngle: 100
 
-      };
+    };
 
-      var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
-      chart.draw(data, options);
-  
-      {% else %}
+    var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+    chart.draw(data, options);
 
-      var data = google.visualization.arrayToDataTable({{data|tojson}});
+    {% else %}
 
-      var options = {
-        chart: {
-          title: 'Product entries and outs of the products throghout the days'
-        }
-      };
+    var data = google.visualization.arrayToDataTable({{ data| tojson}});
 
-      var chart = new google.charts.Bar(document.getElementById('piechart_3d'));
+    var options = {
+      chart: {
+        title: 'Entries and outs'
+      }
+    };
 
-      chart.draw(data, google.charts.Bar.convertOptions(options));      
+    var chart = new google.charts.Bar(document.getElementById('piechart_3d'));
 
-      {% endif %}
+    chart.draw(data, google.charts.Bar.convertOptions(options));
+
+    {% endif %}
     }
   </script>
 </head>
@@ -63,7 +69,10 @@
   html {
     margin-left: 30px;
   }
-  table, td, th {
+
+  table,
+  td,
+  th {
     border: 1px solid black;
     text-align: center;
     padding: 5px;
@@ -85,10 +94,12 @@
   td {
     white-space: nowrap;
     width: 100px;
-  } /*ajusta las td al content*/
+  }
+
+  /*ajusta las td al content*/
 </style>
 
-<!-- pop-up for product description. needs bootstrap --> 
+<!-- pop-up for product description. needs bootstrap -->
 <div id="InvisibleDescription" class="Invisible" id="productDescription">
   <h2>Product Description</h2>
   <p id="productDescriptionText"></p>
@@ -96,7 +107,7 @@
 </div>
 
 <!-- form displayed if user scann qr_barcode -->
-<div class="InvisibleBarcode" id="divBarcode"> 
+<div class="InvisibleBarcode" id="divBarcode">
   <table id="tableBarcode">
     <tr>
       <th>Name</th>
@@ -118,8 +129,7 @@
       </td>
     </tr>
     <td>
-      <a class="closeButton" id="closeBarcode" 
-        onclick="document.querySelector('#divBarcode').setAttribute('class', 'InvisibleBarcode')
+      <a class="closeButton" id="closeBarcode" onclick="document.querySelector('#divBarcode').setAttribute('class', 'InvisibleBarcode')
                  document.querySelectorAll('.tdBarcode').forEach(function(text) {text.innerHTML = ''} )">
         Close
       </a>
@@ -127,88 +137,109 @@
   </table>
 </div>
 <br>
-<h1>Inventory</h1>
-<br>
-<p>Your stock will be shown here</p>
+<style>
+  #orderby {
+    background-color: #3062b4;
+    color: white;
+  }
 
-<!-- form for searching with filters -->
-<form method="POST">
-  <input type="text" name="search" id="search" placeholder="Search..">
-  <select id="selectBranch" name="selectBranch">
-    
-    {% for branch in branches %}
-      <option>{{ branch }}</option>
-    {% endfor %}
-      
-  </select>
-  <input name="btn-srch" value="Search" type="submit" />
-  <a id="qr_barcode" class="scannerButton" onclick="scannerF()">
-    Open scanner
-  </a>
+  .btn-secondary {
+    background-color: #3062b4;
+  }
+</style>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-6">
+      <h1>Inventory</h1>
+      <br>
+      <p>Your stock will be shown here</p>
+      <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+        <!-- form for searching with filters -->
+        <form method="POST">
+          <input type="text" name="search" id="search" placeholder="Search...">
+          <div class="btn-group" role="group">
+            <select id="orderby" name="orderby">
+              <option disabled="" value="" selected="">Order By:</option>
+              <option value="newest">Newest</option>
+              <option value="oldest">Older</option>
+            </select>
+            <input name="btn-srch" value="Search" class="btn btn-secondary" type="submit" />
 
-  <a id="csv_v" class="csvButton" onclick="location.href='csv'">
-    Import CSV
-  </a>
-
-  <!-- table of current stock -->
-  <table>
-    <tr>
-      <th>Name</th>
-      <th>Quantity</th>
-      <th>Branch</th>
-      <th>Description</th>
-      <th>QR/Barcode</th>
-    </tr>
-    
-      <!-- start listing the stock -->
-      {% for p in stock %}
-      <tr>
-        <td>{{ p['name'] }}</td>
-        <td>{{ p['quantity'] }}</td>
-        <td>{{ p['branch'] }}</td>
-        <td value="{{ p['description'] }}" onclick="showDescription(this)"> Show </td>
-        <td>
-          <img class="qr" id="qrid" src="../static/images/{{p['qr_barcode']}}.{{p['id']}}.png">
-          <div id="myModal" class="modal">
-
-            <!-- The Close Button -->
-            <span class="close">&times;</span>
-
-            <!-- Modal Content (The Image) -->
-            <img class="modal-content" id="img01">
-
-            <!-- Modal Caption (Image Text) -->
-            <div id="caption"></div>
+            <!-- scanner, csv and add  button-->
+            <a id="qr_barcode" class="btn btn-secondary" onclick="scannerF()">
+              Open scanner
+            </a>
+            <a id="csv_v" class="btn btn-secondary" onclick="location.href='csv'">
+              Import CSV
+            </a>
           </div>
-          <script>
-            var modal = document.getElementById("myModal");
-            var img = document.getElementById("qrid");
-            var images = document.getElementsByClassName("qr");
-            var modalImg = document.getElementById("img01");
-            var captionText = document.getElementById("caption");
+          <div class="table-responsive-lg">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Branch</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">QR/Barcode</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- start listing the stock -->
+                {% for p in stock %}
+                <tr>
+                  <td>{{ p['name'] }}</td>
+                  <td>{{ p['quantity'] }}</td>
+                  <td>{{ p['branch'] }}</td>
+                  <td value="{{ p['description'] }}" onclick="showDescription(this)"> Show </td>
+                  <td>
+                    <img class="qr" id="qrid" src="../static/images/{{p['qr_barcode']}}.{{p['id']}}.png">
+                    <div id="myModal" class="modal">
 
-            for (let img of images) {
-              img.onclick = function () {
-                modal.style.display = "block";
-                modalImg.src = this.src;
-                captionText.innerHTML = this.alt;
-              }
-            } 
+                      <!-- The Close Button -->
+                      <span class="close">&times;</span>
 
-            var span = document.getElementsByClassName("close")[0];
+                      <!-- Modal Content (The Image) -->
+                      <img class="modal-content" id="img01">
 
-            span.onclick = function () {
-              modal.style.display = "none";
-            }
-          </script>
-        </td>
-      </tr>
-      {% endfor %}
-    </table>
+                      <!-- Modal Caption (Image Text) -->
+                      <div id="caption"></div>
+                    </div>
+                    <script>
+                      var modal = document.getElementById("myModal");
+                      var img = document.getElementById("qrid");
+                      var images = document.getElementsByClassName("qr");
+                      var modalImg = document.getElementById("img01");
+                      var captionText = document.getElementById("caption");
 
-    <!-- Google Pie chart -->
-    <div style="margin: 10px 0 0 10px;width: 1000px">
-      <div id="piechart_3d" style="width: 900px; height: 500px;"></div>
+                      for (let img of images) {
+                        img.onclick = function () {
+                          modal.style.display = "block";
+                          modalImg.src = this.src;
+                          captionText.innerHTML = this.alt;
+                        }
+                      }
+
+                      var span = document.getElementsByClassName("close")[0];
+
+                      span.onclick = function () {
+                        modal.style.display = "none";
+                      }
+                    </script>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+      </div>
     </div>
+    <div class="col-md-6">
+      <div id="piechart_3d" style="width: 600px; height: 300px;"></div>
+    </div>
+  </div>
+</div>
+<!-- Google Pie chart -->
 
-    {% endblock %}
+
+{% endblock %}
