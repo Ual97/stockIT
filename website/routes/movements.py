@@ -34,7 +34,6 @@ def move():
     # filling a list of movements to paass them to jinja. Each movement is a dict
     movementsList = []
     for item in data:
-        movementDict = {}
         movementDict['id'] = item.id
         movementDict['product'] = Product.query.filter_by(id=item.prod_id).first().name
         movementDict['branch'] = Branch.query.filter_by(id=item.branch_id).first().name
@@ -60,14 +59,15 @@ def move():
             print(selectedBranch2.name)
             if movementDict['in_out'] == 'Entry' and selectedBranch2.name == movementDict['branch']:
                 if movementDict['product'] + " On(" + movementDict['branch'] + ")" in graph_data3:
-                    graph_data3[movementDict['product'] + " On(" + movementDict['branch'] + ")"] += movementDict['quantity']
+                    graph_data3[movementDict['product'] + " On (" + movementDict['branch'] + ")"] += movementDict['quantity']
                 else: 
-                    graph_data3[movementDict['product'] + " On(" + movementDict['branch'] + ")"] = movementDict['quantity']
+                    graph_data3[movementDict['product'] + " On (" + movementDict['branch'] + ")"] = movementDict['quantity']
             if movementDict['in_out'] == 'Exit' and selectedBranch2.name == movementDict['branch']:
                 if movementDict['product'] + " On(" + movementDict['branch'] + ")" in graph_data4:
-                    graph_data4[movementDict['product'] + " On(" + movementDict['branch'] + ")"] += movementDict['quantity']
+                    graph_data4[movementDict['product'] + " On (" + movementDict['branch'] + ")"] += movementDict['quantity']
                 else: 
-                    graph_data4[movementDict['product'] + " On(" + movementDict['branch'] + ")"] = movementDict['quantity']
+                    graph_data4[movementDict['product'] + " On (" + movementDict['branch'] + ")"] = movementDict['quantity']
+
 
     # if user presses Search button
     if request.method == 'POST' and "btn-srch" in request.form:

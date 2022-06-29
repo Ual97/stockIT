@@ -16,7 +16,7 @@ async function consult(code_content) {
     const tableDescription = document.querySelector('#descriptionBarcode');
     tableDescription.appendChild(document.createTextNode('Show Description'));
     tableDescription.setAttribute('value', data.description); 
-    document.querySelector('#qr_barcodeBarcode').setAttribute('src', `/ static/images/${data.qr_barcode}.${code_content}.png`);
+    document.querySelector('#qr_barcodeBarcode').setAttribute('src', `/static/images/${data.qr_barcode}.${code_content}.png`);
 
     //exitButton = document.querySelector('#updateButtonBarcode');
 
