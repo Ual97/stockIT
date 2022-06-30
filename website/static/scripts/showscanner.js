@@ -21,14 +21,36 @@ async function consult(code_content, path) {
       document.querySelector('#qr_barcodeBarcode').setAttribute('src', `/static/images/${data.qr_barcode}.${code_content}.png`);
     }
     else {
-      document.querySelector('#nameBarcode').value = data.name;
+
+      const updclass = document.querySelector('.InvisibleBarcode');
+      
+      updclass.setAttribute('class', 'Visible');
+
+      const selectName = document.querySelector('#nameBarcode');
+      selectName.value = data.name;
+      selectName.appendChild(document.createTextNode(data.name));
       branches = document.querySelector('#branchBarcode');
+      console.log("branches::::::");
+      console.log(branches);
       for (branch of data.branches) {
-        option = document.createElement('option');
+        const option = document.createElement('option');
         option.setAttribute('value', branch);
+        option.setAttribute('class', 'branchSelect');
+        option.appendChild(document.createTextNode(branch));
         branches.appendChild(option)
       }
-      
+      function cleanPopUpBarcode () {
+        const updclass = document.querySelector('.Visible');
+        updclass.setAttribute('class', 'InvisibleBarcode');
+        const selectName = document.querySelector('#nameBarcode');
+        selectName.value = "";
+        selectName.innerHTML = "";
+        branches.innerHTML = "";
+        const quantity = document.querySelector('#quantityBarcode');
+        quantity.setAttribute('value', '');
+        quantity.innerHTML = '';
+      }
+      document.querySelector('#closeBarcode').addEventListener('click' ,cleanPopUpBarcode);
     }
     
   }

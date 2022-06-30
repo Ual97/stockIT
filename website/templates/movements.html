@@ -173,9 +173,9 @@
       <th>Action</th>
     </tr>
     <tr>
-      <td class="tdBarcode" >
+      <td>
         <select name="name">
-          <option id="nameBarcode" value="" selected></option>
+          <option id="nameBarcode" value=""></option>
         </select>
       </td>
       <td class="tdBarcode" >
@@ -192,7 +192,6 @@
         <select name="in_out" id="in_out">
           <option value="in">In</option>
           <option value="out">Out</option>
-          <input id="btn-add" name="btn-add" class="btn btn-secondary" value="Add" type="submit" />
         </select>
       </td>
       <td>
@@ -200,11 +199,11 @@
       </td>
     </form>
     </tr>
-      <a class="closeButton" id="closeBarcode" onclick="document.querySelector('#divBarcode').setAttribute('class', 'InvisibleBarcode')
-                 document.querySelectorAll('.tdBarcode').forEach(function(text) {text.innerHTML = ''} )">
+      <td>
+      <a class="closeButton" id="closeBarcode">
         Close
       </a>
-    </td>
+      </td>
   </table>
 </div>
 
