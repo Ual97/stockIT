@@ -62,9 +62,11 @@ def dic_csv():
                     else:
                         flash("Quantity has to be a number.", category='error')
                         return redirect('/movements')
-                    
-                    
-                    if date != '' or date != 'None':
+                    print("kakaka")
+                    print(f'tiṕo ***{type(date)}*** largo ***{len(date)}***')
+                    print("kakaka")
+                    if len(date) > 0 and date != 'None' and date != '':
+                        print("entre a la chucha del if")
                         try:
                             print(str(line.get('date')) + ' 00:00:00')
                             line['date'] = datetime.strptime(str(line.get('date')) + ' 00:00:00', '%Y-%m-%d %H:%M:%S')
