@@ -160,6 +160,54 @@
     background-color: #3062b4;
   }
 </style>
+
+<!-- form displayed if user scann qr_barcode -->
+<div class="InvisibleBarcode" id="divBarcode">
+  <form method="POST">
+  <table id="tableBarcode">
+    <tr>
+      <th>Product</th>
+      <th>Branch</th>
+      <th>Quantity</th>
+      <th>Date</th>
+      <th>Action</th>
+    </tr>
+    <tr>
+      <td class="tdBarcode" >
+        <select name="name">
+          <option id="nameBarcode" value="" selected></option>
+        </select>
+      </td>
+      <td class="tdBarcode" >
+        <select name="branch" id="branchBarcode">
+        </select>
+      </td>
+      <td class="tdBarcode">
+        <input type="number" id="quantityBarcode" name="quantity" placeholder="" />
+      </td>
+      <td>
+        <label for="date">current date time</label>
+      </td>
+      <td>
+        <select name="in_out" id="in_out">
+          <option value="in">In</option>
+          <option value="out">Out</option>
+          <input id="btn-add" name="btn-add" class="btn btn-secondary" value="Add" type="submit" />
+        </select>
+      </td>
+      <td>
+        <input id="btn-add" name="btn-add" class="btn btn-secondary" value="Add" type="submit" />
+      </td>
+    </form>
+    </tr>
+      <a class="closeButton" id="closeBarcode" onclick="document.querySelector('#divBarcode').setAttribute('class', 'InvisibleBarcode')
+                 document.querySelectorAll('.tdBarcode').forEach(function(text) {text.innerHTML = ''} )">
+        Close
+      </a>
+    </td>
+  </table>
+</div>
+
 <div class="container-fluid">
   <div class="row">
     <div class="col-lg-7">
@@ -181,6 +229,9 @@
             <!-- scanner, csv and add  button-->
             <a id="csv_v" class="btn btn-secondary" onclick="location.href='csv'">
               Import CSV
+            </a>
+            <a id="product" class="btn btn-secondary" onclick="scannerF(this)">
+              Open scanner
             </a>
           </div>
 

@@ -77,6 +77,7 @@ def prod():
     return render_template('product.html', user=current_user,
                            branches=branches, nextid=nextid, products=data)
 
+
 @product.route('/product/<id>', methods=['POST','GET'], strict_slashes=False)
 @limiter.limit("20/minute")
 @login_required
@@ -138,8 +139,8 @@ def prodUpdate(id):
         # making a diccionary to use the GET method as API
         toDict = product.__dict__
         toDict.pop('_sa_instance_state')
-        
-        print(f'a ver el diccionario: {toDict}\n\n')
+        branches = Branch.query.filter_by(owner=current_user.email).all()
+        toDict['branches'] = [branch.name for branch in branches]
         return jsonify(toDict)
     except Exception:
         abort(404)

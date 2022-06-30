@@ -43,14 +43,14 @@ def sign_up():
             login_user(new_user, remember=True)
 
             # generating token and sending email
-            token = generate_confirmation_token(email)
-            msg = Message(
-                'Confirm your email address',
-                recipients=[new_user.email],
-                html='hi ' + new_user.usrname + '!<br> Please confirm your email via <a href="http://localhost:5000/confirm/' + token +'">this link</a>',
-                sender='admin@sl4.tech'
-            )
-            mail.send(msg)
+            #token = generate_confirmation_token(email)
+            #msg = Message(
+            #    'Confirm your email address',
+            #    recipients=[new_user.email],
+            #    html='hi ' + new_user.usrname + '!<br> Please confirm your email via <a href="http://localhost:5000/confirm/' + token +'">this link</a>',
+            #    sender='admin@sl4.tech'
+            #)
+            #mail.send(msg)
             flash("An email has been sent to confirm your account", category='success')
             return redirect(url_for('views.home'))
 
