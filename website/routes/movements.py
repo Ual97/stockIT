@@ -10,7 +10,7 @@ from sqlalchemy import and_, or_, desc, asc
 movements = Blueprint('movements', __name__)
 
 @movements.route('/movements', methods=['GET', 'POST'], strict_slashes=False)
-@limiter.limit("10/minute")
+@limiter.limit("20/minute")
 @login_required
 def move():
     """movements of products"""
@@ -60,14 +60,14 @@ def move():
             print(selectedBranch2.name)
             if movementDict['in_out'] == 'Entry' and selectedBranch2.name == movementDict['branch']:
                 if movementDict['product'] + " On(" + movementDict['branch'] + ")" in graph_data3:
-                    graph_data3[movementDict['product'] + " On(" + movementDict['branch'] + ")"] += movementDict['quantity']
+                    graph_data3[movementDict['product'] + " On (" + movementDict['branch'] + ")"] += movementDict['quantity']
                 else: 
-                    graph_data3[movementDict['product'] + " On(" + movementDict['branch'] + ")"] = movementDict['quantity']
+                    graph_data3[movementDict['product'] + " On (" + movementDict['branch'] + ")"] = movementDict['quantity']
             if movementDict['in_out'] == 'Exit' and selectedBranch2.name == movementDict['branch']:
                 if movementDict['product'] + " On(" + movementDict['branch'] + ")" in graph_data4:
-                    graph_data4[movementDict['product'] + " On(" + movementDict['branch'] + ")"] += movementDict['quantity']
+                    graph_data4[movementDict['product'] + " On (" + movementDict['branch'] + ")"] += movementDict['quantity']
                 else: 
-                    graph_data4[movementDict['product'] + " On(" + movementDict['branch'] + ")"] = movementDict['quantity']
+                    graph_data4[movementDict['product'] + " On (" + movementDict['branch'] + ")"] = movementDict['quantity']
 
     # if user presses Search button
     if request.method == 'POST' and "btn-srch" in request.form:

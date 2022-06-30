@@ -10,7 +10,7 @@ subsidiary = Blueprint('subsidiary', __name__)
 
 @subsidiary.route('/branch', methods=['GET', 'POST'], strict_slashes=False)
 @login_required
-@limiter.limit("10/minute")
+@limiter.limit("20/minute")
 def subsidiary_view():
     """
     Branch main page
@@ -58,7 +58,7 @@ def subsidiary_view():
 @subsidiary.route('/branch/<id>', methods=['GET', 'POST'],
                   strict_slashes=False)
 @login_required
-@limiter.limit("10/minute")
+@limiter.limit("20/minute")
 def update_subsidiary(id):
     """
     updates a subsidiary
@@ -92,13 +92,3 @@ def update_subsidiary(id):
         return jsonify(currentSubsidiaryDict)
     except:
         pass
-
-@subsidiary.route('/branch/delete/<id>', strict_slashes=False)
-@login_required
-def Delete(id):
-    """inventory page"""
-    db.session.delete(Branch.query.get(id))
-    db.session.commit()
-    flash('Branch deleted successfully!')
-    print(f'\n\n\naaaaaaaaaaaa{request.url_rule}\n\n\n')
-    return redirect('/branch')

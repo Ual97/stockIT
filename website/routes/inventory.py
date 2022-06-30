@@ -11,7 +11,7 @@ from website import limiter
 inventory = Blueprint('inventory', __name__)
 
 @login_required
-@limiter.limit("10/minute")
+@limiter.limit("20/minute")
 @inventory.route('/inventory', methods=['GET', 'POST'], strict_slashes=False)
 def inventory_page():
     """inventory page"""
@@ -162,7 +162,7 @@ def inventory_page():
 
 
 @login_required
-@limiter.limit("10/minute")
+@limiter.limit("20/minute")
 @inventory.route('/inventory/<id>', methods=['GET'], strict_slashes=False)
 def inventory_product(id):
     """Api Endpoint for inventory product"""

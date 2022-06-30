@@ -12,7 +12,7 @@ usr = Blueprint('usr', __name__)
 
 
 @usr.route('/sign-up', methods=['GET', 'POST'])
-@limiter.limit("10/minute")
+@limiter.limit("20/minute")
 def sign_up():
     if request.method == 'POST':
         # get info submitted on form
@@ -43,14 +43,14 @@ def sign_up():
             login_user(new_user, remember=True)
 
             # generating token and sending email
-            token = generate_confirmation_token(email)
-            msg = Message(
-                'Confirm your email address',
-                recipients=[new_user.email],
-                html='hi ' + new_user.usrname + '!<br> Please confirm your email via <a href="http://localhost:5000/confirm/' + token +'">this link</a>',
-                sender='admin@sl4.tech'
-            )
-            mail.send(msg)
+            #token = generate_confirmation_token(email)
+            #msg = Message(
+            #    'Confirm your email address',
+            #    recipients=[new_user.email],
+            #    html='hi ' + new_user.usrname + '!<br> Please confirm your email via <a href="http://localhost:5000/confirm/' + token +'">this link</a>',
+            #    sender='admin@sl4.tech'
+            #)
+            #mail.send(msg)
             flash("An email has been sent to confirm your account", category='success')
             return redirect(url_for('views.home'))
 
@@ -58,7 +58,7 @@ def sign_up():
 
 
 @usr.route('/confirm/<token>')
-@limiter.limit("10/minute")
+@limiter.limit("20/minute")
 def confirm(token):
     """checks if the token is valid, if so it confirms the account and logs user"""
     from website.token import confirm_token
@@ -84,7 +84,7 @@ def confirm(token):
 
 
 @usr.route('/login', methods=['GET', 'POST'])
-@limiter.limit("10/minute")
+@limiter.limit("20/minute")
 def login():
     if request.method == 'POST':
         mail = request.form.get('email')
@@ -105,7 +105,7 @@ def login():
     return render_template("login.html", user=current_user)
 
 @usr.route('/logout')
-@limiter.limit("10/minute")
+@limiter.limit("20/minute")
 @login_required # only allows access to route if user is logged in
 def logout():
     logout_user()

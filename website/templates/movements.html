@@ -17,125 +17,125 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-      google.charts.load("current", {packages:["corechart"]});
-      google.charts.setOnLoadCallback(drawChart);
-      google.charts.setOnLoadCallback(drawChart2);
-      google.charts.setOnLoadCallback(drawChart3);
-      google.charts.setOnLoadCallback(drawChart4);
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-            {% for key, value in data.items() %}
-                {% if value is string %}
-                    ['{{ key }}', '{{ value }}'],
-                {% else %}
-                    ['{{ key }}', {{ value }}],
-                {% endif %}
-            {% endfor %}
+  <script type="text/javascript">
+    google.charts.load("current", { packages: ["corechart"] });
+    google.charts.setOnLoadCallback(drawChart);
+    google.charts.setOnLoadCallback(drawChart2);
+    google.charts.setOnLoadCallback(drawChart3);
+    google.charts.setOnLoadCallback(drawChart4);
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable([
+        {% for key, value in data.items() %}
+    {% if value is string %}
+    ['{{ key }}', '{{ value }}'],
+      {% else %}
+    ['{{ key }}', {{ value }}],
+      {% endif %}
+    {% endfor %}
         ]);
- 
-        var options = {
-          title: 'Global product entries',
-          is3D: true,
-          //pieHole: 0.5
-          pieStartAngle: 100
-          /*slices: {  
-            2: {offset: 0.2},
-            3: {offset: 0.3}
-          }*/
-          /*slices: {
-            1: { color: 'transparent' }
-          }*/
-        };
- 
-        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
-        chart.draw(data, options);
+
+    var options = {
+      title: 'Global product entries',
+      is3D: true,
+      //pieHole: 0.5
+      pieStartAngle: 100
+      /*slices: {  
+        2: {offset: 0.2},
+        3: {offset: 0.3}
+      }*/
+      /*slices: {
+        1: { color: 'transparent' }
+      }*/
+    };
+
+    var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+    chart.draw(data, options);
       }
-      function drawChart2() {
-        var data = google.visualization.arrayToDataTable([
-            {% for key, value in data2.items() %}
-                {% if value is string %}
-                    ['{{ key }}', '{{ value }}'],
-                {% else %}
-                    ['{{ key }}', {{ value }}],
-                {% endif %}
-            {% endfor %}
+    function drawChart2() {
+      var data = google.visualization.arrayToDataTable([
+        {% for key, value in data2.items() %}
+    {% if value is string %}
+    ['{{ key }}', '{{ value }}'],
+      {% else %}
+    ['{{ key }}', {{ value }}],
+      {% endif %}
+    {% endfor %}
         ]);
- 
-        var options = {
-          title: 'Global product exits',
-          is3D: true,
-          //pieHole: 0.5
-          pieStartAngle: 100
-          /*slices: {  
-            2: {offset: 0.2},
-            3: {offset: 0.3}
-          }*/
-          /*slices: {
-            1: { color: 'transparent' }
-          }*/
-        };
- 
-        var chart = new google.visualization.PieChart(document.getElementById('piechart_4d'));
-        chart.draw(data, options);
+
+    var options = {
+      title: 'Global product exits',
+      is3D: true,
+      //pieHole: 0.5
+      pieStartAngle: 100
+      /*slices: {  
+        2: {offset: 0.2},
+        3: {offset: 0.3}
+      }*/
+      /*slices: {
+        1: { color: 'transparent' }
+      }*/
+    };
+
+    var chart = new google.visualization.PieChart(document.getElementById('piechart_4d'));
+    chart.draw(data, options);
       }
-      function drawChart3() {
-        var data = google.visualization.arrayToDataTable([
-            {% for key, value in data3.items() %}
-                {% if value is string %}
-                    ['{{ key }}', '{{ value }}'],
-                {% else %}
-                    ['{{ key }}', {{ value }}],
-                {% endif %}
-            {% endfor %}
+    function drawChart3() {
+      var data = google.visualization.arrayToDataTable([
+        {% for key, value in data3.items() %}
+    {% if value is string %}
+    ['{{ key }}', '{{ value }}'],
+      {% else %}
+    ['{{ key }}', {{ value }}],
+      {% endif %}
+    {% endfor %}
         ]);
- 
-        var options = {
-          title: 'Product entries by branch',
-          is3D: true,
-          //pieHole: 0.5
-          pieStartAngle: 100
-          /*slices: {  
-            2: {offset: 0.2},
-            3: {offset: 0.3}
-          }*/
-          /*slices: {
-            1: { color: 'transparent' }
-          }*/
-        };
- 
-        var chart = new google.visualization.PieChart(document.getElementById('piechart_5d'));
-        chart.draw(data, options);
+
+    var options = {
+      title: 'Product entries by branch',
+      is3D: true,
+      //pieHole: 0.5
+      pieStartAngle: 100
+      /*slices: {  
+        2: {offset: 0.2},
+        3: {offset: 0.3}
+      }*/
+      /*slices: {
+        1: { color: 'transparent' }
+      }*/
+    };
+
+    var chart = new google.visualization.PieChart(document.getElementById('piechart_5d'));
+    chart.draw(data, options);
       }
-      function drawChart4() {
-        var data = google.visualization.arrayToDataTable([
-            {% for key, value in data4.items() %}
-                {% if value is string %}
-                    ['{{ key }}', '{{ value }}'],
-                {% else %}
-                    ['{{ key }}', {{ value }}],
-                {% endif %}
-            {% endfor %}
+    function drawChart4() {
+      var data = google.visualization.arrayToDataTable([
+        {% for key, value in data4.items() %}
+    {% if value is string %}
+    ['{{ key }}', '{{ value }}'],
+      {% else %}
+    ['{{ key }}', {{ value }}],
+      {% endif %}
+    {% endfor %}
         ]);
- 
-        var options = {
-          title: 'Product exits by branch',
-          is3D: true,
-          //pieHole: 0.5
-          pieStartAngle: 100
-          /*slices: {  
-            2: {offset: 0.2},
-            3: {offset: 0.3}
-          }*/
-          /*slices: {
-            1: { color: 'transparent' }
-          }*/
-        };
- 
-        var chart = new google.visualization.PieChart(document.getElementById('piechart_6d'));
-        chart.draw(data, options);
+
+    var options = {
+      title: 'Product exits by branch',
+      is3D: true,
+      //pieHole: 0.5
+      pieStartAngle: 100
+      /*slices: {  
+        2: {offset: 0.2},
+        3: {offset: 0.3}
+      }*/
+      /*slices: {
+        1: { color: 'transparent' }
+      }*/
+    };
+
+    var chart = new google.visualization.PieChart(document.getElementById('piechart_6d'));
+    chart.draw(data, options);
       }
-    </script>
+  </script>
 </head>
 
 <style>
@@ -147,10 +147,70 @@
   .container-fluid {
     margin-left: 15px;
   }
+
+  #btn-add {
+    width: 60%;
+  }
+
+  #orderby {
+    background-color: #3062b4;
+  }
+
+  .btn-secondary {
+    background-color: #3062b4;
+  }
 </style>
+
+<!-- form displayed if user scann qr_barcode -->
+<div class="InvisibleBarcode" id="divBarcode">
+  <form method="POST">
+  <table id="tableBarcode">
+    <tr>
+      <th>Product</th>
+      <th>Branch</th>
+      <th>Quantity</th>
+      <th>Date</th>
+      <th>Action</th>
+    </tr>
+    <tr>
+      <td class="tdBarcode" >
+        <select name="name">
+          <option id="nameBarcode" value="" selected></option>
+        </select>
+      </td>
+      <td class="tdBarcode" >
+        <select name="branch" id="branchBarcode">
+        </select>
+      </td>
+      <td class="tdBarcode">
+        <input type="number" id="quantityBarcode" name="quantity" placeholder="" />
+      </td>
+      <td>
+        <label for="date">current date time</label>
+      </td>
+      <td>
+        <select name="in_out" id="in_out">
+          <option value="in">In</option>
+          <option value="out">Out</option>
+          <input id="btn-add" name="btn-add" class="btn btn-secondary" value="Add" type="submit" />
+        </select>
+      </td>
+      <td>
+        <input id="btn-add" name="btn-add" class="btn btn-secondary" value="Add" type="submit" />
+      </td>
+    </form>
+    </tr>
+      <a class="closeButton" id="closeBarcode" onclick="document.querySelector('#divBarcode').setAttribute('class', 'InvisibleBarcode')
+                 document.querySelectorAll('.tdBarcode').forEach(function(text) {text.innerHTML = ''} )">
+        Close
+      </a>
+    </td>
+  </table>
+</div>
+
 <div class="container-fluid">
   <div class="row">
-    <div class="col-6-lg">
+    <div class="col-lg-7">
       <h1>Movements</h1>
       <p>Your movements will be shown here</p>
 
@@ -165,15 +225,14 @@
               <option value="oldest">Older</option>
             </select>
             <input name="btn-srch" value="Search" class="btn btn-secondary" type="submit" />
-            
-            <!-- scanner, csv and add  button--> 
-            <a id="qr_barcode" class="btn btn-secondary" onclick="scannerF()">
-              Open scanner
-            </a>
+
+            <!-- scanner, csv and add  button-->
             <a id="csv_v" class="btn btn-secondary" onclick="location.href='csv'">
               Import CSV
             </a>
-            <input id="btn-add" name="btn-add" class="btn btn-secondary" value="Add" type="submit" />
+            <a id="product" class="btn btn-secondary" onclick="scannerF(this)">
+              Open scanner
+            </a>
           </div>
 
           <!-- form for adding a product -->
@@ -219,6 +278,7 @@
                       <select name="in_out" id="in_out">
                         <option value="in">In</option>
                         <option value="out">Out</option>
+                        <input id="btn-add" name="btn-add" class="btn btn-secondary" value="Add" type="submit" />
                       </select>
                     </td>
                   </tr>
@@ -237,18 +297,13 @@
             </div>
       </div>
     </div>
-    <div class="container">
-      <div class="row">
-        <div class="col-6-lg">
-          <div style="margin: 10px 0 0 10px;width: 1000px">
-            <h3>Python Flask Show Data on Google Pie Chart</h3>
-            <div id="piechart_3d" style="width: 900px; height: 500px;"></div>
-            <div id="piechart_4d" style="width: 900px; height: 500px;"></div>
-            <div id="piechart_5d" style="width: 900px; height: 500px;"></div>
-            <div id="piechart_6d" style="width: 900px; height: 500px;"></div>
-        </div>
-        </div>
-      </div>
+    <div class="col-md-5">
+      <div id="piechart_3d" style="width: 400px; height: 200px;"></div>
+      <div id="piechart_4d" style="width: 400px; height: 200px;"></div>
+      <div id="piechart_5d" style="width: 400px; height: 200px;"></div>
+      <div id="piechart_6d" style="width: 400px; height: 200px;"></div>
     </div>
   </div>
-  {% endblock %}
+</div>
+
+{% endblock %}
