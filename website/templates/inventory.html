@@ -156,14 +156,15 @@
       <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
         <!-- form for searching with filters -->
         <form method="POST">
-          <input type="text" name="search" id="search" placeholder="Search...">
-          <div class="btn-group" role="group">
-            <select id="orderby" name="orderby">
-              <option disabled="" value="" selected="">Order By:</option>
-              <option value="newest">Newest</option>
-              <option value="oldest">Older</option>
-            </select>
-            <input name="btn-srch" value="Search" class="btn btn-secondary" type="submit" />
+          <input type="text" name="search" id="search" placeholder="Search..">
+          <select id="selectBranch" name="selectBranch" class="btn btn-secondary">
+    
+            {% for branch in branches %}
+              <option>{{ branch }}</option>
+            {% endfor %}
+      
+          </select>
+          <input name="btn-srch" value="Search" type="submit" class="btn btn-secondary"/>
 
             <!-- scanner, csv and add  button-->
             <a id="inventory" class="btn btn-secondary" onclick="scannerF(this)">
