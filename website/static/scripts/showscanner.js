@@ -20,37 +20,48 @@ async function consult(code_content, path) {
       tableDescription.setAttribute('value', data.description); 
       document.querySelector('#qr_barcodeBarcode').setAttribute('src', `/static/images/${data.qr_barcode}.${code_content}.png`);
     }
-    else {
-
+    else if (path === 'profits') {
       const updclass = document.querySelector('.InvisibleBarcode');
-      
-      updclass.setAttribute('class', 'Visible');
+      console.log(updclass);
+      updclass.setAttribute('class', '');
 
-      const selectName = document.querySelector('#nameBarcode');
-      selectName.value = data.name;
-      selectName.appendChild(document.createTextNode(data.name));
+      const tr = document.querySelector("#trBarcode");
+
+      for (item of data) {
+        tdName = document.createElement('td');
+        tdName.appendChild(document.createTextNode(item.name));
+        tr.appendChild(tdName);
+        tdProfit = document.createElement('td');
+        tdProfit.appendChild(document.createTextNode(item.profit));
+        tr.appendChild(tdProfit);
+        tdQuantity = document.createElement('td');
+        tdQuantity.appendChild(document.createTextNode(item.quantity));
+        tr.appendChild(tdQuantity);
+        tdBranch = document.createElement('td');
+        tdBranch.appendChild(document.createTextNode(item.branch));
+        tr.appendChild(tdBranch);
+        tdDate = document.createElement('td');
+        tdDate.appendChild(document.createTextNode(item.date));
+        tr.appendChild(tdDate);
+        tdDescription = document.createElement('td');
+        tdDescription.appendChild(document.createTextNode("show description"));
+        tdDescription.setAttribute("value", item.description)
+        tr.appendChild(tdDescription);
+        tdDescription = document.createElement('img');
+        tdDescription.setAttribute("src", `/static/images/${item.qr_barcode}.${code_content}.png`)
+        tr.appendChild(tdDescription);
+      }
+
+    } 
+    else {
+      document.querySelector('#nameBarcode').value = data.name;
       branches = document.querySelector('#branchBarcode');
-      console.log("branches::::::");
-      console.log(branches);
       for (branch of data.branches) {
-        const option = document.createElement('option');
+        option = document.createElement('option');
         option.setAttribute('value', branch);
-        option.setAttribute('class', 'branchSelect');
-        option.appendChild(document.createTextNode(branch));
         branches.appendChild(option)
       }
-      function cleanPopUpBarcode () {
-        const updclass = document.querySelector('.Visible');
-        updclass.setAttribute('class', 'InvisibleBarcode');
-        const selectName = document.querySelector('#nameBarcode');
-        selectName.value = "";
-        selectName.innerHTML = "";
-        branches.innerHTML = "";
-        const quantity = document.querySelector('#quantityBarcode');
-        quantity.setAttribute('value', '');
-        quantity.innerHTML = '';
-      }
-      document.querySelector('#closeBarcode').addEventListener('click' ,cleanPopUpBarcode);
+      
     }
     
   }

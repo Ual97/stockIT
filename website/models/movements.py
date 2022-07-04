@@ -1,3 +1,4 @@
+from locale import currency
 from website import db
 import datetime
 from uuid import uuid4
@@ -12,9 +13,11 @@ class Movements(db.Model):
     quantity = db.Column(db.Integer, nullable=False)
     date = db.Column(db.DateTime)
     in_out = db.Column(db.Boolean)
+    currency = db.Column(db.Boolean)
+    price_cost = db.Column(db.Float)
 
     def __init__(self, **kwargs):
-        """initialize obj products"""
+        """initialize movements objs"""
         self.id = str(uuid4())
         self.owner = kwargs.get('owner')
         self.prod_id = kwargs.get('prod_id')
@@ -25,3 +28,5 @@ class Movements(db.Model):
             self.date = kwargs.get('date')
         self.branch_id = kwargs.get('branch_id')
         self.in_out = kwargs.get('in_out')
+        self.currency = kwargs.get('currency')
+        self.price_cost = kwargs.get('price_cost')

@@ -1,11 +1,15 @@
 from flask import Blueprint, render_template, request, flash, redirect, jsonify, abort, url_for
 from website import db, limiter
+from website.models.cost_qty import Cost_qty
 from website.models.movements import Movements
 from website.models.branch import Branch
 from website.models.product import Product
 from website.models.inventory import Inventory
+from website.models.profits import Profits
 from flask_login import login_required, current_user
 from sqlalchemy import and_, or_, desc, asc
+import requests
+
 
 movements = Blueprint('movements', __name__)
 
@@ -39,8 +43,10 @@ def move():
         movementDict['product'] = Product.query.filter_by(id=item.prod_id).first().name
         movementDict['branch'] = Branch.query.filter_by(id=item.branch_id).first().name
         movementDict['quantity'] = item.quantity
+        movementDict['price_cost'] = item.price_cost
         movementDict['date'] = item.date
         movementDict['in_out'] = "Entry" if item.in_out is True else "Exit"
+        movementDict['currency'] = "USD" if item.currency is True else "UYU"
         movementsList.append(movementDict)
         
         # filling movement data for pie charts
@@ -116,10 +122,12 @@ def move():
             movementDict['quantity'] = item.quantity
             movementDict['date'] = item.date
             movementDict['in_out'] = "Entry" if item.in_out is True else "Exit"
+            movementDict['currency'] = "USD" if item.currency is True else "UYU"
             movementsList.append(movementDict)
         if not movementsList and not orderby:
             flash('No results found', 'error')
             return redirect('/movements')
+        print(f'\n{movementDict}')
 
         return render_template('movements.html', user=current_user,
                             branches=branches, products=products, movements=movementsList, data=graph_data, data2=graph_data2, data3=graph_data3, data4=graph_data4)
@@ -135,6 +143,14 @@ def move():
             flash("Quantity has to be a number.", category='error')
             return redirect('/movements')
 
+        currency = prodDict.get('currency')
+        if currency == 'USD':
+            currency = True
+            prodDict['currency'] = True
+        else:
+            currency = False
+            prodDict['currency'] = False
+
         in_out = prodDict.get('in_out')
         if in_out == 'in':
             in_out = True
@@ -143,8 +159,20 @@ def move():
             in_out = False
             prodDict['in_out'] = False
 
+
+        price_cost = prodDict.get('price_cost')
+        if (price_cost.replace('-', '', 1).replace('.', '', 1).isnumeric()):
+            price_cost = float(price_cost)
+        else:
+            if in_out is True:
+                flash("Cost has to be a number.", category='error')
+            else:
+                flash("Price has to be a number.", category='error')
+
+            return redirect('/movements')
+
         
-        if name and branch and qty:
+        if name and branch and qty and price_cost:
             prodDict['owner'] = current_user.email
             branch2 = Branch.query.filter_by(name=branch).first()
             prodDict['branch_id'] = branch2.id
@@ -169,8 +197,8 @@ def move():
                 flash('Error. Cannot make outs of products greather than branch stock', category='error')
                 return redirect('/movements')
             print(f'\n\n\nlargo: {len(prodMov)} movement: {in_out} pelado: {prodMov}\n\n')
-            if qty < 0:
-                flash('Error. Cannot make movements of numbers lower than 0', category='error')
+            if qty < 1:
+                flash('Error. Cannot make movements of numbers lower than 1', category='error')
                 return redirect('/movements')
             if not prodMov and in_out == False:
                 print("\n\nbolas\n")
@@ -195,18 +223,101 @@ def move():
                 newItem = Inventory(**newItemInv)
                 db.session.add(newItem)
                 db.session.commit()
+
+                """adding item to cost_cant table"""
+                
+                dict = {}
+                
+                dict['owner'] = current_user.email
+                dict['prod_id'] = prod.id
+                dict['branch_id'] = branch2.id
+                dict['date'] = prodMov[0].date
+                dict['cost'] = price_cost
+                dict['quantity'] = qty
+                dict['qty_sold'] = 0
+                dict['sold'] = False
+                dict['currency'] = prodMov[0].currency
+                newItem = Cost_qty(**dict)
+                db.session.add(newItem)
+                db.session.commit()
+
+
             else:
-                """quantity addition of the product"""
+
                 item = Inventory.query.filter_by(prod_id=prod.id).first()
                 if in_out is True:
+                    """quantity addition of the product in inventory"""
                     item.quantity += qty
+                    
+                    """adding item to cost_qty table"""
+
+
+                    dict = {}
+
+                    dict['owner'] = current_user.email
+                    dict['prod_id'] = prod.id
+                    dict['branch_id'] = branch2.id
+                    dict['date'] = prodMov[0].date
+                    dict['cost'] = price_cost
+                    dict['quantity'] = qty
+                    dict['qty_sold'] = 0
+                    dict['sold'] = False
+                    dict['currency'] = prodMov[0].currency
+                    newItem = Cost_qty(**dict)
+                    db.session.add(newItem)
+
+
                 elif in_out is False and qty > item.quantity or item.quantity is None:
                     print(f'\n\n\nflasheaste :3\n\n')
                     flash('Error. Cannot make outs of products without stock', category='error')
                     redirect('/movements')
                 else:
-                    print(f'\n\n\nle sumamos al producto :3\n\n')
+                    """quantity substraction of the product in inventory"""
+                    print(f'\n\n\nle restamos al producto :3\n\n')
                     item.quantity -= qty
+
+                    """adding new item to price-cant json if not exists is
+                       created and if the item exists make an addition
+                    """
+                    profit = 0
+                    cost_qty = Cost_qty.query.filter((Cost_qty.prod_id==prod.id) & (Cost_qty.sold == False) & (Cost_qty.branch_id == branch2.id)).order_by(Cost_qty.date.asc()).all()
+                    i = 1
+                    for _ in range(qty, 0, -1):
+                        flag = True
+                        if cost_qty[-i].qty_sold == cost_qty[-i].quantity - 1:
+                            cost_qty[-i].qty_sold += 1                            
+                            cost_qty[-i].sold = True
+                            flag = False
+                        if cost_qty[-i].currency is True and prodMov[0].currency is False:
+                            dollar = requests.get(f'https://cotizaciones-brou.herokuapp.com/api/currency/{str(prodMov[0].date.date())}')
+                            dollar = dollar.json()['rates']['USD']['sell']
+                            profit += price_cost - (cost_qty[-i].cost * dollar)
+                        if cost_qty[-i].currency is False and prodMov[0].currency is True:
+                            
+                            dollar = requests.get(f'https://cotizaciones-brou.herokuapp.com/api/currency/{str(prodMov[0].date.date())}')
+                            dollar = dollar.json()['rates']['USD']['sell']
+                            print(f'\nde dolares a pesos pesos{price_cost} pesos convertidos{(price_cost / dollar)} dolares {cost_qty[-i].cost}')
+                            profit += price_cost  - (cost_qty[-i].cost / dollar)
+                        else:
+                            profit += price_cost - cost_qty[-i].cost
+                        if flag:
+                            cost_qty[-i].qty_sold += 1
+                        else:
+                            i += 1
+
+
+                    profitDict = {}
+                    profitDict['prod_id'] = prod.id
+                    profitDict['owner'] = current_user.email
+                    profitDict['profit'] = profit
+                    profitDict['date'] = prodMov[0].date
+                    profitDict['quantity'] = qty
+                    profitDict['branch_id'] = prodMov[0].branch_id
+                    profitDict['currency'] = prodMov[0].currency
+                    newItem = Profits(**profitDict)
+                    db.session.add(newItem)
+
+
 
                 db.session.commit()
             return redirect('/movements')
