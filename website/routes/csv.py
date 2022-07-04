@@ -195,7 +195,7 @@ def dic_csv():
                 return redirect(url_for('subsidiary.subsidiary_view'))
     #### Add Products via CSV ####
     form3 = UploadFileForm3() 
-    if form2.validate_on_submit(): 
+    if form3.validate_on_submit(): 
         from main import app     
         file = form3.file3.data 
         file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename)))
@@ -235,6 +235,7 @@ def dic_csv():
                         db.session.commit()
                         #print(f'\n\n\n{new_prod.qr_barcode}\n\n')
                     else:
+                        print("HELLOOWEWE")
                         flash('Product is a mandatory field', category='error')
                         return redirect(url_for('product.prod'))
                 flash("Poducts added", category='success')
