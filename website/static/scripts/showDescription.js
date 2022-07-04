@@ -6,7 +6,7 @@ function showDescription(obj) {
     const idTag = obj.getAttribute("id");
     if (idTag !== "descriptionBarcode")
     {    
-        descriptionDiv.classList.replace("InvisibleDescription", "description");
+        descriptionDiv.classList.replace("Invisible", "description");
     }
     else
     {
@@ -17,7 +17,7 @@ function showDescription(obj) {
     function close() {
         if (idTag !== "descriptionBarcode")
     {    
-        document.querySelector("#InvisibleDescription").classList.replace("description", "InvisibleDescription");
+        document.querySelector("#InvisibleDescription").classList.replace("description", "Invisible");
     }
     else
     {
