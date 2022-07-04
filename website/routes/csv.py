@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, flash, redirect, url_for 
+from flask import Blueprint, render_template, flash, redirect, send_file, url_for 
 from website import db, limiter
 from website.models.movements import Movements
 from website.models.inventory import Inventory
@@ -35,7 +35,7 @@ def dic_csv():
             with open(os.path.abspath(os.path.dirname(__file__)) + '/files/' + file.filename, 'r') as data:
                 for line in csv.DictReader(data):
                     date = line.get('date')
-                    name = line.get('name')
+                    name = line.get('product')
                     names2 = Product.query.filter_by(owner=current_user.email).all()
                     listNames = []
                     for name2 in names2:
@@ -241,3 +241,21 @@ def dic_csv():
                 flash("Poducts added", category='success')
                 return redirect('/product')
     return render_template('csv.html', user=current_user, form3=form3, form2=form2, form=form)
+@csv_v.route('/csv/download', methods=['GET', 'POST'], strict_slashes=False) 
+@limiter.limit("20/minute")
+@login_required
+def download_file_movement():
+    print("downloaaaad")
+    return send_file("routes/files/csv_templates/movement_template.csv", as_attachment=True)
+@csv_v.route('/csv/download2', methods=['GET', 'POST'], strict_slashes=False) 
+@limiter.limit("20/minute")
+@login_required
+def download_file_product():
+    print("downloaaaad")
+    return send_file("routes/files/csv_templates/product_template.csv", as_attachment=True)
+@csv_v.route('/csv/download3', methods=['GET', 'POST'], strict_slashes=False) 
+@limiter.limit("20/minute")
+@login_required
+def download_file_branch():
+    print("downloaaaad")
+    return send_file("routes/files/csv_templates/branch_template.csv", as_attachment=True)

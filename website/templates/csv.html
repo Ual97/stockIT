@@ -2,37 +2,56 @@
 {% block title %}Csv{% endblock %}
 {% block content %}
 <body>
-    <h1>Import your CSV</h1>
-    <h2>Requeriments</h2>
-    <ul>
-        <li>Product, Branch and Quantity are mandatory fields</li>
-        <li>The product must already be created</li>
-        <li>The branch must already be created</li>
-        <li>Quantity has to be a number</li>
-        <li>If you want an especific date: Date need the format '%Y-%m-%d'</li>
-        <li>if you want the current date, leave the space empty</li>
-        <li>Action must be 'in' or 'out'</li>
-    </ul>
-    <div style="width: 500px; overflow: hidden;">
-        <div style="width: 200px; float:left;">
+    <div style="position: absolute; top: 15%; left: 30%">
+        <h1>Import your Movement via CSV</h1>
+        <h2>Requeriments</h2>
+        <ul>
+            <li>Product, Branch and Quantity are mandatory fields</li>
+            <li>The product must already be created</li>
+            <li>The branch must already be created</li>
+            <li>Quantity has to be a number</li>
+            <li>If you want an especific date: Date need the format '%Y-%m-%d'</li>
+            <li>if you want the current date, leave the space empty</li>
+            <li>Action must be 'in' or 'out'</li>
+        </ul>
+        <p><a href="{{url_for('csv.download_file_movement')}}">Download Movement Template</a></p>
+        <div style="overflow: hidden;">
             <form method='POST' enctype='multipart/form-data'>
                 {{form.hidden_tag()}}
                 {{form.file()}}
                 {{form.submit()}}
             </form>
         </div>
-        <div style="overflow: hidden;">
-            <form method='POST' enctype='multipart/form-data'>
-                {{form2.hidden_tag()}}
-                {{form2.file2()}}
-                {{form2.submit2()}}
-            </form>
-        </div>
+    </div>
+    <div style="position: absolute; top: 83%; left: 30%">
+        <h1>Import your Product via CSV</h1>
+        <h2>Requeriments</h2>
+        <ul>
+            <li>Product is a mandatory field</li>
+            <li>The product must not exist</li>
+        </ul>
+        <p><a href="{{url_for('csv.download_file_product')}}">Download Product Template</a></p>
         <div style="overflow: hidden;">
             <form method='POST' enctype='multipart/form-data'>
                 {{form3.hidden_tag()}}
                 {{form3.file3()}}
                 {{form3.submit3()}}
+            </form>
+        </div>
+    </div>
+    <div style="position: absolute; top: 130%; left: 30%;">
+        <h1>Import your Branch via CSV</h1>
+        <h2>Requeriments</h2>
+        <ul>
+            <li>Branch is a mandatory field</li>
+            <li>The Branch must not exist</li>
+        </ul>
+        <p><a href="{{url_for('csv.download_file_branch')}}">Download Branch Template</a></p>
+        <div style="overflow: hidden;">
+            <form method='POST' enctype='multipart/form-data'>
+                {{form2.hidden_tag()}}
+                {{form2.file2()}}
+                {{form2.submit2()}}
             </form>
         </div>
     </div>
