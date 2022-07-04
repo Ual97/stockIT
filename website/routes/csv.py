@@ -3,7 +3,7 @@ from website import db, limiter
 from website.models.movements import Movements
 from website.models.inventory import Inventory
 from website.models.branch import Branch 
-from website.models.csv import UploadFileForm 
+from website.models.csv import UploadFileForm, UploadFileForm2, UploadFileForm3 
 from website.models.product import Product
 from website.routes.product import generate_qr, generate_barcode
 from flask_login import login_required, current_user 
@@ -21,11 +21,7 @@ csv_v = Blueprint('csv', __name__)
 @csv_v.route('/csv', methods=['GET', 'POST'], strict_slashes=False) 
 @limiter.limit("20/minute")
 @login_required
-def dic_csv(): 
-    #if user is not confirmed, block access and send to home 
-    #if current_user.confirmed is False: 
-    #    flash('Please confirm your account, check your email (and spam folder)', 'error') 
-    #    return redirect(url_for('views.home')) 
+def dic_csv():  
     form = UploadFileForm() 
     if form.validate_on_submit(): 
         from main import app     
@@ -156,4 +152,91 @@ def dic_csv():
                 return redirect('/movements')
         else:
             flash("Your file must have extension '.csv'", category='error')
-    return render_template('csv.html', user=current_user, form=form)
+    #### Add Branches via CSV ####
+    form2 = UploadFileForm2() 
+    if form2.validate_on_submit(): 
+        from main import app     
+        file = form2.file2.data 
+        file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename)))
+        filename, file_extension = os.path.splitext(file.filename)
+        print(file_extension)
+        branches = Branch.query.filter_by(owner=current_user.email)
+        print(branches)
+        if file_extension == '.csv':
+            with open(os.path.abspath(os.path.dirname(__file__)) + '/files/' + file.filename, 'r') as data:
+                for line in csv.DictReader(data):
+                    branch_name = line.get('branch')
+                    print(f'\n\n\n{line}\n\n')
+                    if not branch_name:
+                        flash('Branch is mandatory', category='error')
+                        return redirect(url_for('subsidiary.subsidiary_view'))
+
+                    if type(branch_name) != str:
+                        flash('Branch must be a string', category='error')
+                        return redirect(url_for('subsidiary.subsidiary_view'))
+
+                    branch_name = branch_name.strip()
+
+                    line['name'] = branch_name
+
+                    currentBranch = currentBranch = Branch.query.filter((Branch.name==branch_name) & (Branch.owner==current_user.email)).first()
+                    if currentBranch:
+                        currentBranchName = currentBranch.name.strip()
+                        print(f"\n\n\nnew {branch_name.lower()} current {currentBranchName.lower()}\n\n")
+                        if branch_name.lower() == currentBranchName.lower():
+                            flash('This branch already exists "' + str(branch_name) + '"', category='error')
+                            return redirect(url_for('subsidiary.subsidiary_view'))
+
+                    line['owner'] = current_user.email
+                    new_branch = Branch(**line)
+                    db.session.add(new_branch)
+                    db.session.commit()
+                flash('Branches added', category='success')
+                return redirect(url_for('subsidiary.subsidiary_view'))
+    #### Add Products via CSV ####
+    form3 = UploadFileForm3() 
+    if form2.validate_on_submit(): 
+        from main import app     
+        file = form3.file3.data 
+        file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename)))
+        filename, file_extension = os.path.splitext(file.filename)
+        print(file_extension)
+        branches = Branch.query.filter_by(owner=current_user.email)
+        print(branches)
+        if file_extension == '.csv':
+            with open(os.path.abspath(os.path.dirname(__file__)) + '/files/' + file.filename, 'r') as data:
+                for line in csv.DictReader(data):
+                    name = line.get('product')    
+                    qr_barcode = line.get('qr_barcode')
+                    description = line.get('description')
+
+
+                    if name:
+                        name = name.strip()
+                        currentName = Product.query.filter((Product.name==name) & (Product.owner==current_user.email)).first()
+                        if currentName and name.lower() == currentName.name.lower():
+                            flash('Product already exists "' + str(name)  + '"', 'error')
+                            return redirect(url_for('product.prod'))
+
+                        line['name'] = name
+                        # adding new product instance to database
+                        line['owner'] = current_user.email
+                        if description == '' or description is None:
+                            line['description'] = 'No description'
+                        new_prod = Product(**line)
+                        db.session.add(new_prod)
+                        db.session.commit()
+                        if qr_barcode == 'qr':
+                            generate_qr(new_prod.id)
+                        elif qr_barcode == 'barcode':
+                            generate_barcode(new_prod.id)
+                        else:
+                            generate_qr(new_prod.id)
+                        db.session.commit()
+                        #print(f'\n\n\n{new_prod.qr_barcode}\n\n')
+                    else:
+                        flash('Product is a mandatory field', category='error')
+                        return redirect(url_for('product.prod'))
+                flash("Poducts added", category='success')
+                return redirect('/product')
+    return render_template('csv.html', user=current_user, form3=form3, form2=form2, form=form)

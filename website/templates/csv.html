@@ -13,10 +13,28 @@
         <li>if you want the current date, leave the space empty</li>
         <li>Action must be 'in' or 'out'</li>
     </ul>
-    <form method='POST' enctype='multipart/form-data'>
-        {{form.hidden_tag()}}
-        {{form.file()}}
-        {{form.submit()}}
-    </form>
+    <div style="width: 500px; overflow: hidden;">
+        <div style="width: 200px; float:left;">
+            <form method='POST' enctype='multipart/form-data'>
+                {{form.hidden_tag()}}
+                {{form.file()}}
+                {{form.submit()}}
+            </form>
+        </div>
+        <div style="overflow: hidden;">
+            <form method='POST' enctype='multipart/form-data'>
+                {{form2.hidden_tag()}}
+                {{form2.file2()}}
+                {{form2.submit2()}}
+            </form>
+        </div>
+        <div style="overflow: hidden;">
+            <form method='POST' enctype='multipart/form-data'>
+                {{form3.hidden_tag()}}
+                {{form3.file3()}}
+                {{form3.submit3()}}
+            </form>
+        </div>
+    </div>
 </body>
 {% endblock %}
