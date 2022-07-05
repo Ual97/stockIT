@@ -282,6 +282,7 @@ def move():
                     profit = 0
                     cost_qty = Cost_qty.query.filter((Cost_qty.prod_id==prod.id) & (Cost_qty.sold == False) & (Cost_qty.branch_id == branch2.id)).order_by(Cost_qty.date.asc()).all()
                     i = 1
+                    dollar = None
                     for _ in range(qty, 0, -1):
                         flag = True
                         if cost_qty[-i].qty_sold == cost_qty[-i].quantity - 1:
@@ -289,13 +290,14 @@ def move():
                             cost_qty[-i].sold = True
                             flag = False
                         if cost_qty[-i].currency is True and prodMov[0].currency is False:
-                            dollar = requests.get(f'https://cotizaciones-brou.herokuapp.com/api/currency/{str(prodMov[0].date.date())}')
-                            dollar = dollar.json()['rates']['USD']['sell']
+                            if not dollar:
+                                dollar = requests.get(f'https://cotizaciones-brou.herokuapp.com/api/currency/{str(prodMov[0].date.date())}')
+                                dollar = dollar.json()['rates']['USD']['sell']
                             profit += price_cost - (cost_qty[-i].cost * dollar)
                         if cost_qty[-i].currency is False and prodMov[0].currency is True:
-                            
-                            dollar = requests.get(f'https://cotizaciones-brou.herokuapp.com/api/currency/{str(prodMov[0].date.date())}')
-                            dollar = dollar.json()['rates']['USD']['sell']
+                            if not dollar:
+                                dollar = requests.get(f'https://cotizaciones-brou.herokuapp.com/api/currency/{str(prodMov[0].date.date())}')
+                                dollar = dollar.json()['rates']['USD']['sell']
                             print(f'\nde dolares a pesos pesos{price_cost} pesos convertidos{(price_cost / dollar)} dolares {cost_qty[-i].cost}')
                             profit += price_cost  - (cost_qty[-i].cost / dollar)
                         else:
@@ -304,6 +306,7 @@ def move():
                             cost_qty[-i].qty_sold += 1
                         else:
                             i += 1
+                            dollar = None
 
 
                     profitDict = {}

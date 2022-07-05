@@ -87,6 +87,7 @@ def inventory_page():
     # making graph throghout the time
     graphQuery = Profits.query.filter_by(owner=current_user.email).order_by(asc(Profits.date)).all()
     graphList = []
+    dollar = None
     for item in graphQuery:
         graphItem = {}
         product = Product.query.filter_by(id=item.prod_id).first()
@@ -98,8 +99,9 @@ def inventory_page():
             continue
         graphItem['name'] = product.name
         if item.currency is False:
-            dollar = requests.get(f'https://cotizaciones-brou.herokuapp.com/api/currency/{str(item.date.date())}')
-            dollar = dollar.json()['rates']['USD']['sell']
+            if not dollar:
+                dollar = requests.get(f'https://cotizaciones-brou.herokuapp.com/api/currency/lastest')
+                dollar = dollar.json()['rates']['USD']['sell']
             graphItem['profit'] = item.profit / dollar
         else:    
             graphItem['profit'] = item.profit
