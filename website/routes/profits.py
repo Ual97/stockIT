@@ -100,7 +100,8 @@ def inventory_page():
         graphItem['name'] = product.name
         if item.currency is False:
             if not dollar:
-                dollar = requests.get(f'https://cotizaciones-brou.herokuapp.com/api/currency/lastest')
+                dollar = requests.get('https://cotizaciones-brou.herokuapp.com/api/currency/latest')
+                print(f"\n\n{dollar.json()}")
                 dollar = dollar.json()['rates']['USD']['sell']
             graphItem['profit'] = item.profit / dollar
         else:    
