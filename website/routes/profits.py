@@ -245,7 +245,7 @@ def inventory_page():
     print(f'\n\n{to_graph}\n')        
     
     return render_template('profits.html', profits=profits, user=current_user,
-                           branches=branchesList, graph0=to_graph, graph1=branchesChart)
+                           branches=branchesList, graph0=to_graph, graph1=branchesChart, graph2=productsChart)
 
 @login_required
 @limiter.limit("20/minute")
