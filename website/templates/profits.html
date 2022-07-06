@@ -20,20 +20,44 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script type="text/javascript">
-    google.charts.load('current', {packages: ['corechart']});
+    google.charts.load('current', { packages: ['corechart'] });
     google.charts.load('current', { 'packages': ['bar'] });
 
     function drawChart() {
       // Define the chart to be drawn.
-      var data = google.visualization.arrayToDataTable({{ graph| tojson}});
+      var data = google.visualization.arrayToDataTable({{ graph0| tojson}});
 
-      var options = {title: 'Total of profits sales per day in USD', isStacked:true};  
+    var options = { title: 'Total of profits sales per day in USD', isStacked: true };
 
-      // Instantiate and draw the chart.
-      var chart = new google.visualization.ColumnChart(document.getElementById('bar'));
-      chart.draw(data, options);
+    // Instantiate and draw the chart.
+    var chart = new google.visualization.ColumnChart(document.getElementById('bar'));
+    chart.draw(data, options);
    }
-   google.charts.setOnLoadCallback(drawChart);
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart1() {
+      var data = google.visualization.arrayToDataTable({{ graph1 | tojson}});
+
+    var options = {
+      title: 'Profits per branch in USD',
+      is3D: true,
+    };
+
+    var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+    chart.draw(data, options);
+      }
+    google.charts.setOnLoadCallback(drawChart1);
+    function drawChart2() {
+      var data = google.visualization.arrayToDataTable({{ graph2 | tojson}});
+
+    var options = {
+      title: 'Profits per product in USD',
+      is3D: true,
+    };
+
+    var chart = new google.visualization.PieChart(document.getElementById('piechart_4d'));
+    chart.draw(data, options);
+      }
+    google.charts.setOnLoadCallback(drawChart2);
 
   </script>
 </head>
@@ -81,34 +105,34 @@
 
 <!-- form displayed if user scann qr_barcode -->
 <div class="InvisibleBarcode" id="divBarcode">
-    <div class="table-responsive-lg">
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Profit</th>
-            <th scope="col">Quantity</th>
-            <th scope="col">Branch</th>
-            <th scope="col">Date</th>
-            <th scope="col">Description</th>
-            <th scope="col">QR/Barcode</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- start listing the profits -->
-          <tr id="trBarcode">
-            
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <td>
-      <a class="closeButton" id="closeBarcode" onclick="document.querySelector('#divBarcode').setAttribute('class', 'InvisibleBarcode')
+  <div class="table-responsive-lg">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Profit</th>
+          <th scope="col">Quantity</th>
+          <th scope="col">Branch</th>
+          <th scope="col">Date</th>
+          <th scope="col">Description</th>
+          <th scope="col">QR/Barcode</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- start listing the profits -->
+        <tr id="trBarcode">
+
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <td>
+    <a class="closeButton" id="closeBarcode" onclick="document.querySelector('#divBarcode').setAttribute('class', 'InvisibleBarcode')
                  const tr = document.querySelector('#trBarcode')
                  while (tr.firstChild) { tr.removeChild(tr.firstChild);}">
-        Close
-      </a>
-    </td>
+      Close
+    </a>
+  </td>
 </div>
 <br>
 <style>
@@ -123,7 +147,7 @@
 </style>
 <div class="container-fluid">
   <div class="row">
-    <div class="col-lg-6">
+    <div class="col-lg-8">
       <h1>Profits</h1>
       <br>
       <p>Your sales profit will be shown here</p>
@@ -131,98 +155,111 @@
         <!-- form for searching with filters -->
         <form method="POST">
           <input type="text" name="search" id="search" placeholder="Search..">
-          <select id="selectBranch" name="selectBranch" class="btn btn-secondary">
-    
-            {% for branch in branches %}
+          <input name="btn-srch" value="Search" type="submit" class="btn btn-secondary" />
+          <a id="profits" class="btn btn-secondary" onclick="scannerF(this)">
+            Open scanner
+          </a>
+          <div class="btn-group" role="group">
+            <select id="selectBranch" name="selectBranch" class="btn btn-secondary">
+
+              {% for branch in branches %}
               <option>{{ branch }}</option>
-            {% endfor %}
-      
-          </select>
-          <select id="orderBy" name="orderBy" class="btn btn-secondary">
-            <option value="" selected>Order By</option>
-            <option value="Lower Profit">Lower Profit</option>
-            <option value="Higher Profit">Higher Profit</option>
-            <option value="Lower Quantity">Lower Quantity</option>
-            <option value="Higher Quantity">Higher Quantity</option>
-          </select>
-          <input name="btn-srch" value="Search" type="submit" class="btn btn-secondary"/>
+              {% endfor %}
 
+            </select>
+            <select id="orderBy" name="orderBy" class="btn btn-secondary">
+              <option value="" selected>Order By</option>
+              <option value="Lower Profit">Lower Profit</option>
+              <option value="Higher Profit">Higher Profit</option>
+              <option value="Lower Quantity">Lower Quantity</option>
+              <option value="Higher Quantity">Higher Quantity</option>
+            </select>
             <!-- scanner, csv and add  button-->
-            <a id="profits" class="btn btn-secondary" onclick="scannerF(this)">
-              Open scanner
-            </a>
           </div>
-          <div class="table-responsive-lg">
-            <table class="table table-hover">
-              <thead>
-                <tr>
-                  <th scope="col">Name</th>
-                  <th scope="col">Profit</th>
-                  <th scope="col">Quantity</th>
-                  <th scope="col">Branch</th>
-                  <th scope="col">Date</th>
-                  <th scope="col">Description</th>
-                  <th scope="col">QR/Barcode</th>
-                </tr>
-              </thead>
-              <tbody>
-                <!-- start listing the profits -->
-                {% for p in profits %}
-                <tr>
-                  <td>{{ p['name'] }}</td>
-                  <td>{{ p['profit'] }} {{ p['currency'] }}</td>
-                  <td>{{ p['quantity'] }}</td>
-                  <td>{{ p['branch'] }}</td>
-                  <td>{{ p['date'] }}</td>
-                  <td value="{{ p['description'] }}" onclick="showDescription(this)"> Show </td>
-                  <td>
-                    <img class="qr" id="qrid" src="../static/images/{{p['qr_barcode']}}.{{p['id']}}.png">
-                    <div id="myModal" class="modal">
 
-                      <!-- The Close Button -->
-                      <span class="close">&times;</span>
+      </div>
+      <div class="table-responsive-lg">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Profit</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Branch</th>
+              <th scope="col">Date</th>
+              <th scope="col">Description</th>
+              <th scope="col">QR/Barcode</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- start listing the profits -->
+            {% for p in profits %}
+            <tr>
+              <td data-label="Product">{{ p['name'] }}</td>
+              <td data-label="Profit">{{ p['profit'] }} {{ p['currency'] }}</td>
+              <td data-label="Quantity">{{ p['quantity'] }}</td>
+              <td data-label="Branch">{{ p['branch'] }}</td>
+              <td data-label="Date">{{ p['date'] }}</td>
+              <td data-label="Description" value="{{ p['description'] }}" onclick="showDescription(this)"> Show </td>
+              <td>
+                <img class="qr" id="qrid" src="../static/images/{{p['qr_barcode']}}.{{p['id']}}.png">
+                <div id="myModal" class="modal">
 
-                      <!-- Modal Content (The Image) -->
-                      <img class="modal-content" id="img01">
+                  <!-- The Close Button -->
+                  <span class="close">&times;</span>
 
-                      <!-- Modal Caption (Image Text) -->
-                      <div id="caption"></div>
-                    </div>
-                    <script>
-                      var modal = document.getElementById("myModal");
-                      var img = document.getElementById("qrid");
-                      var images = document.getElementsByClassName("qr");
-                      var modalImg = document.getElementById("img01");
-                      var captionText = document.getElementById("caption");
+                  <!-- Modal Content (The Image) -->
+                  <img class="modal-content" id="img01">
 
-                      for (let img of images) {
-                        img.onclick = function () {
-                          modal.style.display = "block";
-                          modalImg.src = this.src;
-                          captionText.innerHTML = this.alt;
-                        }
-                      }
+                  <!-- Modal Caption (Image Text) -->
+                  <div id="caption"></div>
+                </div>
+                <script>
+                  var modal = document.getElementById("myModal");
+                  var img = document.getElementById("qrid");
+                  var images = document.getElementsByClassName("qr");
+                  var modalImg = document.getElementById("img01");
+                  var captionText = document.getElementById("caption");
 
-                      var span = document.getElementsByClassName("close")[0];
+                  for (let img of images) {
+                    img.onclick = function () {
+                      modal.style.display = "block";
+                      modalImg.src = this.src;
+                      captionText.innerHTML = this.alt;
+                    }
+                  }
 
-                      span.onclick = function () {
-                        modal.style.display = "none";
-                      }
-                    </script>
-                  </td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
+                  var span = document.getElementsByClassName("close")[0];
+
+                  span.onclick = function () {
+                    modal.style.display = "none";
+                  }
+                </script>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
       </div>
     </div>
-    <div class="col-md-6">
-      <div id="bar" style="width: 600px; height: 300px;"></div>
+    <div class="col-md-4">
+      <ul class="nav nav-tabs flex-column" role="tablist" style="display: flex;">
+        <h3>Charts</h3>
+        <li class="active"><a data-toggle="tab" href="#menu0">Total of profit sales per day in USD</a></li>
+        <li><a data-toggle="tab" href="#menu1">Profit per branch in USD</a></li>
+        <li><a data-toggle="tab" href="#menu2">Profit per product in USD</a></li>
+      </ul>
+      <div class="tab-content">
+        <div id="menu0" class="tab-pane fade in active">
+          <div id="bar" style="width: 400px; height: 200px;"></div>
+        </div>
+        <div id="menu1" class="tab-pane fade">
+          <div id="piechart_3d" style="width: 400px; height: 200px;"></div>
+        </div>
+        <div id="menu2" class="tab-pane fade">
+          <div id="piechart_4d" style="width: 400px; height: 200px;"></div>
+        </div>
+      </div>
     </div>
   </div>
-</div>
-<!-- Google Pie chart -->
-
-
-{% endblock %}
+  {% endblock %}

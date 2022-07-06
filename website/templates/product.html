@@ -79,16 +79,12 @@
     width: 100px;
   }
 
-  a {
-    margin-left: 15px;
-  }
-
   th {
     background-color: orange;
   }
 
   p, h1 {
-    margin-left: 15px;
+    margin-left: 50px;
   }
 
   table {
@@ -113,10 +109,9 @@
 <p>You can manage (add or delete) your products.</p>
 
 <!-- form for adding a product -->
-<div class="container-fluid">
+<div class="container-fluid" style="margin-left: 15px;">
   <div class="row">
-    <div class="col-12-lg">
-      <form method="POST">
+      <form method="POST" style="width: 90%;">
         <div class="table-responsive-lg">
           <table class="table table-hover">
             <thead>
@@ -130,27 +125,27 @@
             <tbody>
               <tr>
                 <!-- row for adding a  product -->
-                <td>
+                <td data-label="Product name" class="bglabel">
                   <label for="name"></label>
                   <input type="text" id="name" name="name" placeholder="" />
                 </td>
-                <td>
+                <td data-label="Description" class="bglabel">
                   <input id="description" name="description" type="text" />
                 </td>
-                <td>
+                <td data-label="Barcode" class="bglabel">
                   <select name="qr_barcode" id="qr_barcode">
                     <option value="qr">QR code</option>
                     <option value="barcode">Barcode</option>
                   </select>
                 </td>
-                <td>
+                <td data-label="Add" class="bglabel">
                   <input id="btn-add" name="btn-add" value="add product" type="submit" />
                 </td>
               </tr>
               <!-- start listing the products -->
               {% for p in products.items %}
               <tr>
-                <td>{{ p.name }}</td>
+                <td data-label="Product Name">{{ p.name }}</td>
                 <td value="{{ p.description }}" name="" id="description" onclick="showDescription(this)">
                   Show
                 </td>
@@ -199,7 +194,6 @@
           </table>
         </div>
       </form>
-    </div>
   </div>
 </div>
 
@@ -207,7 +201,7 @@
 {% for page_num in products.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=3) %}
 {% if page_num %}
 {% if products.page == page_num %}
-<a class="btn btn-info mb-4" href="{{url_for('product.prod', page=page_num)}}">{{page_num}}</a>
+<a class="btn btn-info mb-4" href="{{url_for('product.prod', page=page_num)}}" style="margin-left: 40px;">{{page_num}}</a>
 {% else %}
 <a class="btn btn-outline-info mb-4" href="{{url_for('product.prod', page=page_num)}}">{{page_num}}</a>
 {% endif %}

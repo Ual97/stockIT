@@ -138,190 +138,241 @@
   </script>
 </head>
 
-<style>
-  #orderby {
-    background: #6c747c;
-    color: white;
-  }
+<body>
+  <style>
+    #orderby {
+      background: #6c747c;
+      color: white;
+    }
 
-  .container-fluid {
-    margin-left: 15px;
-  }
+    .container-fluid {
+      margin-left: 15px;
+    }
 
-  #btn-add {
-    width: 60%;
-  }
+    #btn-add {
+      width: 60%;
+    }
 
-  #orderby {
-    background-color: #3062b4;
-  }
+    #orderby {
+      background-color: #3062b4;
+    }
 
-  .btn-secondary {
-    background-color: #3062b4;
-  }
-</style>
+    .btn-secondary {
+      background-color: #3062b4;
+    }
+  </style>
 
-<!-- form displayed if user scann qr_barcode -->
-<div class="InvisibleBarcode" id="divBarcode">
-  <form method="POST">
-  <table id="tableBarcode">
-    <tr>
-      <th>Product</th>
-      <th>Branch</th>
-      <th>Quantity</th>
-      <th>Cost/Price</th>
-      <th>Date</th>
-      <th>Action</th>
-    </tr>
-    <tr>
-      <td class="tdBarcode" >
-        <select name="name">
-          <option id="nameBarcode" value="" selected></option>
-        </select>
-      </td>
-      <td class="tdBarcode" >
-        <select name="branch" id="branchBarcode">
-        </select>
-      </td>
-      <td class="tdBarcode">
-        <input type="number" id="quantityBarcode" name="quantity" placeholder="" />
-      </td>
-      <td>
-        <div>
-          <input type="number" id="price_costBarcode" name="price_cost" placeholder="" />
-          <select name="in_out" id="in_out">
-            <option value="usd">USD</option>
-            <option value="uyu">UYU</option>
-          </select></td>
-        </div>
-      <td>
-        <label for="date">current date time</label>
-      </td>
-      <td>
-        <select name="in_out" id="in_out">
-          <option value="in">In</option>
-          <option value="out">Out</option>
-        </select>
-      </td>
-      <td>
-        <input id="btn-add" name="btn-add" class="btn btn-secondary" value="Add" type="submit" />
-      </td>
-    </form>
-    </tr>
-      <a class="closeButton" id="closeBarcode" onclick="document.querySelector('#divBarcode').setAttribute('class', 'InvisibleBarcode')
-                 document.querySelectorAll('.tdBarcode').forEach(function(text) {text.innerHTML = ''} )">
-        Close
-      </a>
-    </td>
-  </table>
-</div>
-
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-lg-7">
-      <h1>Movements</h1>
-      <p>Your movements will be shown here</p>
-
-      <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-        <!-- form for searching with filters -->
-        <form method="POST">
-          <input type="text" name="search" id="search" placeholder="Search...">
-          <div class="btn-group" role="group">
-            <select id="orderby" name="orderby">
-              <option disabled="" value="" selected="">Order By:</option>
-              <option value="newest">Newest</option>
-              <option value="oldest">Older</option>
-            </select>
-            <input name="btn-srch" value="Search" class="btn btn-secondary" type="submit" />
-
-            <!-- scanner, csv and add  button-->
-            <a id="csv_v" class="btn btn-secondary" onclick="location.href='csv'">
-              Import CSV
-            </a>
-            <a id="product" class="btn btn-secondary" onclick="scannerF(this)">
-              Open scanner
-            </a>
+  <!-- form displayed if user scann qr_barcode -->
+  <div class="InvisibleBarcode" id="divBarcode">
+    <form method="POST">
+    <table id="tableBarcode">
+      <tr>
+        <th>Product</th>
+        <th>Branch</th>
+        <th>Quantity</th>
+        <th>Cost/Price</th>
+        <th>Date</th>
+        <th>Action</th>
+      </tr>
+      <tr>
+        <td class="tdBarcode" >
+          <select name="name">
+            <option id="nameBarcode" value="" selected></option>
+          </select>
+        </td>
+        <td class="tdBarcode" >
+          <select name="branch" id="branchBarcode">
+          </select>
+        </td>
+        <td class="tdBarcode">
+          <input type="number" id="quantityBarcode" name="quantity" placeholder="" />
+        </td>
+        <td>
+          <div>
+            <input type="number" id="price_costBarcode" name="price_cost" placeholder="" />
+            <select name="in_out" id="in_out">
+              <option value="usd">USD</option>
+              <option value="uyu">UYU</option>
+            </select></td>
           </div>
+        <td>
+          <label for="date">current date time</label>
+        </td>
+        <td>
+          <select name="in_out" id="in_out">
+            <option value="in">In</option>
+            <option value="out">Out</option>
+          </select>
+        </td>
+        <td>
+          <input id="btn-add" name="btn-add" class="btn btn-secondary" value="Add" type="submit" />
+        </td>
+      </form>
+      </tr>
+        <a class="closeButton" id="closeBarcode" onclick="document.querySelector('#divBarcode').setAttribute('class', 'InvisibleBarcode')
+                   document.querySelectorAll('.tdBarcode').forEach(function(text) {text.innerHTML = ''} )">
+          Close
+        </a>
+      </td>
+    </table>
+  </div>
 
-          <!-- form for adding a product -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-9">
+        <h1>Movements</h1>
+        <p>Your movements will be shown here</p>
+
+        <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+          <!-- form for searching with filters -->
           <form method="POST">
-            <div class="table-responsive-lg">
-              <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th scope="col">Product</th>
-                    <th scope="col">Branch</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Cost/Price</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Action</th>
+            <input type="text" name="search" id="search" placeholder="Search...">
+            <div class="btn-group" role="group">
+              <select id="orderby" name="orderby">
+                <option disabled="" value="" selected="">Order By:</option>
+                <option value="newest">Newest</option>
+                <option value="oldest">Older</option>
+              </select>
+              <input name="btn-srch" value="Search" class="btn btn-secondary" type="submit" />
 
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <!-- row for adding a  product -->
-                    <td>
-                      <label for="name"></label>
-                      <select name="name" id="products">
-                        {% for prod in products %}
-                        <option value="{{prod.name}}">{{prod.name}}</option>
-                        {% endfor %}
-                      </select>
-                    </td>
-                    <td>
-                      <label for="branch">select s.</label>
-                      <select name="branch" id="branch">
-                        {% for s in branches%}
-                        <option value="{{s.name}}">{{s.name}}</option>
-                        {% endfor %}
-                      </select>
-                    </td>
-                    <td>
-                      <label for="quantity"></label>
-                      <input type="number" id="quantity" name="quantity" placeholder="" />
-                    </td>
-                    <td>
-                      <input type="float" id="price_cost" name="price_cost" placeholder="" />
-                      <select name="currency" id="currency">
-                        <option value="USD">USD</option>
-                        <option value="UYU">UYU</option>
-                      </select>
-                    </td>
-                    <td>
-                      <label for="date">current date time</label>
-                    </td>
-                    <td>
-                      <select name="in_out" id="in_out">
-                        <option value="in">In</option>
-                        <option value="out">Out</option>
-                        <input id="btn-add" name="btn-add" class="btn btn-secondary" value="Add" type="submit" />
-                      </select>
-                    </td>
-                  </tr>
-                  <!-- start listing the products -->
-                  {% for p in movements %}
-                  <tr>
-                    <td>{{ p['product'] }}</td>
-                    <td>{{ p['branch'] }}</td>
-                    <td>{{ p['quantity'] }}</td>
-                    <td>{{ p['price_cost'] }} {{ p['currency'] }}</td>
-                    <td>{{ p['date'] }}</td>
-                    <td>{{ p['in_out'] }}</td>
-                  </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
+              <!-- scanner, csv and add  button-->
+              <a id="csv_v" class="btn btn-secondary" onclick="location.href='csv'">
+                Import CSV
+              </a>
+              <a id="product" class="btn btn-secondary" onclick="scannerF(this)">
+                Open scanner
+              </a>
             </div>
+
+            <!-- form for adding a product -->
+            <form method="POST">
+              <div class="table-responsive-lg">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col" data-toggle="tooltip" data-placement="bottom" title="Select a product">Product
+                        <script>
+                          $(document).ready(function () {
+                            $('[data-toggle="tooltip"]').tooltip();
+                          });
+                        </script>
+                      </th>
+                      <th scope="col" data-toggle="tooltip" data-placement="bottom" title="Select an office branch">
+                        Branch
+                        <script>
+                          $(document).ready(function () {
+                            $('[data-toggle="tooltip"]').tooltip();
+                          });
+                        </script>
+                      </th>
+                      <th scope="col" data-toggle="tooltip" data-placement="bottom" title="Enter a quantity">Quantity
+                        <script>
+                          $(document).ready(function () {
+                            $('[data-toggle="tooltip"]').tooltip();
+                          });
+                        </script>
+                      </th>
+                      <th scope="col" data-toggle="tooltip" data-placement="bottom"
+                        title="Enter cost if it's a product entry or price if it's an exit">Cost/Price
+                        <script>
+                          $(document).ready(function () {
+                            $('[data-toggle="tooltip"]').tooltip();
+                          });
+                        </script>
+                      </th>
+                      <th scope="col">Date</th>
+                      <th scope="col" data-toggle="tooltip" data-placement="bottom"
+                        title="Select In for porduct entry or Out for product exit">Action
+                        <script>
+                          $(document).ready(function () {
+                            $('[data-toggle="tooltip"]').tooltip();
+                          });
+                        </script>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <!-- row for adding a  product -->
+                      <td class="bglabel" data-label="Product">
+                        <label for="name"></label>
+                        <select name="name" id="products">
+                          {% for prod in products %}
+                          <option value="{{prod.name}}">{{prod.name}}</option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td class="bglabel" data-label="Branch">
+                        <label for="branch">select s.</label>
+                        <select name="branch" id="branch">
+                          {% for s in branches%}
+                          <option value="{{s.name}}">{{s.name}}</option>
+                          {% endfor %}
+                        </select>
+                      </td>
+                      <td class="bglabel" data-label="Quantity">
+                        <label for="quantity"></label>
+                        <input type="number" id="quantity" name="quantity" placeholder="" />
+                      </td>
+                      <td class="bglabel" data-label="Price/Cost">
+                        <input type="number" id="price_cost" name="price_cost" placeholder="" />
+                        <select name="currency" id="currency">
+                          <option value="USD">USD</option>
+                          <option value="UYU">UYU</option>
+                        </select>
+                      </td>
+                      <td class="bglabel" data-label="Date">
+                        <label for="date">current date time</label>
+                      </td>
+                      <td class="bglabel fixselect" data-label="Action">
+                        <div>
+                          <select name="in_out" id="in_out">
+                            <option value="in">In</option>
+                            <option value="out">Out</option>
+                          </select>
+                          <input id="btn-add" name="btn-add" class="btn-sm btn-secondary" value="Add" type="submit" />
+                        </div>
+                      </td>
+                    </tr>
+                    <!-- start listing the products -->
+                    {% for p in movements %}
+                    <tr>
+                      <td data-label="Product">{{ p['product'] }}</td>
+                      <td data-label="Branch">{{ p['branch'] }}</td>
+                      <td data-label="Quantity">{{ p['quantity'] }}</td>
+                      <td data-label="Price/Cost">{{ p['price_cost'] }} {{ p['currency'] }}</td>
+                      <td data-label="Date">{{ p['date'] }}</td>
+                      <td data-label="Action">{{ p['in_out'] }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+        </div>
+      </div>
+      <div class="col-md-3 flexdiv" style="margin-left: -75px;">
+        <ul class="nav nav-tabs flex-column" role="tablist" style="display: flex;">
+          <h3>Charts</h3>
+          <li class="active"><a data-toggle="tab" href="#menu0">Global entries </a></li>
+          <li><a data-toggle="tab" href="#menu1">Global exits </a></li>
+          <li><a data-toggle="tab" href="#menu2">Entries by branch </a></li>
+          <li><a data-toggle="tab" href="#menu3">Exits by branch </a></li>
+        </ul>
+        <div class="tab-content">
+          <div id="menu0" class="tab-pane fade in active">
+            <div id="piechart_3d" style="width: 400px; height: 200px;"></div>
+          </div>
+          <div id="menu1" class="tab-pane fade">
+            <div id="piechart_4d" style="width: 400px; height: 200px;"></div>
+          </div>
+          <div id="menu2" class="tab-pane fade">
+            <div id="piechart_5d" style="width: 400px; height: 200px;"></div>
+          </div>
+          <div id="menu3" class="tab-pane fade">
+            <div id="piechart_6d" style="width: 400px; height: 200px;"></div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="col-md-5">
-      <div id="piechart_3d" style="width: 400px; height: 200px;"></div>
-      <div id="piechart_4d" style="width: 400px; height: 200px;"></div>
-      <div id="piechart_5d" style="width: 400px; height: 200px;"></div>
-      <div id="piechart_6d" style="width: 400px; height: 200px;"></div>
-    </div>
-  </div>
-</div>
-
+</body>
 {% endblock %}
