@@ -13,6 +13,7 @@ from sqlalchemy import and_, asc, desc
 from website import limiter
 from operator import itemgetter
 import requests
+import math
 
 profits = Blueprint('profits', __name__)
 
@@ -193,12 +194,58 @@ def inventory_page():
             to_graph.append(newEntry)
     print(f'\nestará para graficar? {to_graph}')
     
+    branchesChart = [['Branch', 'Profit']]
+    for item in Branch.query.filter_by(owner=current_user.email).all():
+        branchProfit = Profits.query.filter_by(branch_id=item.id).all()
+        if branchProfit:
+            list = [item.name]
+            sum = []
+            for value in branchProfit:
+                print(f"\n\n{branchProfit}\n")
+                if value.currency is False:
+                    if not dollar:
+                        dollar = requests.get('https://cotizaciones-brou.herokuapp.com/api/currency/latest')
+                        print(f"\n\n{dollar.json()}")
+                        dollar = dollar.json()['rates']['USD']['sell']
+                    sum.append(value.profit / dollar)
+                else:
+                    print(f"\n\nesta en dolares {value.profit}")
+                    sum.append(value.profit)
+            print(f"\n\nsumas {sum}\n")
+            list.append(math.fsum(sum))
+            branchesChart.append(list)
+
+    productsChart = [['Product', 'Profit']]
 
 
+    for item in Product.query.filter_by(owner=current_user.email).all():
+        if selectedBranch and selectedBranch != 'All Branches (default)':
+            branchId = Branch.query.filter_by(name=selectedBranch).first().id
+            prodProfit = Profits.query.filter((Profits.prod_id==item.id) & (Profits.branch_id==branchId)).all()
+        else:
+            prodProfit = Profits.query.filter_by(prod_id=item.id).all()
+        if prodProfit:
+            list = [item.name]
+            sum = []
+            for value in prodProfit:
+                if value.currency is False:
+                    if not dollar:
+                        dollar = requests.get('https://cotizaciones-brou.herokuapp.com/api/currency/latest')
+                        print(f"\n\n{dollar.json()}")
+                        dollar = dollar.json()['rates']['USD']['sell']
+                    sum.append(value.profit / dollar)
+                else:    
+                    sum.append(value.profit)
+            print(f"\n\nsumas {sum}\n")
+            list.append(math.fsum(sum))
+            productsChart.append(list)
 
+    print(f"\nbranches chart {branchesChart}")
+
+    print(f'\n\n{to_graph}\n')        
     
     return render_template('profits.html', profits=profits, user=current_user,
-                           branches=branchesList, graph=to_graph)
+                           branches=branchesList, graph0=to_graph, graph1=branchesChart)
 
 @login_required
 @limiter.limit("20/minute")
