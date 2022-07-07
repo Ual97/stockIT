@@ -154,17 +154,17 @@
       <br>
       <p>Your stock will be shown here</p>
       <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-        <!-- form for searching with filters -->
         <form method="POST">
           <input type="text" name="search" id="search" placeholder="Search..">
-          <select id="selectBranch" name="selectBranch" class="btn btn-secondary">
-    
-            {% for branch in branches %}
+          <div class="btn-group" role="group">
+            <select id="selectBranch" name="selectBranch" class="btn btn-secondary">
+
+              {% for branch in branches %}
               <option>{{ branch }}</option>
-            {% endfor %}
-      
-          </select>
-          <input name="btn-srch" value="Search" type="submit" class="btn btn-secondary"/>
+              {% endfor %}
+
+            </select>
+            <input name="btn-srch" value="Search" type="submit" class="btn btn-secondary" />
 
             <!-- scanner, csv and add  button-->
             <a id="inventory" class="btn btn-secondary" onclick="scannerF(this)">
@@ -186,10 +186,11 @@
                 <!-- start listing the stock -->
                 {% for p in stock %}
                 <tr>
-                  <td>{{ p['name'] }}</td>
-                  <td>{{ p['quantity'] }}</td>
-                  <td>{{ p['branch'] }}</td>
-                  <td value="{{ p['description'] }}" onclick="showDescription(this)"> Show </td>
+                  <td data-label="Product">{{ p['name'] }}</td>
+                  <td data-label="Quantity">{{ p['quantity'] }}</td>
+                  <td data-label="Branch">{{ p['branch'] }}</td>
+                  <td data-label="Description" value="{{ p['description'] }}" onclick="showDescription(this)"> Show
+                  </td>
                   <td>
                     <img class="qr" id="qrid" src="../static/images/{{p['qr_barcode']}}.{{p['id']}}.png">
                     <div id="myModal" class="modal">
@@ -233,7 +234,8 @@
       </div>
     </div>
     <div class="col-md-6">
-      <div id="piechart_3d" style="width: 600px; height: 300px;"></div>
+      <h3>Chart</h3>
+      <div id="piechart_3d" style="width: 400px; height: 200px;"></div>
     </div>
   </div>
 </div>
