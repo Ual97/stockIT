@@ -9,6 +9,7 @@ from website.models.profits import Profits
 from flask_login import login_required, current_user
 from sqlalchemy import and_, or_, desc, asc
 import requests
+import math
 
 
 movements = Blueprint('movements', __name__)
@@ -122,7 +123,9 @@ def move():
             movementDict['quantity'] = item.quantity
             movementDict['date'] = item.date
             movementDict['in_out'] = "Entry" if item.in_out is True else "Exit"
+            movementDict['price_cost'] = item.price_cost
             movementDict['currency'] = "USD" if item.currency is True else "UYU"
+
             movementsList.append(movementDict)
         if not movementsList and not orderby:
             flash('No results found', 'error')
