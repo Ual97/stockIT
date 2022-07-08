@@ -100,41 +100,70 @@
 </style>
 
 <!-- pop-up for product description. needs bootstrap -->
-<div id="InvisibleDescription" class="Invisible" id="productDescription">
-  <h2>Product Description</h2>
-  <p id="productDescriptionText"></p>
-  <a class="closeButton" id="closeProductDescription">Close</a>
+<div class="modal fade" id="desc_popup" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Product Description</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p id="productDescriptionText"></p>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-
+<script>
+  $('#myModal').modal({ show: false })
+</script>
 <!-- form displayed if user scann qr_barcode -->
-<div class="InvisibleBarcode" id="divBarcode">
-  <table id="tableBarcode">
-    <tr>
-      <th>Name</th>
-      <th>Quantity</th>
-      <th>Description</th>
-      <th>Branch</th>
-      <th>Barcode</th>
-    </tr>
-    <tr>
-      <td class="tdBarcode" id="nameBarcode">
-      </td>
-      <td class="tdBarcode" id="quantityBarcode">
-      </td>
-      <td class="tdBarcode" id="descriptionBarcode" onclick="showDescription(this)">
-      <td class="tdBarcode" id="branchBarcode"></td>
-      </td>
-      <td>
-        <img id="qr_barcodeBarcode" src="">
-      </td>
-    </tr>
-    <td>
-      <a class="closeButton" id="closeBarcode" onclick="document.querySelector('#divBarcode').setAttribute('class', 'InvisibleBarcode')
-                 document.querySelectorAll('.tdBarcode').forEach(function(text) {text.innerHTML = ''} )">
-        Close
-      </a>
-    </td>
-  </table>
+<div class="modal fade" id="InvisibleBarcode" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document"
+    onclick="document.querySelectorAll('.tdBarcode').forEach(function(text) {text.innerHTML = ''} )">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+          onclick="document.querySelectorAll('.tdBarcode').forEach(function(text) {text.innerHTML = ''} )">
+          <span aria-hidden="true"
+            onclick="document.querySelectorAll('.tdBarcode').forEach(function(text) {text.innerHTML = ''} )">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table id="tableBarcode">
+            <tr>
+              <th>Name</th>
+              <th>Quantity</th>
+              <th>Description</th>
+              <th>Barcode</th>
+            </tr>
+            <tr>
+              <td class="tdBarcode" id="nameBarcode">
+              </td>
+              <td class="tdBarcode" id="quantityBarcode">
+              </td>
+              <td class="tdBarcode" id="descriptionBarcode">
+              <td>
+                <img id="qr_barcodeBarcode" src="">
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+          onclick="document.querySelectorAll('.tdBarcode').forEach(function(text) {text.innerHTML = ''} )">Close</button>
+      </div>
+    </div>
+  </div>
 </div>
 <br>
 <style>
@@ -189,14 +218,18 @@
                   <td data-label="Product">{{ p['name'] }}</td>
                   <td data-label="Quantity">{{ p['quantity'] }}</td>
                   <td data-label="Branch">{{ p['branch'] }}</td>
-                  <td data-label="Description" value="{{ p['description'] }}" onclick="showDescription(this)"> Show
+                  <td data-label="Description" value="{{ p['description'] }}">
+                    <button type="button" value="{{ p['description'] }}" class="btn btn-secondary" onclick="$('#desc_popup').modal('show');
+                    showDescription(this);">Show</button>
                   </td>
                   <td>
                     <img class="qr" id="qrid" src="../static/images/{{p['qr_barcode']}}.{{p['id']}}.png">
                     <div id="myModal" class="modal">
 
                       <!-- The Close Button -->
-                      <span class="close">&times;</span>
+                      <button class="close" onclick="const close_qr = document.querySelector('#myModal');
+                      close_qr.preventDefault();
+                      close_qr.hide();">&times;</button>
 
                       <!-- Modal Content (The Image) -->
                       <img class="modal-content" id="img01">
@@ -231,6 +264,7 @@
               </tbody>
             </table>
           </div>
+        </form>
       </div>
     </div>
     <div class="col-md-6">
