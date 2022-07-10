@@ -286,7 +286,8 @@ def move():
                     cost_qty = Cost_qty.query.filter((Cost_qty.prod_id==prod.id) & (Cost_qty.sold == False) & (Cost_qty.branch_id == branch2.id)).order_by(Cost_qty.date.asc()).all()
                     i = 1
                     dollar = None
-                    for _ in range(qty, 0, -1):
+                    profitList = []
+                    for j in range(qty, 0, -1):
                         flag = True
                         if cost_qty[-i].qty_sold == cost_qty[-i].quantity - 1:
                             cost_qty[-i].qty_sold += 1                            
@@ -296,13 +297,16 @@ def move():
                             if not dollar:
                                 dollar = requests.get(f'https://cotizaciones-brou.herokuapp.com/api/currency/{str(prodMov[0].date.date())}')
                                 dollar = dollar.json()['rates']['USD']['sell']
-                            profit += price_cost - (cost_qty[-i].cost * dollar)
+                            unitprofit = (price_cost - (cost_qty[-i].cost * dollar))
+                            profit += unitprofit
+                            profitList.append(unitprofit)
+                            print(f'\n\nj = {j}la cuenta q se supone q es igual a profit {price_cost - (cost_qty[-i].cost * dollar)} price_cost {price_cost} - (cost_qty[-i].cost {cost_qty[-i].cost} * dollar {dollar})profit = {profit}')
                         if cost_qty[-i].currency is False and prodMov[0].currency is True:
                             if not dollar:
                                 dollar = requests.get(f'https://cotizaciones-brou.herokuapp.com/api/currency/{str(prodMov[0].date.date())}')
                                 dollar = dollar.json()['rates']['USD']['sell']
                             print(f'\nde dolares a pesos pesos{price_cost} pesos convertidos{(price_cost / dollar)} dolares {cost_qty[-i].cost}')
-                            profit += price_cost  - (cost_qty[-i].cost / dollar)
+                            profit += (price_cost  - (cost_qty[-i].cost / dollar))
                         else:
                             profit += price_cost - cost_qty[-i].cost
                         if flag:
@@ -311,7 +315,7 @@ def move():
                             i += 1
                             dollar = None
 
-
+                    print(f"\n profitlist {profitList} suma de los profits {math.fsum(profitList)}")
                     profitDict = {}
                     profitDict['prod_id'] = prod.id
                     profitDict['owner'] = current_user.email
