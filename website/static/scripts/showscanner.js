@@ -6,18 +6,13 @@ async function consult(code_content, path) {
 
     if (path === 'inventory') {
 
-      const updclass = document.querySelector('.InvisibleBarcode');
-      console.log(updclass);
-      updclass.setAttribute('class', '');
-
-
+      $('#InvisibleBarcode').modal('show');
       tableName = document.querySelector('#nameBarcode');
       tableName.appendChild(document.createTextNode(data.name));
       const tableQuantity = document.querySelector('#quantityBarcode');
       tableQuantity.appendChild(document.createTextNode(data.quantity));
       const tableDescription = document.querySelector('#descriptionBarcode');
-      tableDescription.appendChild(document.createTextNode('Show Description'));
-      tableDescription.setAttribute('value', data.description); 
+      tableDescription.appendChild(document.createTextNode(data.description));
       document.querySelector('#qr_barcodeBarcode').setAttribute('src', `/static/images/${data.qr_barcode}.${code_content}.png`);
     }
     else if (path === 'profits') {
