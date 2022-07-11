@@ -5,6 +5,8 @@ from website.models.inventory import Inventory
 from website.models.branch import Branch 
 from website.models.csv import UploadFileForm, UploadFileForm2, UploadFileForm3 
 from website.models.product import Product
+from website.models.cost_qty import Cost_qty
+from website.models.profits import Profits
 from website.routes.product import generate_qr, generate_barcode
 from flask_login import login_required, current_user 
 from sqlalchemy.sql.expression import func 
@@ -12,8 +14,10 @@ from sqlalchemy import and_
 from flask import Flask, render_template  
 from werkzeug.utils import secure_filename 
 from sqlalchemy import and_, desc
+import requests
 import os 
 import csv
+import math
 from datetime import datetime
 
 csv_v = Blueprint('csv', __name__) 
@@ -58,6 +62,20 @@ def dic_csv():
                     else:
                         flash("Quantity has to be a number.", category='error')
                         return redirect('/movements')
+                    price_cost =  line.get('cost/price')
+                    if (price_cost.replace('-', '', 1).isnumeric()):
+                        price_cost = float(price_cost)
+                        line['price_cost'] = price_cost
+                    else:
+                        flash("Cost/Price has to be a number.", category='error')
+                        return redirect('/movements')
+                    print("xddddddd", price_cost)
+                    
+                    currency = line.get('UYU/USD')
+                    if currency and currency.upper() == 'UYU' or currency.upper() == 'USD':
+                        line['currency'] = True if currency.upper() == 'USD' else False 
+                    else:
+                        flash("Currency has to be USD or UYU")                     
                     print("kakaka")
                     print(f'tiṕo ***{type(date)}*** largo ***{len(date)}***')
                     print("kakaka")
@@ -130,19 +148,101 @@ def dic_csv():
                             newItemInv['quantity'] = qty
                             newItem = Inventory(**newItemInv)
                             db.session.add(newItem)
+                            
+                            """adding item to cost_cant table"""
+                
+                            dict = {}
+                            
+                            dict['owner'] = current_user.email
+                            dict['prod_id'] = prod.id
+                            dict['branch_id'] = branch2.id
+                            dict['date'] = prodMov[0].date
+                            dict['cost'] = price_cost
+                            dict['quantity'] = qty
+                            dict['qty_sold'] = 0
+                            dict['sold'] = False
+                            dict['currency'] = prodMov[0].currency
+                            newItem = Cost_qty(**dict)
+                            db.session.add(newItem)
+                            db.session.commit()
                         else:
                             """quantity addition of the product"""
                             item = Inventory.query.filter_by(prod_id=prod.id).first()
                             if in_out is True:
                                 print(f'\n\n\nle sumamos al producto :3\n\n')
                                 item.quantity += qty
+                                
+                                """adding item to cost_qty table"""
+
+                                dict = {}
+
+                                dict['owner'] = current_user.email
+                                dict['prod_id'] = prod.id
+                                dict['branch_id'] = branch2.id
+                                dict['date'] = prodMov[0].date
+                                dict['cost'] = price_cost
+                                dict['quantity'] = qty
+                                dict['qty_sold'] = 0
+                                dict['sold'] = False
+                                dict['currency'] = prodMov[0].currency
+                                newItem = Cost_qty(**dict)
+                                db.session.add(newItem)
+                                
                             elif in_out is False and qty > item.quantity or item.quantity is None:
                                 print(f'\n\n\nflasheaste :3\n\n')
                                 flash('Error. Cannot make outs of products without stock', category='error')
                                 redirect('/movements')
                             else:
-                                print(f'\n\n\nle sumamos al producto :3\n\n')
+                                print(f'\n\n\nle restamos el producto :3\n\n')
                                 item.quantity -= qty
+                                """adding new item to price-cant json if not exists is
+                                created and if the item exists make an addition
+                                """
+
+                                cost_qty = Cost_qty.query.filter((Cost_qty.prod_id==prod.id) & (Cost_qty.sold == False) & (Cost_qty.branch_id == branch2.id)).order_by(Cost_qty.date.asc()).all()
+                                i = 1
+                                dollar = None
+                                profitList = []
+                                for j in range(qty, 0, -1):
+                                    flag = True
+                                    if cost_qty[-i].qty_sold == cost_qty[-i].quantity - 1:
+                                        cost_qty[-i].qty_sold += 1                            
+                                        cost_qty[-i].sold = True
+                                        flag = False
+                                    if cost_qty[-i].currency is True and prodMov[0].currency is False:
+                                        if not dollar:
+                                            dollar = requests.get(f'https://cotizaciones-brou.herokuapp.com/api/currency/{str(prodMov[0].date.date())}')
+                                            dollar = dollar.json()['rates']['USD']['sell']
+                                        unitprofit = (price_cost - (cost_qty[-i].cost * dollar))
+                                        print(f'\nunit profit {unitprofit} iteracion {j}')
+                                        profitList.append(unitprofit)
+                                    elif cost_qty[-i].currency is False and prodMov[0].currency is True:
+                                        if not dollar:
+                                            dollar = requests.get(f'https://cotizaciones-brou.herokuapp.com/api/currency/{str(prodMov[0].date.date())}')
+                                            dollar = dollar.json()['rates']['USD']['sell']
+                                        unitprofit = (price_cost  - (cost_qty[-i].cost / dollar))
+                                        profitList.append(unitprofit)
+                                    else:
+                                        unitprofit = price_cost - cost_qty[-i].cost
+                                        profitList.append(unitprofit)
+                                    if flag:
+                                        cost_qty[-i].qty_sold += 1
+                                    else:
+                                        i += 1
+                                        dollar = None
+
+                                print(f"\n profitlist {profitList} suma de los profits {math.fsum(profitList)}")
+                                profitDict = {}
+                                profitDict['prod_id'] = prod.id
+                                profitDict['owner'] = current_user.email
+                                profitDict['profit'] = math.fsum(profitList)
+                                profitDict['date'] = prodMov[0].date
+                                profitDict['quantity'] = qty
+                                profitDict['branch_id'] = prodMov[0].branch_id
+                                profitDict['currency'] = prodMov[0].currency
+                                newItem = Profits(**profitDict)
+                                db.session.add(newItem)
+
                             db.session.commit()
                     else:
                         flash('Name, Branch, Quantity and Action are mandatory fields', category='error')
