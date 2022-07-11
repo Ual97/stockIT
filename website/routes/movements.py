@@ -298,15 +298,16 @@ def move():
                                 dollar = requests.get(f'https://cotizaciones-brou.herokuapp.com/api/currency/{str(prodMov[0].date.date())}')
                                 dollar = dollar.json()['rates']['USD']['sell']
                             unitprofit = (price_cost - (cost_qty[-i].cost * dollar))
+                            print(f'\nunit profit {unitprofit} iteracion {j}')
                             profitList.append(unitprofit)
-                        if cost_qty[-i].currency is False and prodMov[0].currency is True:
+                        elif cost_qty[-i].currency is False and prodMov[0].currency is True:
                             if not dollar:
                                 dollar = requests.get(f'https://cotizaciones-brou.herokuapp.com/api/currency/{str(prodMov[0].date.date())}')
                                 dollar = dollar.json()['rates']['USD']['sell']
-                            unitprofit += (price_cost  - (cost_qty[-i].cost / dollar))
+                            unitprofit = (price_cost  - (cost_qty[-i].cost / dollar))
                             profitList.append(unitprofit)
                         else:
-                            unitprofit += price_cost - cost_qty[-i].cost
+                            unitprofit = price_cost - cost_qty[-i].cost
                             profitList.append(unitprofit)
                         if flag:
                             cost_qty[-i].qty_sold += 1
