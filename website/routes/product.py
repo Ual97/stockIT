@@ -152,7 +152,7 @@ def generate_qr(id):
     querystring = {"d":f'{id}'}
 
     headers = {
-	            "X-RapidAPI-Key": "1f2d50fbf4mshdcf01c7289d62e9p1f5cf7jsn978bc35e8d2d",
+	            "X-RapidAPI-Key": "b542ab94a6msh4122c7211f10621p125c2ejsne10b1b5c4697",
 	            "X-RapidAPI-Host": "qrickit-qr-code-qreator.p.rapidapi.com"
                 }
 
