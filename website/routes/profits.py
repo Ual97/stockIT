@@ -277,6 +277,8 @@ def profits_product(id):
         profitItem['description'] = product.description
         profitItem['id'] = item.prod_id
         profitItem['qr_barcode'] = product.qr_barcode
+        profitItem['profit'] = item.profit
+        profitItem['date'] = item.date
         profitsList.append(profitItem)
 
     if not profitsList:

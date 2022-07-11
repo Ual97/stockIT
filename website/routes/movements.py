@@ -134,9 +134,10 @@ def move():
 
         return render_template('movements.html', user=current_user,
                             branches=branches, products=products, movements=movementsList, data=graph_data, data2=graph_data2, data3=graph_data3, data4=graph_data4)
-
+    print(f'\n\ncon q metodo entro?????????{request.method} diccrionatio {request.form}')
     if request.method == 'POST' and "btn-add" in request.form:
         prodDict = request.form.to_dict()
+        print(f'\n\n sera????? {prodDict}')
         name = prodDict.get('name')    
         branch = prodDict.get('branch')
         qty = prodDict.get('quantity')
@@ -330,6 +331,7 @@ def move():
 
 
                 db.session.commit()
+            flash('Movement added successfully', category='success')
             return redirect('/movements')
         else:
             flash('Name, Branch and Quantity are mandatory fields', category='error')

@@ -13,47 +13,44 @@ async function consult(code_content, path) {
       tableQuantity.appendChild(document.createTextNode(data.quantity));
       const tableDescription = document.querySelector('#descriptionBarcode');
       tableDescription.appendChild(document.createTextNode(data.description));
-      document.querySelector('#qr_barcodeBarcode').setAttribute('src', `/static/images/${data.qr_barcode}.${code_content}.png`);
     }
     else if (path === 'profits') {
-      const updclass = document.querySelector('.InvisibleBarcode');
-      console.log(updclass);
-      updclass.setAttribute('class', '');
-
-      const tr = document.querySelector("#trBarcode");
-
+      $('#InvisibleBarcode').modal('show');
+      const table = document.querySelector('#tableBarcode');
       for (item of data) {
-        tdName = document.createElement('td');
-        tdName.appendChild(document.createTextNode(item.name));
-        tr.appendChild(tdName);
-        tdProfit = document.createElement('td');
-        tdProfit.appendChild(document.createTextNode(item.profit));
-        tr.appendChild(tdProfit);
-        tdQuantity = document.createElement('td');
-        tdQuantity.appendChild(document.createTextNode(item.quantity));
-        tr.appendChild(tdQuantity);
-        tdBranch = document.createElement('td');
-        tdBranch.appendChild(document.createTextNode(item.branch));
-        tr.appendChild(tdBranch);
-        tdDate = document.createElement('td');
-        tdDate.appendChild(document.createTextNode(item.date));
-        tr.appendChild(tdDate);
-        tdDescription = document.createElement('td');
-        tdDescription.appendChild(document.createTextNode("show description"));
-        tdDescription.setAttribute("value", item.description)
-        tr.appendChild(tdDescription);
-        tdDescription = document.createElement('img');
-        tdDescription.setAttribute("src", `/static/images/${item.qr_barcode}.${code_content}.png`)
-        tr.appendChild(tdDescription);
+        const tr = document.createElement('tr');
+        tr.setAttribute('id', 'trBarcode')
+        const td_name = document.createElement('td');
+        td_name.appendChild(document.createTextNode(item.name));
+        tr.appendChild(td_name);
+        const td_profit = document.createElement('td');
+        td_profit.appendChild(document.createTextNode(item.profit));
+        tr.appendChild(td_profit);
+        const td_quantity = document.createElement('td');
+        td_quantity.appendChild(document.createTextNode(item.quantity));
+        tr.appendChild(td_quantity);
+        const td_branch = document.createElement('td');
+        td_branch.appendChild(document.createTextNode(item.branch));
+        tr.appendChild(td_branch);
+        const td_date = document.createElement('td');
+        td_date.appendChild(document.createTextNode(item.date));
+        tr.appendChild(td_date);
+        const td_description = document.createElement('td');
+        td_description.appendChild(document.createTextNode(item.description));
+        tr.appendChild(td_description);
+        table.appendChild(tr);
       }
-
     } 
     else {
-      document.querySelector('#nameBarcode').value = data.name;
+      $('#InvisibleBarcode').modal('show');
+      const name = document.querySelector('#nameBarcode')
+      name.value = data.name;
+      name.appendChild(document.createTextNode(data.name));
       branches = document.querySelector('#branchBarcode');
       for (branch of data.branches) {
         option = document.createElement('option');
         option.setAttribute('value', branch);
+        option.appendChild(document.createTextNode(branch))
         branches.appendChild(option)
       }
       

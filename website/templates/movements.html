@@ -163,58 +163,75 @@
   </style>
 
   <!-- form displayed if user scann qr_barcode -->
-  <div class="InvisibleBarcode" id="divBarcode">
+  <div class="modal fade" id="InvisibleBarcode" tabindex="-1" data-backdrop="static" role="dialog"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
     <form method="POST">
-    <table id="tableBarcode">
-      <tr>
-        <th>Product</th>
-        <th>Branch</th>
-        <th>Quantity</th>
-        <th>Cost/Price</th>
-        <th>Date</th>
-        <th>Action</th>
-      </tr>
-      <tr>
-        <td class="tdBarcode" >
-          <select name="name">
-            <option id="nameBarcode" value="" selected></option>
-          </select>
-        </td>
-        <td class="tdBarcode" >
-          <select name="branch" id="branchBarcode">
-          </select>
-        </td>
-        <td class="tdBarcode">
-          <input type="number" id="quantityBarcode" name="quantity" placeholder="" />
-        </td>
-        <td>
-          <div>
-            <input type="number" id="price_costBarcode" name="price_cost" placeholder="" />
-            <select name="in_out" id="in_out">
-              <option value="usd">USD</option>
-              <option value="uyu">UYU</option>
-            </select></td>
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">New Movement</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+              onclick="document.querySelectorAll('#trBarcode').forEach(function(text) {text.innerHTML = ''} )">
+              <span aria-hidden="true"
+                onclick="document.querySelectorAll('#trBarcode').forEach(function(text) {text.innerHTML = ''} )">&times;</span>
+            </button>
           </div>
-        <td>
-          <label for="date">current date time</label>
-        </td>
-        <td>
-          <select name="in_out" id="in_out">
-            <option value="in">In</option>
-            <option value="out">Out</option>
-          </select>
-        </td>
-        <td>
-          <input id="btn-add" name="btn-add" class="btn btn-secondary" value="Add" type="submit" />
-        </td>
-      </form>
-      </tr>
-        <a class="closeButton" id="closeBarcode" onclick="document.querySelector('#divBarcode').setAttribute('class', 'InvisibleBarcode')
-                   document.querySelectorAll('.tdBarcode').forEach(function(text) {text.innerHTML = ''} )">
-          Close
-        </a>
-      </td>
+          <div class="modal-body">
+            <div class="table-responsive">
+              <table id="tableBarcode">
+                <tr>
+                  <th>Product</th>
+                  <th>Branch</th>
+                  <th>Quantity</th>
+                  <th>Cost/Price</th>
+                  <th>Date</th>
+                  <th>Action</th>
+                </tr>
+                <tr>
+                  <td class="tdBarcode">
+                    <select name="name">
+                      <option id="nameBarcode" value="" selected></option>
+                    </select>
+                  </td>
+                  <td class="tdBarcode">
+                    <select name="branch" id="branchBarcode">
+                    </select>
+                  </td>
+                  <td class="tdBarcode">
+                    <input type="number" id="quantityBarcode" name="quantity" placeholder="" />
+                  </td>
+                  <td>
+                    <div>
+                      <input type="number" id="price_costBarcode" name="price_cost" placeholder="" />
+                      <select name="currency" id="in_out">
+                        <option value="USD">USD</option>
+                        <option value="UYU">UYU</option>
+                      </select>
+                  </td>
+            </div>
+            <td>
+              <label for="date">current date time</label>
+            </td>
+            <td>
+              <select name="in_out" id="in_out">
+                <option value="in">In</option>
+                <option value="out">Out</option>
+              </select>
+            </td>
+    </form>
+    </tr>
+    </td>
     </table>
+  </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal"
+      onclick="document.querySelectorAll('#trBarcode').forEach(function(text) {text.innerHTML = ''} )">Close</button>
+    <input id="btn-add" name="btn-add" class="btn-sm btn-secondary" value="Add" type="submit" />
+  </div>
+  </div>
+  </div>
+  </form>
   </div>
 
   <div class="container-fluid">

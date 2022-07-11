@@ -123,10 +123,9 @@
   $('#myModal').modal({ show: false })
 </script>
 <!-- form displayed if user scann qr_barcode -->
-<div class="modal fade" id="InvisibleBarcode" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="InvisibleBarcode" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
   aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document"
-    onclick="document.querySelectorAll('.tdBarcode').forEach(function(text) {text.innerHTML = ''} )">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
@@ -136,14 +135,13 @@
             onclick="document.querySelectorAll('.tdBarcode').forEach(function(text) {text.innerHTML = ''} )">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" style="display: block; margin-left:auto; margin-right:auto;">
         <div class="table-responsive">
           <table id="tableBarcode">
             <tr>
               <th>Name</th>
               <th>Quantity</th>
               <th>Description</th>
-              <th>Barcode</th>
             </tr>
             <tr>
               <td class="tdBarcode" id="nameBarcode">
@@ -151,9 +149,6 @@
               <td class="tdBarcode" id="quantityBarcode">
               </td>
               <td class="tdBarcode" id="descriptionBarcode">
-              <td>
-                <img id="qr_barcodeBarcode" src="">
-              </td>
             </tr>
           </table>
         </div>

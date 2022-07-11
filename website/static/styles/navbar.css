@@ -42,6 +42,12 @@ nav .icon {
     }
 }
 
+@media only screen and (min-width: 600px) {
+    .hide-pc {
+        display: none;
+    }
+}
+
 @media screen and (max-width: 600px) {
     nav.responsive {
         position: relative;
