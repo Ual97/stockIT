@@ -43,46 +43,6 @@
   $('#myModal').modal({ show: false })
 </script>
 
-<!-- form displayed if user clicks Update -->
-<div class="Invisible">
-  <form id="updateForm" action="" method="POST">
-    <div class="table-responsive-lg">
-      <table class="table table-hover" id="tableUpdate">
-        <thead>
-          <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Name</th>
-            <th scope="col">Description</th>
-            <th scope="col">Barcode</th>
-            <th scope="col">Update</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td id="idUpdate" value="">
-            </td>
-            <td id="nameUpdate">
-            </td>
-            <td>
-              <input type="text" value="" id="descriptionUpdate" name="descriptionUpdate">
-            </td>
-            <td>
-              <select name="qr_barcodeUpdate" id="qr_barcodeUpdate">
-                <option id="qr_barcodeUpdateqr" value="qr">QR code</option>
-                <option id="qr_barcodeUpdatebarcode" value="barcode">Barcode</option>
-              </select>
-            </td>
-            <td>
-              <input id="updateButton" name="btn-add" value="Update" type="submit" />
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </form>
-  <a class="cancelButton" id="cancelButtonUpdate">Cancel</a>
-
-</div>
 
 <style>
   table,
@@ -219,6 +179,60 @@
     </form>
   </div>
 </div>
+
+<!-- form displayed if user updates product -->
+<div class="modal fade" id="InvisibleProduct" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <form id="updateForm" action="" method="POST">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Update Product</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="display: block; margin-left:auto; margin-right:auto;">
+        <div class="table-responsive">
+          <form id="updateForm" action="" method="POST">
+            <div class="table-responsive-lg">
+              <table class="table table-hover" id="tableUpdate">
+                <thead>
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Barcode</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td id="nameUpdate">
+                    </td>
+                    <td>
+                      <input type="text" value="" id="descriptionUpdate" name="descriptionUpdate">
+                    </td>
+                    <td>
+                      <select name="qr_barcodeUpdate" id="qr_barcodeUpdate">
+                        <option id="qr_barcodeUpdateqr" value="qr">QR code</option>
+                        <option id="qr_barcodeUpdatebarcode" value="barcode">Barcode</option>
+                      </select>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </form>
+          
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <input id="updateButton" style="background-color: #3062b4;" name="btn-add" value="Update" class="btn btn-secondary" type="submit" />
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <!-- pagination of table rows -->
 {% for page_num in products.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=3) %}
