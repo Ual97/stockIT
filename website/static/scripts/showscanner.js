@@ -43,7 +43,7 @@ async function consult(code_content, path) {
     } 
     else {
       $('#InvisibleBarcode').modal('show');
-      const name = document.querySelector('#nameBarcode')
+      const name = document.querySelector('#nameBarcode');
       if (name.firstChild) {
         name.removeChild(name.firstChild)
       }
