@@ -4,7 +4,7 @@
 Our goal is to create a easy to use, scalable inventory management system.  
 If you’re not paying attention to your inventory, how much product you have available, re-ordering needs, etc, you can easily be wasting your money on products no one wants while missing  opportunities to offer the products your customers are most excited about.  
 
-techual.tech
+[Visit the website](https://techual.tech/)
 
 ### Functionalities
 - User email registration and verification
